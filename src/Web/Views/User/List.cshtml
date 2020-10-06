@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- partial -->
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Tables</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Data Table</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">姓名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">邮箱</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">电话</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <button class="btn btn-google">搜索</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="listTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>账号</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>电话</th>
+                                <th>邮箱</th>
+                                <th>身份证号</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listBody">
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            
+        </div>
+
+    </div>
+    <div class="col-12 d-flex justify-content-between"  >
+        <div>
+            <button class="btn btn-google" data-toggle="modal" data-target="#exampleModal">添加员工</button>
+        </div>
+        
+
+        <div id="page">
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加员工</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">姓名:</label>
+                        <input type="text" class="form-control" id="uname">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">性别:</label>
+                        <select class="form-control" id="gender">
+                            <option selected="selected" value="1">
+                                男
+                            </option>
+                            
+                            <option value="2">
+                                女
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">电话:</label>
+                        <input type="text" class="form-control" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">邮箱:</label>
+                        <textarea class="form-control" id="email"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">身份证号:</label>
+                        <input type="text" class="form-control" id="identity">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="AddUser()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="~/layui-v2.5.6/layui/layui.js"></script>
+    <script src="~/static/User/List.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+<script id="listHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.userAccount}}</td>
+        <td>{{value.userName}}</td>
+        <td>{{value.genderDesc}}</td>
+        <td>{{value.phoneNumber}}</td>
+        <td>{{value.email}}</td>
+        <td>{{value.userIdentity}}</td>
+    <td><span class="btn btn-primary">详情</span></td>
+    </tr>
+
+    {{/each}}
+</script>
+
+
