@@ -32,6 +32,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
             
         }
         public DbSet<Users> Users { get; set; }
+        public DbSet<Role> Role { get; set ; }
+        public DbSet<RoleMapper> RoleMapper { get ; set ; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

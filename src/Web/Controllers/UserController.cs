@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABPExample.Application.Interface;
 using ABPExample.Domain.Dtos.UserDtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -36,6 +37,13 @@ namespace Web.Controllers
         public async Task<JsonResult> AddUser(AddUserInputDto inputDto)
         {
             return Json(await _userApplication.AddUser(inputDto));
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> BatchAddUser(IFormFile file)
+        {
+
+            return Json(await _userApplication.BatchAddUser(file));
         }
     }
 }

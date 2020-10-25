@@ -10,8 +10,12 @@ using Volo.Abp.EntityFrameworkCore;
 namespace ABPExample.EntityFramework.EntityFrameworkCore
 {
     [ConnectionStringName("DefaultConn")]
-    public interface IAppDbContext:IEfCoreDbContext,ISingletonDependency
+    public interface IAppDbContext : IEfCoreDbContext, ISingletonDependency
     {
-         DbSet<Users> Users { get; set; }
+        DbSet<Users> Users { get; set; }
+
+        DbSet<Role> Role { get; set; }
+
+        DbSet<RoleMapper> RoleMapper { get; set; }
     }
 }

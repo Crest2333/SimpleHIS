@@ -9,7 +9,5 @@ namespace ABPExample.Domain.Dtos.UserDtos
         public string AccountNo { get; set; }
 
         public string PassWord { get; set; }
-
-        public bool RememberMe { get; set; }
     }
 }

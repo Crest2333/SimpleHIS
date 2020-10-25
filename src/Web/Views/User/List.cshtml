@@ -7,8 +7,7 @@
 <!-- partial -->
 <nav class="page-breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Tables</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Data Table</li>
+        <li class="breadcrumb-item"><a href="#">用户管理</a></li>
     </ol>
 </nav>
 
@@ -73,7 +72,10 @@
     </div>
     <div class="col-12 d-flex justify-content-between"  >
         <div>
-            <button class="btn btn-google" data-toggle="modal" data-target="#exampleModal">添加员工</button>
+            <button class="btn btn-google" onclick="ShowAddUserPage()">添加员工</button>
+            <button class="btn btn-google" onclick="ShowBatchAddUserPage()">批量添加</button>
+            <button class="btn btn-google" onclick="test()" >导出</button>
+
         </div>
         
 
@@ -133,6 +135,40 @@
     </div>
 </div>
 
+<div class="modal fade" id="batchAddUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">批量添加账户</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>上传文件 &nbsp;&nbsp;&nbsp;<a href ="~/file/批量添加账号模板.xlsx">点击下载模板</a></label>
+                        <input type="file" name="batchFile" id="batchFile" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                            <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                            <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-primary" type="button">上传</button>
+                            </span>
+                        </div>
+                    </div>
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="BatchAddUser()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @section Scripts{
 
     <script src="~/layui-v2.5.6/layui/layui.js"></script>
@@ -151,7 +187,11 @@
         <td>{{value.phoneNumber}}</td>
         <td>{{value.email}}</td>
         <td>{{value.userIdentity}}</td>
-    <td><span class="btn btn-primary">详情</span></td>
+        <td>
+            <span class="btn btn-primary" onclick="">详情</span>
+            <span class="btn btn-primary" onclick="">编辑</span>
+            <span class="btn btn-primary" onclick="">重置密码</span>
+        </td>
     </tr>
 
     {{/each}}

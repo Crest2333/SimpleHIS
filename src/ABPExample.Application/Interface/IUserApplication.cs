@@ -1,6 +1,7 @@
 ﻿using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Dtos.UserDtos;
 using ABPExample.Domain.Public;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +19,8 @@ namespace ABPExample.Application.Interface
 
         Task<ModelResult> BatchAddUser(List<AddUserInputDto> inputDtoList);
 
+        Task<ModelResult> BatchAddUser(IFormFile file);
+
         Task<ModelResult<PageDto<UserInfoListDto>>> GetUserInfoList(UserInfoListSearchDto inputDto);
 
         Task<ModelResult<UserInfoDetailDto>> GetUserInfoDetail(int id);
@@ -26,5 +29,16 @@ namespace ABPExample.Application.Interface
 
         Task<ModelResult> EditUserInfo(EditUserInfoDto infoDto);
 
+        Task<ModelResult> SetUserRole(string userId, int roleId);
+
+        Task<ModelResult> DeleteUserRole(int userId);
+
+        Task<ModelResult<string>> BatchEditUserInfo(List<EditUserInfoDto> infoDtoList);
+
+        Task<ModelResult> EditUserPassWord(EditPassWordDto inputDto);
+
+        Task<ModelResult> DeleteUser(long id);
+
+        Task<ModelResult> BatchDeleteUser(List<long> idList);
     }
 }

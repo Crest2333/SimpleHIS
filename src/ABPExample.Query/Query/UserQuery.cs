@@ -68,7 +68,7 @@ namespace ABPExample.Query.Query
 
         public async Task AddUser(Users model)
         {
-            var query = await _context.Users.OrderByDescending(c=>c.Id).Select(c=>c.Id).FirstOrDefaultAsync();
+            var query = await _context.Users.OrderByDescending(c => c.Id).Select(c => c.Id).FirstOrDefaultAsync();
             model.UserAccount = string.Format("{0:d6}", query + 1);
             await _context.AddAsync(model);
             await _context.SaveChangesAsync();
@@ -93,7 +93,7 @@ namespace ABPExample.Query.Query
                         select new UserInfoListDto
                         {
                             Email = a.Email,
-                            Gender =(EnumGender) a.Gender,
+                            Gender = (EnumGender)a.Gender,
                             PhoneNumber = a.PhoneNumber,
                             UserAccount = a.UserAccount,
                             UserIdentity = a.UserIdentity,
@@ -124,14 +124,105 @@ namespace ABPExample.Query.Query
             return info;
         }
 
-        public async Task ResetUserPassWord(int id)
+        public async Task<ModelResult> ResetUserPassWord(int id)
         {
-            throw new NotImplementedException();
+            var passwordHasher = new PasswordHasher<Users>();
+            var userInfo = await _context.Users.FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+            if (userInfo == null)
+                return new ModelResult { IsSuccess = false, Message = "没有查询到相关信息！" };
+            userInfo.UserPwd = passwordHasher.HashPassword(userInfo, userInfo.UserIdentity.Substring(userInfo.UserIdentity.Length - 6));
+            _context.Update(userInfo);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Message = "重置密码成功！" };
         }
 
-        public async Task EditUserInfo(EditUserInfoDto infoDto)
+        public async Task<ModelResult> EditUserInfo(EditUserInfoDto infoDto)
         {
-            throw new NotImplementedException();
+            var userInfo = await _context.Users.FirstOrDefaultAsync(c => c.Id == infoDto.Id);
+            if (userInfo == null)
+                return new ModelResult { IsSuccess = false, Message = "没有查询到相关信息！" };
+            _context.Update(userInfo);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Message = "修改成功" };
+        }
+
+        public async Task<ModelResult> EditUserPassWord(EditPassWordDto inputDto)
+        {
+            var passwordHasher = new PasswordHasher<Users>();
+            var userInfo = await _context.Users.FirstOrDefaultAsync(c => c.Id == inputDto.Id && !c.IsDeleted);
+            if (userInfo == null)
+                return new ModelResult { IsSuccess = false, Message = "没有查询到相关信息！" };
+
+            var result = passwordHasher.VerifyHashedPassword(userInfo, userInfo.UserPwd, inputDto.OldPassWord);
+            if (result != PasswordVerificationResult.Success)
+                return new ModelResult { IsSuccess = false, Message = "密码错误！" };
+
+            userInfo.UserPwd = passwordHasher.HashPassword(userInfo, inputDto.NewPassWord);
+            _context.Update(userInfo);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Message = "修改密码成功密码成功！" };
+        }
+
+
+        public async Task<ModelResult> SetUserRole(string userId, int roleId)
+        {
+            var query = await _context.RoleMapper.FirstOrDefaultAsync(c => c.AccountNo == userId && c.RoleId == roleId && !c.IsDeleted);
+            if (query != null)
+                return new ModelResult { IsSuccess = false, Message = "添加失败，该账号已有一个角色" };
+            var roleMapper = new RoleMapper
+            {
+                AccountNo = userId,
+                CreationTime = DateTime.Now,
+                IsDeleted = false,
+                LastModificationTime = DateTime.Now,
+                RoleId = roleId
+            };
+            await _context.AddAsync(roleMapper);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Code = 200, Message = "添加成功" };
+        }
+
+        public async Task<ModelResult> DeleteUserRole(int id)
+        {
+            var query = await _context.RoleMapper.FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+            if (query == null)
+                return new ModelResult { IsSuccess = false, Message = "没有找到相关信息！" };
+            query.IsDeleted = true;
+            _context.Update(query);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Code = 200, Message = "删除成功！" };
+        }
+
+        public async Task<ModelResult> DeleteUser(long id)
+        {
+            var userInfo = await _context.Users.FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+            if (userInfo == null)
+                return new ModelResult { IsSuccess = false, Message = "没有找到相关信息！" };
+            userInfo.IsDeleted = true;
+            _context.Update(userInfo);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Code = 200, Message = "删除成功！" };
+        }
+
+        public async Task<ModelResult> BatchDeleteUser(List<long> idList)
+        {
+            var userInfoList = await _context.Users
+                .Where(c => idList.Contains(c.Id) && !c.IsDeleted)
+                .Select(c => new Users
+                {
+                    Id = c.Id,
+                    IsDeleted = true
+                }).ToListAsync();
+            if (!userInfoList.Any())
+                return new ModelResult { IsSuccess = false, Message = "没有找到相关信息！" };
+
+            foreach(var item in userInfoList)
+            {
+                _context.Attach(item);//告诉EF Core开始跟踪person实体的更改，因为调用DbContext.Attach方法后，EF Core会将person实体的State值（可以通过testDBContext.Entry(person).State查看到）更改回EntityState.Unchanged，所以这里testDBContext.Attach(person)一定要放在下面一行testDBContext.Entry(person).Property(p => p.Name).IsModified = true的前面，否者后面的testDBContext.SaveChanges方法调用后，数据库不会被更新
+                _context.Entry(item).Property(p => p.IsDeleted).IsModified = true;//告诉EF Core实体person的Name属性已经更改。将testDBContext.Entry(person).Property(p => p.Name).IsModified设置为true后，也会将person实体的State值（可以通过testDBContext.Entry(person).State查看到）更改为EntityState.Modified，这样就保证了下面SaveChanges的时候会将person实体的Name属性值Update到数据库中。
+            }
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Code = 200, Message = "删除成功！" };
         }
     }
 }

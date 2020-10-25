@@ -6,10 +6,10 @@ namespace ABPExample.Domain.Models.Enum
 {
     public enum EnumGender
     {
+        other,
+
         man,
 
-        woman,
-
-        other
+        woman
     }
 }

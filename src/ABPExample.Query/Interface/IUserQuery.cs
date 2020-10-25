@@ -23,8 +23,18 @@ namespace ABPExample.Query.Interface
 
         Task<UserInfoDetailDto> GetUserInfoDetail(int id);
 
-        Task ResetUserPassWord(int id);
+        Task<ModelResult> ResetUserPassWord(int id);
 
-        Task EditUserInfo(EditUserInfoDto infoDto);
+        Task<ModelResult> EditUserInfo(EditUserInfoDto infoDto);
+
+        Task<ModelResult> SetUserRole(string userId, int roleId);
+
+        Task<ModelResult> DeleteUserRole(int id);
+
+        Task<ModelResult> EditUserPassWord(EditPassWordDto inputDto);
+
+        Task<ModelResult> DeleteUser(long id);
+
+        Task<ModelResult> BatchDeleteUser(List<long> idList);
     }
 }

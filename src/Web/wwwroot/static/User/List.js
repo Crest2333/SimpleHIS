@@ -15,7 +15,7 @@ function GetList(index) {
         function (res) {
             console.log(res)
             if (res.isSuccess) {
-                if ( res.result.count > 0) {
+                if (res.result.count > 0) {
                     //var html = $("#listHtml").tmpl(res.result.list)
                     var html = template("listHtml", res.result);
                     PageTool(res.result.count);
@@ -32,15 +32,15 @@ function GetList(index) {
 
 function GetData(index) {
     var data = {
-        PageIndex: index|| 1,
-        PageSize:size||10
+        PageIndex: index || 1,
+        PageSize: size || 10
     }
 
     return data;
 }
 
 
-function PageTool (count) {
+function PageTool(count) {
     layui.use('laypage', function () {
         var laypage = layui.laypage;
 
@@ -85,29 +85,50 @@ function GetAddUserInfo() {
     return data;
 }
 
-function LoadData(data) {
-    layui.use('table', function () {
-        var table = layui.table;
 
-        //第一个实例
-        table.render({
-            elem: '#demo'
-            , height: 312
-            , url: '/demo/table/user/' //数据接口
-            , page: true //开启分页
-            , cols: [[ //表头
-                { field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left' }
-                , { field: 'username', title: '用户名', width: 80 }
-                , { field: 'sex', title: '性别', width: 80, sort: true }
-                , { field: 'city', title: '城市', width: 80 }
-                , { field: 'sign', title: '签名', width: 177 }
-                , { field: 'experience', title: '积分', width: 80, sort: true }
-                , { field: 'score', title: '评分', width: 80, sort: true }
-                , { field: 'classify', title: '职业', width: 80 }
-                , { field: 'wealth', title: '财富', width: 135, sort: true }
-            ]]
-        });
-
-    });
+function ShowAddUserPage() {
+    ClearInput();
+    $("#exampleModal").modal("show")
 }
 
+function ClearInput() {
+    $("#uname").val(null);
+    $("#gender").val(1);
+    $("#phone").val(null);
+    $("#email").val(null);
+    $("#identity").val(null)
+}
+
+function ShowBatchAddUserPage() {
+    $("#batchAddUser").modal("show")
+}
+
+function BatchAddUser() {
+    var file = $('#batchFile').prop("files");
+
+    var data = new FormData()
+
+    data.append("file", file[0]);
+    $.ajax(
+        {
+            method: 'post',
+            url: "BatchAddUser",
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                if (res.isSuccess) {
+                    ShowTip('success', '添加成功')
+                }
+                else {
+                    ShowTip('warning', '添加成功')
+                }
+            }
+
+        }
+    )
+}
+function test() {
+    Tip('success', '添加成功')
+}

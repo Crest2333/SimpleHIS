@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ABPExample.Application\ABPExample.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\file\" />
+  </ItemGroup>
+
 </Project>
