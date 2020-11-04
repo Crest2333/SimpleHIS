@@ -17,5 +17,17 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
         DbSet<Role> Role { get; set; }
 
         DbSet<RoleMapper> RoleMapper { get; set; }
+
+        DbSet<DepartmentMapper> DepartmentMapper { get; set; }
+
+        DbSet<Department> Department { get; set; }
+
+        DbSet<Patients> Patients { get; set; }
+
+        DbSet<PastHistories> PastHistories { get; set; }
+
+        DbSet<Drug> Drug { get; set; }
+
+        DbSet<DrugCompatibility> DrugCompatibility { get; set; }
     }
 }

@@ -32,15 +32,28 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
             
         }
         public DbSet<Users> Users { get; set; }
+
         public DbSet<Role> Role { get; set ; }
+
         public DbSet<RoleMapper> RoleMapper { get ; set ; }
+
+        public DbSet<DepartmentMapper> DepartmentMapper { get; set; }
+
+        public DbSet<Department> Department { get; set; }
+
+        public DbSet<Patients> Patients { get; set; }
+
+        public DbSet<PastHistories> PastHistories { get; set; }
+
+        public DbSet<Drug> Drug { get; set; }
+
+        public DbSet<DrugCompatibility> DrugCompatibility { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Users>(c =>
             {
-
                 c.ConfigureByConvention();
             });
         }

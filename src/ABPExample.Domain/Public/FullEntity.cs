@@ -8,10 +8,12 @@ namespace ABPExample.Domain.Public
     public class FullEntity
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         
         public DateTime CreationTime { get; set; }
+
         public DateTime? LastModificationTime { get; set; }
+
         public bool IsDeleted { get; set; }
 
     }
