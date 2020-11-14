@@ -16,18 +16,20 @@ using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Query.Query
 {
-    public class PatientQuery : ApplicationService, IPatientQuery, ITransientDependency
+    public class PatientQuery : IPatientQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PatientQuery(IAppDbContext context)
+        public PatientQuery(IAppDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<ModelResult> Add(AddPatientInfoDto model)
         {
             var query = new Patients();
-            query = ObjectMapper.Map(model, query);
+            query = _mapper.Map<Patients>(model);
             query.IsDeleted = false;
             query.CreationTime = DateTime.Now;
             query.LastModificationTime = DateTime.Now;
@@ -46,7 +48,7 @@ namespace ABPExample.Query.Query
         public async Task<ModelResult> AddIllnessHistory(AddPastHistoryDto model)
         {
             var query = new PastHistories();
-            query = ObjectMapper.Map(model, query);
+            query = _mapper.Map<PastHistories>(model);
             query.CreationTime = DateTime.Now;
             query.LastModificationTime = DateTime.Now;
             query.IsDeleted = false;
@@ -152,7 +154,7 @@ namespace ABPExample.Query.Query
 
             var list = await query.ToListAsync();
             var result = new List<PatientInfoListDto>();
-            result = ObjectMapper.Map(list, result);
+            result = _mapper.Map< List<PatientInfoListDto>> (list);
 
             return new ModelResult<List<PatientInfoListDto>> { IsSuccess = true, Result = result };
         }

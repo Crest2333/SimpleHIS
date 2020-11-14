@@ -104,7 +104,7 @@ namespace ABPExample.Query.Query
                 query = query.Skip((inputDto.PageIndex) - 1).Take(inputDto.PageSize);
             var list = await query.ToListAsync();
 
-            return new PageDto<UserInfoListDto> { Count = count, List = list };
+            return new PageDto<UserInfoListDto>(count, list);
         }
 
         public async Task<UserInfoDetailDto> GetUserInfoDetail(int id)
@@ -216,7 +216,7 @@ namespace ABPExample.Query.Query
             if (!userInfoList.Any())
                 return new ModelResult { IsSuccess = false, Message = "没有找到相关信息！" };
 
-            foreach(var item in userInfoList)
+            foreach (var item in userInfoList)
             {
                 _context.Attach(item);//告诉EF Core开始跟踪person实体的更改，因为调用DbContext.Attach方法后，EF Core会将person实体的State值（可以通过testDBContext.Entry(person).State查看到）更改回EntityState.Unchanged，所以这里testDBContext.Attach(person)一定要放在下面一行testDBContext.Entry(person).Property(p => p.Name).IsModified = true的前面，否者后面的testDBContext.SaveChanges方法调用后，数据库不会被更新
                 _context.Entry(item).Property(p => p.IsDeleted).IsModified = true;//告诉EF Core实体person的Name属性已经更改。将testDBContext.Entry(person).Property(p => p.Name).IsModified设置为true后，也会将person实体的State值（可以通过testDBContext.Entry(person).State查看到）更改为EntityState.Modified，这样就保证了下面SaveChanges的时候会将person实体的Name属性值Update到数据库中。

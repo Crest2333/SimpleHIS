@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Query\DepartmentQuery.cs" />
+    <Compile Remove="Query\DoctorQuery.cs" />
+    <Compile Remove="Query\DrugQuery.cs" />
+    <Compile Remove="Query\PAQuery.cs" />
+    <Compile Remove="Query\PatientQuery.cs" />
+    <Compile Remove="Query\PharmacistQuery.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp" Version="5.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.7" />

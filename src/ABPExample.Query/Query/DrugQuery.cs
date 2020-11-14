@@ -5,6 +5,7 @@ using ABPExample.Domain.Models;
 using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,19 @@ using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Query.Query
 {
-    public class DrugQuery : ApplicationService, IDrugQuery, ITransientDependency
+    public class DrugQuery : IDrugQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public DrugQuery(IAppDbContext context)
+        public DrugQuery(IAppDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<ModelResult> Add(AddDrugInputDto inputDto)
         {
-            var query = new Drug();
-            query = ObjectMapper.Map(inputDto, query);
+            var query = _mapper.Map<Drug>(inputDto);
             query.CreationTime = DateTime.Now;
             query.LastModificationTime = DateTime.Now;
             query.IsDeleted = false;
@@ -38,7 +40,7 @@ namespace ABPExample.Query.Query
         public async Task<ModelResult> BatchAdd(List<AddDrugInputDto> inputDtoList)
         {
             var query = new List<Drug>();
-            query = ObjectMapper.Map(inputDtoList, query);
+            query = _mapper.Map<List<Drug>>(inputDtoList);
             query.ForEach(item =>
             {
                 item.LastModificationTime = DateTime.Now;
@@ -125,7 +127,7 @@ namespace ABPExample.Query.Query
             var query = await _context.Drug.FirstOrDefaultAsync(c => c.Id == inputDto.Id && !c.IsDeleted);
             if (query == null)
                 return new ModelResult { IsSuccess = false, Message = "没有找到相关信息" };
-            query = ObjectMapper.Map(inputDto, query);
+            query = _mapper.Map<Drug>(inputDto);
             query.LastModificationTime = DateTime.Now;
             _context.Update(query);
             await _context.SaveChangesAsync();
@@ -141,7 +143,7 @@ namespace ABPExample.Query.Query
             var list = await query.Skip((param.PageIndex - 1) * param.PageSize).Take(param.PageSize).ToListAsync();
 
             var result = new List<DrugInfoListDto>();
-            result = ObjectMapper.Map(list, result);
+            result = _mapper.Map<List<DrugInfoListDto>>(list);
             return new ModelResult<PageDto<DrugInfoListDto>> { IsSuccess = true, Result = new PageDto<DrugInfoListDto>(count, result) };
         }
 

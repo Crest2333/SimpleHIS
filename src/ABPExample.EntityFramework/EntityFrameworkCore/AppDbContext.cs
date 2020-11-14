@@ -49,6 +49,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
 
         public DbSet<DrugCompatibility> DrugCompatibility { get; set; }
 
+        public DbSet<Appointment> Appointment { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -8,7 +8,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.EntityFramework.EntityFrameworkCore
 {
-    public class HISContextProvider : IHISContextProvider, ISingletonDependency
+    public class HISContextProvider : IHISContextProvider
     {
         private readonly DbContextPool<AppDbContext> _dbContextPool;
         public HISContextProvider()

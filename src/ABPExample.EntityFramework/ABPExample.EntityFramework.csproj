@@ -11,6 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="EntityFrameworkCore\BaseDbContext.cs" />
+    <Compile Remove="EntityFrameworkCore\HISContextProvider.cs" />
+    <Compile Remove="EntityFrameworkCore\HISCurrentContext.cs" />
+    <Compile Remove="EntityFrameworkCore\IBaseDbContext.cs" />
+    <Compile Remove="EntityFrameworkCore\IHISContextProvider.cs" />
+    <Compile Remove="EntityFrameworkCore\IHISCurrentContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
     <PackageReference Include="Volo.Abp" Version="3.0.5" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="3.0.5" />

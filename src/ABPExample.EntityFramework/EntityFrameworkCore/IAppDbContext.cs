@@ -29,5 +29,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
         DbSet<Drug> Drug { get; set; }
 
         DbSet<DrugCompatibility> DrugCompatibility { get; set; }
+
+        DbSet<Appointment> Appointment { get; set; }
+
     }
 }

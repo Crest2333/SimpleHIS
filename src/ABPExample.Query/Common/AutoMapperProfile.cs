@@ -9,23 +9,23 @@ using System.Text;
 
 namespace ABPExample.Query.Common
 {
-    public class AutoMapperProfile: Profile
+    public class AutoMapperProfile
     {
-        public AutoMapperProfile()
-        {
-            CreateMap<AddPatientInfoDto, Patients>();
+        //public AutoMapperProfile()
+        //{
+        //    CreateMap<AddPatientInfoDto, Patients>();
 
-            CreateMap<EditPatientInfoDto, Patients>();
+        //    CreateMap<EditPatientInfoDto, Patients>();
 
-            CreateMap<AddPastHistoryDto, PastHistories>();
+        //    CreateMap<AddPastHistoryDto, PastHistories>();
 
-            CreateMap<AddDrugInputDto, Drug>();
+        //    CreateMap<AddDrugInputDto, Drug>();
 
-            CreateMap<Drug, DrugInfoListDto>();
+        //    CreateMap<Drug, DrugInfoListDto>();
 
-            CreateMap<EditDrugInputDto, Drug>();
+        //    CreateMap<EditDrugInputDto, Drug>();
 
-            CreateMap<Drug, DrugInfoDetailDto>();
-        }
+        //    CreateMap<Drug, DrugInfoDetailDto>();
+        //}
     }
 }

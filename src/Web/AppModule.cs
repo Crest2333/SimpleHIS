@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace Web
@@ -22,8 +23,7 @@ namespace Web
       typeof(ABPExampleEntityFrameworkModule),
       typeof(ABPExampleDomainModule),
       typeof(ABPExampleApplicationModule),
-      typeof(ABPExampleQueryModule)
-      )]
+      typeof(ABPExampleQueryModule))]
     public class AppModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -42,7 +42,7 @@ namespace Web
             var app = context.GetApplicationBuilder();
 
             var env = context.GetEnvironment();
-            
+
 
             if (env.IsDevelopment())
             {
@@ -57,11 +57,12 @@ namespace Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseConfiguredEndpoints(endpoints => {
-                endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Account}/{action=Login}/{id?}");
-            });
+            //app.UseConfiguredEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //            name: "default",
+            //            pattern: "{controller=Account}/{action=Login}/{id?}");
+            //});
         }
     }
 }

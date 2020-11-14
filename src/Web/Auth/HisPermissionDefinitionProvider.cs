@@ -6,12 +6,12 @@ using Volo.Abp.Authorization.Permissions;
 
 namespace Web.Auth
 {
-    public class HisPermissionDefinitionProvider : PermissionDefinitionProvider
+    public class HisPermissionDefinitionProvider 
     {
-        public override void Define(IPermissionDefinitionContext context)
-        {
-            var roleGroup = context.AddGroup("Doctor");
-            var permission = roleGroup.AddPermission("Book");
-        }
+        //public override void Define(IPermissionDefinitionContext context)
+        //{
+        //    var roleGroup = context.AddGroup("Doctor");
+        //    var permission = roleGroup.AddPermission("Book");
+        //}
     }
 }
