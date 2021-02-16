@@ -1,9 +1,11 @@
 ﻿using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Dtos.UserDtos;
+using ABPExample.Domain.Models;
 using ABPExample.Domain.Public;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,5 +42,10 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> DeleteUser(long id);
 
         Task<ModelResult> BatchDeleteUser(List<long> idList);
+
+        Task<List<TestExport>> GetTestExportListAsync();
+
+        Task<Stream> ExportUserInfo();
+
     }
 }

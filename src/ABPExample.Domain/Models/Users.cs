@@ -22,6 +22,13 @@ namespace ABPExample.Domain.Models
 
         public string UserIdentity { get; set; }
 
-        public int Gender { get; set; }
+        public Gender Gender { get; set; }
+    }
+
+    public enum Gender
+    {
+        Man,
+        Woman,
+        Other
     }
 }

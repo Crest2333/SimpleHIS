@@ -43,7 +43,7 @@ namespace ABPExample.Application.Application
             var query = new Users
             {
                 CreationTime = DateTime.Now,
-                Gender = (int)inputDto.Gender,
+                Gender = (Gender)inputDto.Gender,
                 IsDeleted = false,
                 LastModificationTime = DateTime.Now,
                 Email = inputDto.Email,
@@ -67,7 +67,7 @@ namespace ABPExample.Application.Application
                 var query = new Users
                 {
                     CreationTime = DateTime.Now,
-                    Gender = (int)inputDto.Gender,
+                    Gender = (Gender)inputDto.Gender,
                     IsDeleted = false,
                     LastModificationTime = DateTime.Now,
                     Email = inputDto.Email,
@@ -136,10 +136,10 @@ namespace ABPExample.Application.Application
                         item.Gender = Domain.Models.Enum.EnumGender.man;
                         break;
                     case "女":
-                        item.Gender = Domain.Models.Enum.EnumGender.man;
+                        item.Gender = Domain.Models.Enum.EnumGender.woman;
                         break;
                     case "其他":
-                        item.Gender = Domain.Models.Enum.EnumGender.man;
+                        item.Gender = Domain.Models.Enum.EnumGender.other;
                         break;
                     default:
                         return new ModelResult { IsSuccess = false, Message = "性别字段数据格式错误" };
@@ -177,12 +177,28 @@ namespace ABPExample.Application.Application
 
         public async Task<ModelResult> DeleteUser(long id)
         {
-            return await _query.DeleteUser(id);
+            for(var index = 1; index <= 60000; index++)
+            {
+                await _query.AddTest();
+            }
+            return null;
         }
 
         public async Task<ModelResult> BatchDeleteUser(List<long> idList)
         {
             return await _query.BatchDeleteUser(idList);
+        }
+
+        public async Task<List<TestExport>> GetTestExportListAsync()
+        {
+            return await _query.GetTestExportList();
+        }
+
+        public async Task<Stream> ExportUserInfo()
+        {
+            var list = await GetTestExportListAsync();
+            var dt = list.ToDataTable();
+            return ExcelHelper.ToExcel(dt, "Test", type: ExcelHelper.ExcelType.XLSX);
         }
     }
 }

@@ -32,5 +32,7 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
 
         DbSet<Appointment> Appointment { get; set; }
 
+        DbSet<TestExport> TestExport { get; set; }
+
     }
 }

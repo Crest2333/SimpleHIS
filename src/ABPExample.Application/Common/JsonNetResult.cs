@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ABPExample.Domain.Dtos.PastHistory
+namespace ABPExample.Application.Common
 {
-    public class PastInfoDto
+    class JsonNetResult
     {
     }
 }

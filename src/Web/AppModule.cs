@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABPExample.Query.Common;
+using AutoMapper;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
@@ -57,12 +59,12 @@ namespace Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            //app.UseConfiguredEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //            name: "default",
-            //            pattern: "{controller=Account}/{action=Login}/{id?}");
-            //});
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Account}/{action=Login}/{id?}");
+            });
         }
     }
 }

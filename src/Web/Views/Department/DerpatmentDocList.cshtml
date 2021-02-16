@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewData["Title"] = "DerpatmentDocList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<input type="hidden" value="@ViewBag.DepartmentId" id="departmentId" />
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <button class="btn btn-google" onclick="Search(1)">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="listTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>工号</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+        <div>
+            <button class="btn btn-google" onclick="ShowBatchAdd()">批量添加成员</button>
+        </div>
+        <div id="page">
+
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="BatchAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">批量添加成员</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>上传文件 &nbsp;&nbsp;&nbsp;<a href="~/file/批量添加账号模板.xlsx">点击下载模板</a></label>
+                        <input type="file" name="batchFile" id="batchFile" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                            <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                            <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-primary" type="button">上传</button>
+                            </span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="BatchAddUser()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="listHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.workNo}}</td>
+        <td>{{value.name}}</td>
+        <td>{{value.gender}}</td>
+        <td>
+            <button class="btn btn-primary" onclick="Delete('{{value.Id}}')">删除</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
+@section Scripts{
+    <script src="~/static/Department/docList.js"></script>
+    <script type="text/javascript">
+    </script>
+}

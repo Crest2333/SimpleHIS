@@ -28,6 +28,7 @@ namespace ABPExample.Query.Query
             _context = context;
             _hostingEnvironment = hostingEnvironment;
         }
+
         public async Task<AuthUserInfoDto> Authentication(LoginInputDto inputDto)
         {
             return await _context.Users
@@ -113,7 +114,7 @@ namespace ABPExample.Query.Query
             {
                 Id = (int)c.Id,
                 Email = c.Email,
-                Gender = c.Gender,
+                Gender =(int) c.Gender,
                 PhoneNumber = c.PhoneNumber,
                 UserAccount = c.UserAccount,
                 UserIdentity = c.UserIdentity,
@@ -162,7 +163,6 @@ namespace ABPExample.Query.Query
             await _context.SaveChangesAsync();
             return new ModelResult { IsSuccess = true, Message = "修改密码成功密码成功！" };
         }
-
 
         public async Task<ModelResult> SetUserRole(string userId, int roleId)
         {
@@ -223,6 +223,55 @@ namespace ABPExample.Query.Query
             }
             await _context.SaveChangesAsync();
             return new ModelResult { IsSuccess = true, Code = 200, Message = "删除成功！" };
+        }
+
+        public async Task AddTest()
+        {
+            TestExport testExport = new TestExport
+            {
+                A1 = "qwe123",
+                A2 = "qwe123",
+                A3 = "qwe123",
+                A4 = "qwe123",
+                A5 = "qwe123",
+                A6 = "qwe123",
+                A7 = "qwe123",
+                A8 = "qwe123",
+                A9 = "qwe123",
+                A10 = "qwe123",
+                A11 = "qwe123",
+                A12 = "qwe123",
+                A13 = "qwe123",
+                A14 = "qwe123",
+                A16 = "qwe123",
+                A15 = "qwe123",
+                A17 = "qwe123",
+                A18 = "qwe123",
+                A19 = "qwe123",
+                A20 = "qwe123",
+                A21 = "qwe123",
+                A22 = "qwe123",
+                A23 = "qwe123",
+                A24 = "qwe123",
+                A25 = "qwe123",
+                A26 = "qwe123",
+                A27 = "qwe123",
+                A28 = "qwe123",
+                A29 = "qwe123",
+                A30 = "qwe123",
+                A31 = "qwe123",
+                A32 = "qwe123",
+                A33 = "qwe123",
+                A34 = "qwe123",
+                A35 = "qwe123"
+            };
+            await _context.AddAsync(testExport);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<TestExport>> GetTestExportList()
+        {
+            return await  _context.TestExport.ToListAsync();
         }
     }
 }

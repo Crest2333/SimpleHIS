@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -69,6 +70,46 @@ namespace ABPExample.Application.Common
             }
             ms.Dispose();
             return data;
+        }
+
+        public static Stream ToExcel(DataTable dt,string fileName, ExcelType type)
+        {
+            IWorkbook workbook;
+            if (type==ExcelType.XLSX)
+                workbook = new XSSFWorkbook();
+            else
+                workbook = new HSSFWorkbook();
+            ISheet sheet = string.IsNullOrEmpty(dt.TableName) ? workbook.CreateSheet("Sheet1") : workbook.CreateSheet(dt.TableName);
+
+            //表头  
+            IRow row = sheet.CreateRow(0);
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                ICell cell = row.CreateCell(i);
+                cell.SetCellValue(dt.Columns[i].ColumnName);
+            }
+
+            //数据  
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                IRow row1 = sheet.CreateRow(i + 1);
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    ICell cell = row1.CreateCell(j);
+                    cell.SetCellValue(dt.Rows[i][j].ToString());
+                }
+            }
+
+            //转为字节数组  
+            MemoryStream stream = new MemoryStream();
+            workbook.Write(stream);
+            return stream;
+        }
+
+        public enum ExcelType
+        {
+            XLSX,
+            XLS
         }
     }
 }

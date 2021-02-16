@@ -1,31 +1,40 @@
 ﻿using ABPExample.Domain.Dtos.Drug;
-using ABPExample.Domain.Dtos.PastHistory;
 using ABPExample.Domain.Dtos.Patient;
 using ABPExample.Domain.Models;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Dtos.MedicalHistory;
+using AutoMapper;
+using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Query.Common
 {
-    public class AutoMapperProfile
+    public class AutoMapperProfile:Profile
     {
-        //public AutoMapperProfile()
-        //{
-        //    CreateMap<AddPatientInfoDto, Patients>();
+        public AutoMapperProfile()
+        {
+            CreateMap<AddPatientInfoDto, Patients>();
 
-        //    CreateMap<EditPatientInfoDto, Patients>();
+            CreateMap<Patients,PatientInfoListDto >();
 
-        //    CreateMap<AddPastHistoryDto, PastHistories>();
+            CreateMap<Patients, PatientInfoDetailDto>();
 
-        //    CreateMap<AddDrugInputDto, Drug>();
+            CreateMap<EditPatientInfoDto, Patients>();
 
-        //    CreateMap<Drug, DrugInfoListDto>();
+            CreateMap<AddPastHistoryDto, PastHistories>();
 
-        //    CreateMap<EditDrugInputDto, Drug>();
+            CreateMap<PastHistories, MedicalInfoDto>();
 
-        //    CreateMap<Drug, DrugInfoDetailDto>();
-        //}
+            CreateMap<EditMedicalInputDto, MedicalInfoDto>();
+
+            CreateMap<AddDrugInputDto, Drug>();
+
+            CreateMap<Drug, DrugInfoListDto>();
+
+            CreateMap<EditDrugInputDto, Drug>();
+
+            CreateMap<Drug, DrugInfoDetailDto>();
+        }
     }
 }

@@ -9,6 +9,8 @@ namespace ABPExample.Domain.Dtos.Appointment
     {
         public int Id { get; set; }
 
+        public string AppointmentNo { get; set; }
+
         public string PatientName { get; set; }
 
         public EnumGender Gender { get; set; }

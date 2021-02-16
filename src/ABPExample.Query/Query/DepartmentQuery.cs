@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Dtos.Department;
 using ABPExample.Domain.Models;
 using ABPExample.Domain.Public;
@@ -131,10 +132,13 @@ namespace ABPExample.Query.Query
             return new ModelResult { IsSuccess = true, Message = "删除成功！" };
         }
 
-        public async Task<List<DepartmentInfoListDto>> List(DepartmentSearchDto inputDto)
+        public async Task<PageDto<DepartmentInfoListDto>> List(DepartmentSearchDto inputDto)
         {
-            var query = await _context.Department
-                .Where(c => c.IsDeleted)
+            var query =  _context.Department
+                .WhereIf(!string.IsNullOrWhiteSpace(inputDto.Name), c => c.Name == inputDto.Name)
+                .Where(c => !c.IsDeleted);
+            var count =await query.CountAsync();
+            var list=await query
                 .Skip(inputDto.PageSize * (inputDto.PageIndex - 1))
                 .Take(inputDto.PageSize)
                 .Select(c => new DepartmentInfoListDto
@@ -144,9 +148,7 @@ namespace ABPExample.Query.Query
                     Id=c.Id
                 })
                 .ToListAsync();
-
-
-            return query;
+            return new PageDto<DepartmentInfoListDto>(count,list) ;
         }
 
         public async Task<ModelResult> Modify(int id)

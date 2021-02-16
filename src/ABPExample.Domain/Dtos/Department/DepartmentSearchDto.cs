@@ -6,6 +6,7 @@ namespace ABPExample.Domain.Dtos.Department
 {
     public class DepartmentSearchDto
     {
+        public string Name { get; set; }
 
         public int PageIndex { get; set; }
 

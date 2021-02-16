@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Abp.Application.Services;
 using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Models;
@@ -16,15 +15,14 @@ using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Query.Query
 {
-    public class PAQuery :  IPAQuery, ITransientDependency
+    public class PAQuery : IPAQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
-        private readonly IMapper _mapper;
 
-        public PAQuery(IAppDbContext context, IMapper mapper)
+        public PAQuery(IAppDbContext context)
         {
             _context = context;
-            _mapper = mapper;
+
         }
         public async Task<ModelResult> AddAppointment(AddAppointmentInfoDto inputDto)
         {
@@ -42,8 +40,6 @@ namespace ABPExample.Query.Query
                 Describe = inputDto.Describe,
                 DoctorNo = inputDto.DoctorNo,
                 IsDeleted = false,
-                PatientName = patientInfo.FullName,
-                PhoneNumber = patientInfo.PhoneNumber,
                 PatientId = inputDto.PatientId
             };
 
@@ -78,30 +74,31 @@ namespace ABPExample.Query.Query
 
         public async Task<ModelResult<AppointmentInfoDetailDto>> GetAppointmentInfoDetail(int id)
         {
-            var result = await (from a in _context.Appointment
-                                join b in _context.Patients on a.PatientId equals b.Id
-                                join c in _context.Users on a.DoctorNo equals c.UserAccount
-                                join d in _context.Department on a.DepartmentId equals d.Id
-                                where a.Id == id && !a.IsDeleted
-                                select new AppointmentInfoDetailDto
-                                {
-                                    Id = a.Id,
-                                    Status = a.Status,
-                                    AppointmentDate = a.AppointmentDate,
-                                    Department = d.Name,
-                                    Describe = a.Describe,
-                                    DoctorName = c.UserName,
-                                    DoctorNo = c.UserAccount,
-                                    Gender = b.Gender.ToString(),
-                                    PatientName = b.FullName,
-                                    Address = b.Address,
-                                    BloodType = b.BloodType,
-                                    DateOfBirth = b.DateOfBirth,
-                                    Height = b.Height,
-                                    IdentityId = b.IdentityId,
-                                    PhoneNumber = b.PhoneNumber,
-                                    Weight = b.Weight
-                                }).FirstOrDefaultAsync();
+            var result = await (
+                from a in _context.Appointment
+                join b in _context.Patients on a.PatientId equals b.Id
+                join c in _context.Users on a.DoctorNo equals c.UserAccount
+                join d in _context.Department on a.DepartmentId equals d.Id
+                where a.Id == id && !a.IsDeleted
+                select new AppointmentInfoDetailDto
+                {
+                    Id = a.Id,
+                    Status = a.Status,
+                    AppointmentDate = a.AppointmentDate,
+                    Department = d.Name,
+                    Describe = a.Describe,
+                    DoctorName = c.UserName,
+                    DoctorNo = c.UserAccount,
+                    Gender = b.Gender.ToString(),
+                    PatientName = b.FullName,
+                    Address = b.Address,
+                    BloodType = b.BloodType,
+                    DateOfBirth = b.DateOfBirth,
+                    Height = b.Height,
+                    IdentityId = b.IdentityId,
+                    PhoneNumber = b.PhoneNumber,
+                    Weight = b.Weight
+                }).FirstOrDefaultAsync();
             return new ModelResult<AppointmentInfoDetailDto> { IsSuccess = true, Result = result };
         }
 
@@ -111,10 +108,11 @@ namespace ABPExample.Query.Query
                         join b in _context.Patients on a.PatientId equals b.Id
                         join c in _context.Users on a.DoctorNo equals c.UserAccount
                         join d in _context.Department on a.DepartmentId equals d.Id
+                        where !param.PatientId.HasValue || a.PatientId == param.PatientId
                         where string.IsNullOrWhiteSpace(param.DoctorName) || c.UserName == param.DoctorName
                         where string.IsNullOrWhiteSpace(param.PatientName) || b.FullName == param.PatientName
                         where string.IsNullOrWhiteSpace(param.PhoneNumber) || b.PhoneNumber == param.PhoneNumber
-                        where param.Status < 0 || a.Status == param.Status
+                        where !param.Status.HasValue || a.Status == param.Status
                         where !param.StartDate.HasValue || a.AppointmentDate >= param.StartDate.Value
                         where !param.EndDate.HasValue || a.AppointmentDate <= param.EndDate
                         where !a.IsDeleted
@@ -127,7 +125,8 @@ namespace ABPExample.Query.Query
                             DoctorNo = c.UserAccount,
                             Gender = b.Gender,
                             Id = a.Id,
-                            PatientName = b.FullName
+                            PatientName = b.FullName,
+                            AppointmentNo = a.AppointmentNo
                         };
 
 

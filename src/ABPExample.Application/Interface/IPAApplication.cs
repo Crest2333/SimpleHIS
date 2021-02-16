@@ -6,5 +6,6 @@ namespace ABPExample.Application.Interface
 {
     public interface IPAApplication
     {
+
     }
 }

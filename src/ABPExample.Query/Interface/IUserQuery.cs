@@ -36,5 +36,9 @@ namespace ABPExample.Query.Interface
         Task<ModelResult> DeleteUser(long id);
 
         Task<ModelResult> BatchDeleteUser(List<long> idList);
+
+        Task AddTest();
+
+        Task<List<TestExport>> GetTestExportList();
     }
 }

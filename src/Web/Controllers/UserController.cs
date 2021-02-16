@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ABPExample.Application.Interface;
@@ -42,8 +43,20 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<JsonResult> BatchAddUser(IFormFile file)
         {
-
             return Json(await _userApplication.BatchAddUser(file));
+        }
+
+        [HttpPut]
+        public async Task<JsonResult> ResetPassWord(int userId)
+        {
+            return Json(await _userApplication.ResetUserPassWord(userId));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportUserInfo()
+        {
+            MemoryStream stream = (MemoryStream)await _userApplication.ExportUserInfo();
+            return File(stream.ToArray(), "application/ms-excel", "fileName.xlsx");
         }
     }
 }

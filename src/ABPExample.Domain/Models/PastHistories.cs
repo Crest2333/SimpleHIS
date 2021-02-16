@@ -9,11 +9,13 @@ namespace ABPExample.Domain.Models
     {
         public string Name { get; set; }
 
-        public long PatientId { get; set; }
+        public int PatientId { get; set; }
 
         public string Describe { get; set; }
 
         public string CreateBy { get; set; }
+
+        public DateTime? StartDate { get; set; }
 
     }
 }

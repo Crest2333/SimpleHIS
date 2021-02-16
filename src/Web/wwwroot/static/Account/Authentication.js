@@ -12,7 +12,6 @@ function Login() {
         PassWord: $("#passWord").val(),
         RememberMe: false
     }
-
     $.post(
         "/Account/Authentication",
         model,

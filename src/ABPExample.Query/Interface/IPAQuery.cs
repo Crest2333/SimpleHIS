@@ -1,5 +1,4 @@
-﻿using Abp.Application.Services.Dto;
-using ABPExample.Domain.Dtos.Appointment;
+﻿using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Public;
 using System;

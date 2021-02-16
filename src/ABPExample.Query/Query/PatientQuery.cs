@@ -1,27 +1,28 @@
-﻿using Abp.Application.Services;
-using ABPExample.Domain.Dtos.PastHistory;
+﻿using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Dtos.Patient;
 using ABPExample.Domain.Models;
 using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.MedicalHistory;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ObjectMapping;
+
 
 namespace ABPExample.Query.Query
 {
     public class PatientQuery : IPatientQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IObjectMapper<ABPExampleQueryModule> _mapper;
 
-        public PatientQuery(IAppDbContext context,IMapper mapper)
+        public PatientQuery(IAppDbContext context, IObjectMapper<ABPExampleQueryModule> mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -29,7 +30,7 @@ namespace ABPExample.Query.Query
         public async Task<ModelResult> Add(AddPatientInfoDto model)
         {
             var query = new Patients();
-            query = _mapper.Map<Patients>(model);
+            query = _mapper.Map<AddPatientInfoDto, Patients>(model);
             query.IsDeleted = false;
             query.CreationTime = DateTime.Now;
             query.LastModificationTime = DateTime.Now;
@@ -47,12 +48,11 @@ namespace ABPExample.Query.Query
 
         public async Task<ModelResult> AddIllnessHistory(AddPastHistoryDto model)
         {
-            var query = new PastHistories();
-            query = _mapper.Map<PastHistories>(model);
+            var query = _mapper.Map<AddPastHistoryDto, PastHistories>(model);
             query.CreationTime = DateTime.Now;
             query.LastModificationTime = DateTime.Now;
             query.IsDeleted = false;
-
+            query.CreateBy = "123";
             var isExistence = await _context.PastHistories
                 .Where(c => !c.IsDeleted && c.Name == model.Name && c.PatientId == model.PatientId)
                 .AnyAsync();
@@ -121,7 +121,9 @@ namespace ABPExample.Query.Query
 
         public async Task<ModelResult<PatientInfoDetailDto>> Detail(int id)
         {
-            throw new NotImplementedException();
+            var info = await _context.Patients.FirstOrDefaultAsync(c => c.Id == id);
+            return info == null ? new ModelResult<PatientInfoDetailDto> { IsSuccess = false, Message = "没有获取到数据" }
+                : new ModelResult<PatientInfoDetailDto> { IsSuccess = true, Result = _mapper.Map<Patients, PatientInfoDetailDto>(info) };
         }
 
         public async Task<ModelResult> Edit(EditPatientInfoDto model)
@@ -143,20 +145,22 @@ namespace ABPExample.Query.Query
             return new ModelResult { IsSuccess = true, Message = "修改成功" };
         }
 
-        public async Task<ModelResult<List<PatientInfoListDto>>> List(PatientSearchDto param)
+        public async Task<ModelResult<PageDto<PatientInfoListDto>>> List(PatientSearchDto param)
         {
             var query = _context.Patients
-                .Where(c => !c.IsDeleted && c.FullName == param.Name && c.IdentityId == param.IdentityId && c.PhoneNumber == param.PhoneNumber);
+                .WhereIf(!string.IsNullOrEmpty(param.Name), c => c.FullName == param.Name)
+                .WhereIf(!string.IsNullOrEmpty(param.IdentityId), c => c.IdentityId == param.IdentityId)
+                .WhereIf(!string.IsNullOrEmpty(param.PhoneNumber), c => c.PhoneNumber == param.PhoneNumber)
+                .Where(c => !c.IsDeleted);
 
             var count = await query.CountAsync();
             if (param.PageIndex > 0)
                 query = query.Skip((param.PageIndex - 1) * param.PageSize).Take(param.PageSize);
 
             var list = await query.ToListAsync();
-            var result = new List<PatientInfoListDto>();
-            result = _mapper.Map< List<PatientInfoListDto>> (list);
+            var result = _mapper.Map<List<Patients>, List<PatientInfoListDto>>(list);
 
-            return new ModelResult<List<PatientInfoListDto>> { IsSuccess = true, Result = result };
+            return new ModelResult<PageDto<PatientInfoListDto>> { IsSuccess = true, Result = new PageDto<PatientInfoListDto>(count, result) };
         }
     }
 }

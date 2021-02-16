@@ -7,7 +7,7 @@ namespace ABPExample.Domain.Dtos.Patient
 {
     public class PatientInfoListDto
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public string FullName { get; set; }
 
@@ -17,7 +17,6 @@ namespace ABPExample.Domain.Dtos.Patient
 
         public string IdentityId { get; set; }
 
-        public int TotalCount { get; set; }
 
     }
 }

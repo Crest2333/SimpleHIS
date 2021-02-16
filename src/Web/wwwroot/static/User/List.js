@@ -2,13 +2,13 @@
     GetList(1)
 })
 
-let index = 1;
+let pageIndex = 1;
 
 let size = 10;
 
-
 function GetList(index) {
-    var model = GetData(index);
+    pageIndex = index;
+    var model = GetData(pageIndex);
     $.post(
         "/User/GetUserInfoList",
         model,
@@ -18,7 +18,10 @@ function GetList(index) {
                 if (res.result.count > 0) {
                     //var html = $("#listHtml").tmpl(res.result.list)
                     var html = template("listHtml", res.result);
-                    PageTool(res.result.count);
+                    if (pageIndex == 1) {
+                        PageTool(res.result.count);
+                    }
+
                     $("#listBody").html(html);
                 }
                 else {
@@ -29,39 +32,35 @@ function GetList(index) {
     )
 }
 
-
 function GetData(index) {
     var data = {
         PageIndex: index || 1,
         PageSize: size || 10
     }
-
     return data;
 }
-
 
 function PageTool(count) {
     layui.use('laypage', function () {
         var laypage = layui.laypage;
-
         //执行一个laypage实例
         laypage.render({
             elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
             , count: count //数据总数，从服务端得到
-            , limit: 20
+            , limit: 10
             , jump: function (obj, first) {
                 //obj包含了当前分页的所有参数，比如：
-
                 //首次不执行
+                console.log(obj.curr)
+                console.log(first);
                 if (!first) {
+                    GetList(obj.curr)
                     //do something
                 }
             }
         });
     });
-
 }
-
 
 function AddUser() {
     var model = GetAddUserInfo();
@@ -85,7 +84,6 @@ function GetAddUserInfo() {
     return data;
 }
 
-
 function ShowAddUserPage() {
     ClearInput();
     $("#exampleModal").modal("show")
@@ -105,9 +103,7 @@ function ShowBatchAddUserPage() {
 
 function BatchAddUser() {
     var file = $('#batchFile').prop("files");
-
     var data = new FormData()
-
     data.append("file", file[0]);
     $.ajax(
         {
@@ -122,13 +118,67 @@ function BatchAddUser() {
                     ShowTip('success', '添加成功')
                 }
                 else {
-                    ShowTip('warning', '添加成功')
+                    ShowTip('warning', res.Message);
                 }
+                $("#batchAddUser").modal("hide")
             }
 
         }
     )
 }
+
 function test() {
     Tip('success', '添加成功')
+}
+
+function ResetPassWord(userId) {
+    $.ajax({
+        method: 'put',
+        url: '/User/ResetPassWord',
+        data: { userId: userId },
+        success: function (res) {
+            if (res.isSuccess) {
+                ShowTip('success', '重置成功');
+            }
+            else {
+                ShowTip('warning', res.Message);
+            }
+        }
+    })
+}
+
+function Delete() {
+    $.ajax({
+        method: 'put',
+        url: '/User/ResetPassWord',
+        data: { userId: userId },
+        success: function (res) {
+            if (res.isSuccess) {
+                ShowTip('success', '重置成功');
+            }
+            else {
+                ShowTip('warning', res.Message);
+            }
+        }
+    })
+}
+
+function Export() {
+    Loading('请稍后');
+    $.ajax({
+        method: 'get',
+        url: '/User/ExportUserInfo',
+        responseType: 'arraybuffer',
+        success: function (res) {
+            console.log(res);
+            const url = window.URL.createObjectURL(new Blob([res]))
+            const link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            link.setAttribute('download', 'excel.xlsx')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        }
+    })
 }

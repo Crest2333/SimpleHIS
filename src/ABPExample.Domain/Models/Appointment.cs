@@ -7,11 +7,12 @@ namespace ABPExample.Domain.Models
 {
     public class Appointment:FullEntity
     {
+        /// <summary>
+        ///     预约号
+        /// </summary>
+        public string AppointmentNo { get; set; }
+
         public int PatientId { get; set; }
-
-        public string PatientName { get; set; }
-
-        public string PhoneNumber { get; set; }
 
         public string DoctorNo { get; set; }
 

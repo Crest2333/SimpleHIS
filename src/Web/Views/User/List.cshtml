@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 row ">
-                        <button class="btn btn-google">搜索</button>
+                        <button class="btn btn-google" onclick="GetList(1)">搜索</button>
                     </div>
                 </div>
 
@@ -74,11 +74,8 @@
         <div>
             <button class="btn btn-google" onclick="ShowAddUserPage()">添加员工</button>
             <button class="btn btn-google" onclick="ShowBatchAddUserPage()">批量添加</button>
-            <button class="btn btn-google" onclick="test()" >导出</button>
-
+            <button class="btn btn-google" onclick="Export()" >导出</button>
         </div>
-        
-
         <div id="page">
 
         </div>
@@ -167,15 +164,9 @@
     </div>
 </div>
 
-
-
 @section Scripts{
-
-    <script src="~/layui-v2.5.6/layui/layui.js"></script>
     <script src="~/static/User/List.js"></script>
-
     <script type="text/javascript">
-
     </script>
 }
 <script id="listHtml" type="text/html">
@@ -188,9 +179,9 @@
         <td>{{value.email}}</td>
         <td>{{value.userIdentity}}</td>
         <td>
-            <span class="btn btn-primary" onclick="">详情</span>
-            <span class="btn btn-primary" onclick="">编辑</span>
-            <span class="btn btn-primary" onclick="">重置密码</span>
+            <button class="btn btn-primary" onclick="">详情</button>
+            <button class="btn btn-primary" onclick="Delete()">编辑</button>
+            <button class="btn btn-primary" onclick="ResetPassWord(1)">重置密码</button>
         </td>
     </tr>
 

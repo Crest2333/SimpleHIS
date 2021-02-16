@@ -32,3 +32,4 @@ function Tip(type, msg) {
 
     $("#tip").modal("show");
 }
+

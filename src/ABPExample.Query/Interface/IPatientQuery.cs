@@ -1,10 +1,11 @@
-﻿using ABPExample.Domain.Dtos.PastHistory;
-using ABPExample.Domain.Dtos.Patient;
+﻿using ABPExample.Domain.Dtos.Patient;
 using ABPExample.Domain.Public;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Common;
+using ABPExample.Domain.Dtos.MedicalHistory;
 
 namespace ABPExample.Query.Interface
 {
@@ -16,7 +17,7 @@ namespace ABPExample.Query.Interface
 
         Task<ModelResult> Edit(EditPatientInfoDto model);
 
-        Task<ModelResult<List<PatientInfoListDto>>> List(PatientSearchDto param);
+        Task<ModelResult<PageDto<PatientInfoListDto>>> List(PatientSearchDto param);
 
         Task<ModelResult> AddIllnessHistory(AddPastHistoryDto model);
 

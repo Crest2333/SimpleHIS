@@ -7,6 +7,8 @@ namespace ABPExample.Domain.Dtos.Appointment
 {
     public class AppointmentInfoListSearchDto: PageSearchDto
     {
+        public int? PatientId { get; set; }
+
         public string PatientName { get; set; }
 
         public string PhoneNumber { get; set; }
@@ -19,7 +21,7 @@ namespace ABPExample.Domain.Dtos.Appointment
 
         public int DepartmentId { get; set; }
 
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
     }
 }

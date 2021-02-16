@@ -1,4 +1,5 @@
-﻿using ABPExample.Domain.Dtos.Department;
+﻿using ABPExample.Domain.Dtos.Common;
+using ABPExample.Domain.Dtos.Department;
 using ABPExample.Domain.Public;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace ABPExample.Query.Interface
 
         Task<ModelResult> Modify(int id);
 
-        Task<List<DepartmentInfoListDto>> List(DepartmentSearchDto inputDto);
+        Task<PageDto<DepartmentInfoListDto>> List(DepartmentSearchDto inputDto);
 
         Task<ModelResult> AddDepartmentPersonnel(AddPersonnelInputDto inputDto);
 
