@@ -7,6 +7,7 @@ namespace ABPExample.Domain.Dtos.UserDtos
 {
     public class UserInfoListDto
     {
+        public int Id { get; set; }
         public string UserAccount { get; set; }
 
         public string UserName { get; set; }

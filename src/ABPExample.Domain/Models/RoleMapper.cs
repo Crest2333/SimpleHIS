@@ -8,7 +8,7 @@ namespace ABPExample.Domain.Models
 {
     public class RoleMapper:FullEntity
     {
-        public string AccountNo { get; set; }
+        public int UserId { get; set; }
 
         public int RoleId { get; set; }
     }

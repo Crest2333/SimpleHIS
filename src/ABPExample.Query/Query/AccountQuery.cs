@@ -33,7 +33,7 @@ namespace ABPExample.Query.Query
         {
             var info = await (
                 from a in _context.Users
-                join b in _context.RoleMapper on a.UserAccount equals b.AccountNo
+                join b in _context.RoleMapper on a.Id equals b.UserId
                 join c in _context.Role on b.RoleId equals c.Id
                 where a.UserAccount == inputDto.AccountNo
                 where !a.IsDeleted && !b.IsDeleted && !c.IsDeleted

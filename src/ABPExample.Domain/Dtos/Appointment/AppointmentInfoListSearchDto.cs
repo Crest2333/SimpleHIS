@@ -19,7 +19,7 @@ namespace ABPExample.Domain.Dtos.Appointment
 
         public string DoctorName { get; set; }
 
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
 
         public int? Status { get; set; }
 

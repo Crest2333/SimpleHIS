@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\PA\AddAppointment.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="Volo.Abp" Version="3.3.1" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.3.1" />
@@ -17,6 +21,18 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\file\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\PA\AddAppointment.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\PA\AddAppointment.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\PA\AddAppointment.cshtml" />
   </ItemGroup>
 
 </Project>

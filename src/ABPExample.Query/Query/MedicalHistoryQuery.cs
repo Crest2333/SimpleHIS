@@ -9,6 +9,7 @@ using ABPExample.Domain.Models;
 using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
@@ -47,13 +48,25 @@ namespace ABPExample.Query.Query
             throw new NotImplementedException();
         }
 
-        public async Task<ModelResult> Edit(EditMedicalInputDmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmnnnnnnnnnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm mmmmmmmmmmmmmmmmmmmto input)
+        public async Task<ModelResult> Edit(EditMedicalInputDto input)
         {
-            var model = _mapper.Map<EditMedicalInputDto, MedicalInfoDto>(input);
+            var model = _mapper.Map<EditMedicalInputDto, PastHistories>(input);
             model.CreateBy = "123";
-             _context.Update(model);
-             await _context.SaveChangesAsync();
-             return new ModelResult {IsSuccess = true, Message = "修改成功"};
+            model.CreationTime=DateTime.Now;
+            model.LastModificationTime = DateTime.Now;
+
+            _context.Update(model);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Message = "修改成功" };
+        }
+
+        public async Task<ModelResult<MedicalInfoDto>> Detail(int id)
+        {
+            var model = await _context.PastHistories.FirstOrDefaultAsync(c => c.Id == id);
+            return model == null
+                ? new ModelResult<MedicalInfoDto> { IsSuccess = false, Message = "没有查询到相关数据" }
+                : new ModelResult<MedicalInfoDto>
+                { IsSuccess = true, Result = _mapper.Map<PastHistories, MedicalInfoDto>(model) };
         }
     }
 }

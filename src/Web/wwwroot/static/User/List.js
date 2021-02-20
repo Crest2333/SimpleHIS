@@ -182,3 +182,43 @@ function Export() {
         }
     })
 }
+
+let userId;
+
+function OpenRoleModal(id) {
+    $("#roleModal").modal("show");
+    userId = id;
+    InitRole();
+}
+
+function InitRole() {
+    $.get(
+        "/Role/GetAllRole",
+        function (result) {
+            var html = template("roleHtml", result);
+            $("#roleDiv").html(html);
+        }
+    )
+}
+
+function AddRole() {
+    var model = {
+        UserId: userId,
+        RoleId: $("input[name='role']:checked").val()
+    }
+    $.post(
+        "/Role/AddOrEditRole",
+        model,
+        function (result) {
+            if (result.isSuccess) {
+                ShowTip('success', '添加成功');
+            }
+            else {
+                ShowTip('warning', result.message);
+            }
+        }
+    )
+}
+
+
+

@@ -11,16 +11,19 @@ using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ObjectMapping;
 
 namespace ABPExample.Query.Query
 {
     public class DepartmentQuery : IDepartmentQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
+        private readonly IObjectMapper _mapper;
 
-        public DepartmentQuery(IAppDbContext context)
+        public DepartmentQuery(IAppDbContext context,IObjectMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<ModelResult> Add(AddDepartmentInputDto inputDto)
@@ -45,7 +48,7 @@ namespace ABPExample.Query.Query
             {
                 CreationTime = DateTime.Now,
                 DepartmentId = inputDto.DepartmentId,
-                AccountNo = inputDto.AccountNo,
+                UserId = inputDto.UserId,
                 IsDeleted = false,
             };
             await _context.AddAsync(model);
@@ -83,7 +86,7 @@ namespace ABPExample.Query.Query
                 {
                     CreationTime = DateTime.Now,
                     DepartmentId = inputDto.DepartmentId,
-                    AccountNo = inputDto.AccountNo,
+                    UserId = inputDto.UserId,
                     IsDeleted = false,
                 };
                 modelList.Add(model);
@@ -118,6 +121,13 @@ namespace ABPExample.Query.Query
             _context.UpdateRange(query);
             await _context.SaveChangesAsync();
             return new ModelResult { IsSuccess = true, Message = "删除成功！" };
+        }
+
+        public async Task<ModelResult<List<DepartmentInfoListDto>>> GetAllDepartment()
+        {
+            var result = await _context.Department.Where(c => !c.IsDeleted).ToListAsync();
+            return new ModelResult<List<DepartmentInfoListDto>>
+                {IsSuccess = true, Result = _mapper.Map<List<Department>, List<DepartmentInfoListDto>>(result)};
         }
 
         public async Task<ModelResult> Delete(long id)

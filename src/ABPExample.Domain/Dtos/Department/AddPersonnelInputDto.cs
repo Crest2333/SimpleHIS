@@ -9,6 +9,6 @@ namespace ABPExample.Domain.Dtos.Department
 
         public int DepartmentId { get; set; }
 
-        public string AccountNo { get; set; }
+        public int UserId { get; set; }
     }
 }

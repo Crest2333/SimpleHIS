@@ -39,5 +39,10 @@ namespace ABPExample.Application.Application
         {
             return await _medicalHistoryQuery.Edit(input);
         }
+
+        public async Task<ModelResult<MedicalInfoDto>> Detail(int id)
+        {
+            return await _medicalHistoryQuery.Detail(id);
+        }
     }
 }

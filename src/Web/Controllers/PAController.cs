@@ -17,7 +17,7 @@ namespace Web.Controllers
         private readonly IMedicalHistoryApplication _medicalHistory;
 
 
-        public PAController(IAppointmentApplication appointmentApplication, IPatientApplication patientApplication,IMedicalHistoryApplication medicalHistory)
+        public PAController(IAppointmentApplication appointmentApplication, IPatientApplication patientApplication, IMedicalHistoryApplication medicalHistory)
         {
             _appointmentApplication = appointmentApplication;
             _patientApplication = patientApplication;
@@ -53,11 +53,7 @@ namespace Web.Controllers
 
 
 
-        [HttpPost]
-        public async Task<JsonResult> AddAppointment(AddAppointmentInfoDto inputDto)
-        {
-            return Json(await _appointmentApplication.AddAppointment(inputDto));
-        }
+      
 
         [HttpGet]
         public async Task<JsonResult> GetPatientInfoDetail(int id)
@@ -100,5 +96,28 @@ namespace Web.Controllers
             return Json(await _medicalHistory.List(param));
         }
 
+        public async Task<JsonResult> GetMedicalHistoryInfoById(int id)
+        {
+            return Json(await _medicalHistory.Detail(id));
+        }
+
+        #region  预约
+
+        public IActionResult AppointmentInfoList()
+        {
+            return View();
+        }
+
+        public IActionResult AddAppointment(int patientId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AddAppointment(AddAppointmentInfoDto inputDto)
+        {
+            return Json(await _appointmentApplication.AddAppointment(inputDto));
+        }
+        #endregion
     }
 }

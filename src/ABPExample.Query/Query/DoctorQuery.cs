@@ -29,7 +29,7 @@ namespace ABPExample.Query.Query
         public async Task<ModelResult<PageDto<DoctorInfoDto>>> ListAsync(GetDoctorInputDto param)
         {
             var query = from a in _context.Users
-                        from b in _context.DepartmentMapper.Where(c => c.AccountNo == a.UserAccount)
+                        from b in _context.DepartmentMapper.Where(c => c.UserId == a.Id)
                         from d in _context.Department.Where(c => c.Id == b.DepartmentId)
                         where string.IsNullOrEmpty(param.Name) || a.UserName == param.Name
                         where param.DepartmentId <= 0 || param.DepartmentId == d.Id

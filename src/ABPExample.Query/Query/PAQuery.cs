@@ -38,7 +38,9 @@ namespace ABPExample.Query.Query
                 LastModificationTime = DateTime.Now,
                 DepartmentId = inputDto.DepartmentId,
                 Describe = inputDto.Describe,
-                DoctorNo = inputDto.DoctorNo,
+                DoctorId = inputDto.DoctorId,
+                AppointmentNo = "10",
+                AppointmentTime = "14:00",
                 IsDeleted = false,
                 PatientId = inputDto.PatientId
             };

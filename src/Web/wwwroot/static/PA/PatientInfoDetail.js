@@ -1,4 +1,5 @@
 ﻿let patientId;
+let isAddOrEdit;
 $(function () {
     var request = GetRequest();
     patientId = request["patientId"];
@@ -6,6 +7,7 @@ $(function () {
     console.log(request);
     Search(1);
     GetHistoryInfo(1);
+    isAddOrEdit = 1;
 });
 
 
@@ -145,6 +147,7 @@ function PageToolHistory(count) {
 }
 
 function ShowAddHistoryPage() {
+    isAddOrEdit = 1;
     ResetInput();
     $("#AddHistoryModal").modal("show");
 }
@@ -155,19 +158,24 @@ function ResetInput() {
     $("#StartDate").val();
 }
 
-function AddHistory() {
-    var model = GetAddHistoryData();
-    $("#AddHistoryModal").modal("hide");
-    $.post(
-        "/PA/AddMedicalHistory",
-        model,
-        function (result) {
-            if (result.isSuccess) {
-                ShowTip("success", result.Message);
-            } else {
-                ShowTip("warning", result.Message);
-            }
-        })
+function AddOrEditHistory() {
+    if (isAddOrEdit == 1) {
+        var model = GetAddHistoryData();
+        $("#AddHistoryModal").modal("hide");
+        $.post(
+            "/PA/AddMedicalHistory",
+            model,
+            function (result) {
+                if (result.isSuccess) {
+                    ShowTip("success", result.Message);
+                } else {
+                    ShowTip("warning", result.Message);
+                }
+            })
+    }
+    else {
+        EditHistory();
+    }
 }
 
 function GetAddHistoryData() {
@@ -181,6 +189,7 @@ function GetAddHistoryData() {
 
 let historyId;
 function InitHistoryInfo(id) {
+    isAddOrEdit = 2;
     historyId = id;
     $.get(
         `/PA/GetMedicalHistoryInfoById?id=${historyId}`,

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ABPExample.Domain.Models
 {
-    public class Appointment:FullEntity
+    public class Appointment : FullEntity
     {
         /// <summary>
         ///     预约号
@@ -15,6 +15,10 @@ namespace ABPExample.Domain.Models
         public int PatientId { get; set; }
 
         public string DoctorNo { get; set; }
+
+        public int DoctorId { get; set; }
+
+        public string AppointmentTime { get; set; }
 
         public int DepartmentId { get; set; }
 

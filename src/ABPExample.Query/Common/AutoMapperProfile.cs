@@ -4,7 +4,9 @@ using ABPExample.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Dtos.Department;
 using ABPExample.Domain.Dtos.MedicalHistory;
+using ABPExample.Domain.Dtos.Role;
 using AutoMapper;
 using Volo.Abp.DependencyInjection;
 
@@ -26,7 +28,7 @@ namespace ABPExample.Query.Common
 
             CreateMap<PastHistories, MedicalInfoDto>();
 
-            CreateMap<EditMedicalInputDto, MedicalInfoDto>();
+            CreateMap<EditMedicalInputDto, PastHistories>();
 
             CreateMap<AddDrugInputDto, Drug>();
 
@@ -35,6 +37,10 @@ namespace ABPExample.Query.Common
             CreateMap<EditDrugInputDto, Drug>();
 
             CreateMap<Drug, DrugInfoDetailDto>();
+
+            CreateMap<Department, DepartmentInfoListDto>();
+
+            CreateMap<Role, RoleInfoDto>();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ABPExample.Domain.Models
         [Key]
         public int Id { get; set; }
 
-        public string AccountNo { get; set; }
+        public int UserId { get; set; }
 
         public long DepartmentId { get; set; }
 

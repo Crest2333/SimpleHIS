@@ -17,5 +17,7 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> Delete(int id);
 
         Task<ModelResult> Edit(EditMedicalInputDto input);
+
+        Task<ModelResult<MedicalInfoDto>> Detail(int id);
     }
 }

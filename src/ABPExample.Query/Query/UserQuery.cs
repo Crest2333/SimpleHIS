@@ -93,6 +93,7 @@ namespace ABPExample.Query.Query
                         where !a.IsDeleted
                         select new UserInfoListDto
                         {
+                            Id = a.Id,
                             Email = a.Email,
                             Gender = (EnumGender)a.Gender,
                             PhoneNumber = a.PhoneNumber,
@@ -114,7 +115,7 @@ namespace ABPExample.Query.Query
             {
                 Id = (int)c.Id,
                 Email = c.Email,
-                Gender =(int) c.Gender,
+                Gender = (int)c.Gender,
                 PhoneNumber = c.PhoneNumber,
                 UserAccount = c.UserAccount,
                 UserIdentity = c.UserIdentity,
@@ -166,12 +167,12 @@ namespace ABPExample.Query.Query
 
         public async Task<ModelResult> SetUserRole(string userId, int roleId)
         {
-            var query = await _context.RoleMapper.FirstOrDefaultAsync(c => c.AccountNo == userId && c.RoleId == roleId && !c.IsDeleted);
+            var query = await _context.RoleMapper.FirstOrDefaultAsync(c => c.UserId == int.Parse(userId) && c.RoleId == roleId && !c.IsDeleted);
             if (query != null)
                 return new ModelResult { IsSuccess = false, Message = "添加失败，该账号已有一个角色" };
             var roleMapper = new RoleMapper
             {
-                AccountNo = userId,
+                UserId = int.Parse(userId),
                 CreationTime = DateTime.Now,
                 IsDeleted = false,
                 LastModificationTime = DateTime.Now,
@@ -271,7 +272,7 @@ namespace ABPExample.Query.Query
 
         public async Task<List<TestExport>> GetTestExportList()
         {
-            return await  _context.TestExport.ToListAsync();
+            return await _context.TestExport.ToListAsync();
         }
     }
 }

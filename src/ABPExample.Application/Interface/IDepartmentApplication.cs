@@ -32,5 +32,6 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> BatchRemovePersonnel(List<int> idList);
 
         Task<ModelResult<PageDto<DoctorInfoDto>>> GetDoctorInfoAsync(GetDoctorInputDto param);
+        Task<ModelResult<List<DepartmentInfoListDto>>> GetAllDepartment();
     }
 }

@@ -201,8 +201,8 @@
         <td>{{value.startDate}}</td>
       
         <td>
-            <button class="btn btn-primary" onclick="Delete('{{value.Id}}')">删除</button>
-            <button class="btn btn-primary" onclick="EditHistory('{{value.Id}}')">编辑</button>
+            <button class="btn btn-primary" onclick="Delete('{{value.id}}')">删除</button>
+            <button class="btn btn-primary" onclick="InitHistoryInfo('{{value.id}}')">编辑</button>
         </td>
     </tr>
 
@@ -287,7 +287,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">添加患者既往史信息</h5>
+                <h5 class="modal-title" id="exampleModalLabel">添加或编辑患者既往史信息</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -317,7 +317,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="AddHistory()">确定</button>
+                <button type="button" class="btn btn-primary" onclick="AddOrEditHistory()">确定</button>
             </div>
         </div>
     </div>

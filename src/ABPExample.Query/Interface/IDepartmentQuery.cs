@@ -32,6 +32,6 @@ namespace ABPExample.Query.Interface
 
         Task<ModelResult> BatchRemovePersonnel(List<int> idList);
 
-       
+        Task<ModelResult<List<DepartmentInfoListDto>>> GetAllDepartment();
     }
 }

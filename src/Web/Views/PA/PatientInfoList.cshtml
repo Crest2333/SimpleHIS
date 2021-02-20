@@ -95,6 +95,7 @@
         <td>
             <a href="/PA/PatientDetail?patientId={{value.id}}" class="btn btn-primary">详情</a>
             <button class="btn btn-primary" onclick="Delete('{{value.id}}')">删除</button>
+            <a href="/PA/AddAppointment?patientId={{value.id}}" class="btn btn-primary">添加预约</a>
         </td>
     </tr>
     {{/each}}

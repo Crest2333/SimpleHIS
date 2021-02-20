@@ -34,6 +34,11 @@ namespace Web.Controllers
             return Json(await _departmentApplication.List(param));
         }
 
+        public async Task<JsonResult> GetAllDepartment()
+        {
+            return Json(await _departmentApplication.GetAllDepartment());
+        }
+
         public async Task<JsonResult> Add(AddDepartmentInputDto inputDto)
         {
             return Json(await _departmentApplication.Add(inputDto));
@@ -75,6 +80,17 @@ namespace Web.Controllers
         public async Task<JsonResult> GetDepartmentDocList(GetDoctorInputDto param)
         {
             return Json(await _departmentApplication.GetDoctorInfoAsync(param));
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDoctorListByDepartmentId(int departmentId)
+        {
+            return Json(await _departmentApplication.GetDoctorInfoAsync(new GetDoctorInputDto
+            {
+                DepartmentId = departmentId,
+                PageIndex = 1,
+                PageSize = 10000
+            }));
         }
     }
 }
