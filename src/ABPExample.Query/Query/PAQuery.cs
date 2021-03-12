@@ -35,12 +35,11 @@ namespace ABPExample.Query.Query
                 Status = 1,
                 AppointmentDate = inputDto.AppointmentDate,
                 CreationTime = DateTime.Now,
-                LastModificationTime = DateTime.Now,
                 DepartmentId = inputDto.DepartmentId,
                 Describe = inputDto.Describe,
                 DoctorId = inputDto.DoctorId,
                 AppointmentNo = "10",
-                AppointmentTime = "14:00",
+                AppointmentTime = $"{Convert.ToDateTime(inputDto.AppointmentTime):HH:mm}",
                 IsDeleted = false,
                 PatientId = inputDto.PatientId
             };
@@ -108,7 +107,7 @@ namespace ABPExample.Query.Query
         {
             var query = from a in _context.Appointment
                         join b in _context.Patients on a.PatientId equals b.Id
-                        join c in _context.Users on a.DoctorNo equals c.UserAccount
+                        join c in _context.Users on a.DoctorId equals c.Id
                         join d in _context.Department on a.DepartmentId equals d.Id
                         where !param.PatientId.HasValue || a.PatientId == param.PatientId
                         where string.IsNullOrWhiteSpace(param.DoctorName) || c.UserName == param.DoctorName
@@ -120,6 +119,8 @@ namespace ABPExample.Query.Query
                         where !a.IsDeleted
                         select new AppointmentInfoListDto
                         {
+                            IdentityId = b.IdentityId,
+                            PhoneNumber = b.PhoneNumber,
                             Status = a.Status,
                             AppointmentDate = a.AppointmentDate,
                             Department = d.Name,
@@ -137,6 +138,22 @@ namespace ABPExample.Query.Query
             var list = await query.Skip((param.PageIndex - 1) * param.PageSize)
                 .Take(param.PageSize).ToListAsync();
             return new ModelResult<PageDto<AppointmentInfoListDto>> { IsSuccess = true, Result = new PageDto<AppointmentInfoListDto>(count, list) };
+        }
+
+        public async Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentInputDto inputDto)
+        {
+            var appointment =
+                await _context.Appointment
+                    .Where(c => c.Id == inputDto.AppointmentId&&!c.IsDeleted)
+                    .FirstOrDefaultAsync();
+
+            if (appointment == null)
+                return new ModelResult<bool> {IsSuccess = false, Message = "无效Id"};
+            appointment.Status = inputDto.Status;
+            _context.Update(appointment);
+
+            return new ModelResult<bool> {Result = await _context.SaveChangesAsync() > 0};
+
         }
     }
 }

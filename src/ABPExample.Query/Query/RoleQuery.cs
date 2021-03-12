@@ -28,7 +28,7 @@ namespace ABPExample.Query.Query
         {
 
             var query = await _context.RoleMapper.FirstOrDefaultAsync(c =>
-                c.UserId == input.UserId && c.RoleId == input.RoleId);
+                c.UserId == input.UserId && !c.IsDeleted);
 
             if (query != null)
             {

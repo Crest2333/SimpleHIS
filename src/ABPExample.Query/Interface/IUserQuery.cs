@@ -40,5 +40,7 @@ namespace ABPExample.Query.Interface
         Task AddTest();
 
         Task<List<TestExport>> GetTestExportList();
+
+        Task<List<UseInfo>> GetUserInfoAsync(IReadOnlyCollection<string> userNoList);
     }
 }

@@ -51,6 +51,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
 
         public DbSet<Appointment> Appointment { get; set; }
 
+        public DbSet<Scheduling> Scheduling { get; set; }
+
         public DbSet<TestExport> TestExport { get ; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

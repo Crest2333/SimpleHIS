@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Scheduling;
 
 namespace ABPExample.Application.Interface
 {
@@ -32,6 +33,11 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> BatchRemovePersonnel(List<int> idList);
 
         Task<ModelResult<PageDto<DoctorInfoDto>>> GetDoctorInfoAsync(GetDoctorInputDto param);
+
         Task<ModelResult<List<DepartmentInfoListDto>>> GetAllDepartment();
+
+        Task<ModelResult<PageDto<SchedulingInfoDto>>> GetSchedulingInfo(GetSchedulingInputDto param);
+
+        Task<ModelResult<bool>> AddScheduling(AddSchedulingInputDto input);
     }
 }

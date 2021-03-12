@@ -44,5 +44,11 @@ namespace ABPExample.Application.Application
         {
             return await _pAQuery.GetAppointmentInfoList(param);
         }
+
+        public async Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentInputDto inputDto)
+        {
+
+            return await _pAQuery.ChangeAppointmentStatus(inputDto);
+        }
     }
 }

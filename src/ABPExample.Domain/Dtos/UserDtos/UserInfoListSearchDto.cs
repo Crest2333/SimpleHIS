@@ -7,6 +7,9 @@ namespace ABPExample.Domain.Dtos.UserDtos
 {
     public class UserInfoListSearchDto:PageSearchDto
     {
-        
+        public int? DepartmentId { get; set; }
+
+        public bool? IsOther { get; set; }
+
     }
 }

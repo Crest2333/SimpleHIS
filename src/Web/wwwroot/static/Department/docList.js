@@ -104,6 +104,88 @@ function Import() {
 }
 
 function ShowBatchAdd() {
-    $("#BatchAddModal").modal("show");
+    $("#AddModal").modal("show");
+    SearchOther(1)
+}
+
+
+let pageOtherIndex = 1;
+let pageOtherSize = 10;
+function SearchOther(index) {
+    pageOtherIndex = index;
+    var model = GetOtherData(pageIndex);
+    $.post(
+        "/Department/GetUserInfoByDepartmentId",
+        model,
+        function (res) {
+            console.log(res)
+            if (res.isSuccess) {
+                if (res.result.count > 0) {
+                    //var html = $("#listHtml").tmpl(res.result.list)
+                    var html = template("otherListHtml", res.result);
+                    console.log(html)
+                    if (pageIndex == 1) {
+                        PageOtherTool(res.result.count);
+                    }
+                    $("#listOtherBody").html(html);
+                }
+                else {
+                    $("#listOtherBody").html('<tr><td colspan="7">暂无数据</td></tr>')
+                }
+            }
+        }
+    )
+}
+
+function GetOtherData(index) {
+    var data = {
+        Name: $("#otherName").val(),
+        WorkNumber: $("#otherWorkNumber").val(),
+        DepartmentId: $("#departmentId").val(),
+        PageIndex: pageOtherIndex || 1,
+        PageSize: pageOtherSize || 10
+    }
+    return data;
+}
+
+function PageOtherTool(count) {
+    layui.use('laypage', function () {
+        var laypage = layui.laypage;
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'pageOther' //注意，这里的 test1 是 ID，不用加 # 号
+            , count: count //数据总数，从服务端得到
+            , limit: 10
+            , jump: function (obj, first) {
+                //obj包含了当前分页的所有参数，比如：
+                //首次不执行
+                console.log(obj.curr)
+                console.log(first);
+                if (!first) {
+                    GetList(obj.curr)
+                    //do something
+                }
+            }
+        });
+    });
+}
+
+function AddDoc(id) {
+    var model = {
+        DepartmentId: $("#departmentId").val(),
+        UserId: id
+    }
+    $.post(
+        "/Department/AddDepartmentPersonnel",
+        model,
+        function (result) {
+            if (result.isSuccess) {
+                ShowTip("success", "添加成功");
+            } else {
+                ShowTip("warning", result.message);
+
+            }
+        }
+    )
 }
 

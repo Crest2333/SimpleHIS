@@ -6,6 +6,7 @@ using ABPExample.Application.Interface;
 using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Dtos.MedicalHistory;
 using ABPExample.Domain.Dtos.Patient;
+using ABPExample.Domain.Public;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -50,10 +51,6 @@ namespace Web.Controllers
         {
             return Json(await _appointmentApplication.GetAppointmentInfoDetail(id));
         }
-
-
-
-      
 
         [HttpGet]
         public async Task<JsonResult> GetPatientInfoDetail(int id)
@@ -113,11 +110,28 @@ namespace Web.Controllers
             return View();
         }
 
+        public IActionResult AppointmentDetail(int appointmentId)
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<JsonResult> AddAppointment(AddAppointmentInfoDto inputDto)
         {
             return Json(await _appointmentApplication.AddAppointment(inputDto));
         }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteAppointment(int appointmentId)
+        {
+            return Json(await _appointmentApplication.DeleteAppointment(appointmentId));
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ChangeAppointmentStatus(EditAppointmentInputDto inputDto)
+        {
+            return Json(await _appointmentApplication.ChangeAppointmentStatus(inputDto));
+        }
         #endregion
+
     }
 }

@@ -1,13 +1,14 @@
 ﻿$(function () {
-
-});
+    LoadDepartment()
+})
+let departmentId = 1;
 let pageIndex = 1;
 let pageSize = 10;
 function Search(index) {
     pageIndex = index;
     var model = GetData(pageIndex);
     $.post(
-        "/PA/GetAppointmentList",
+        "/Department/GetSchedulingList",
         model,
         function (res) {
             console.log(res)
@@ -31,13 +32,11 @@ function Search(index) {
 
 function GetData(index) {
     var data = {
-        PatientName: $("#PatientName").val(),
-        PhoneNumber: $("#PhoneNumber").val(),
-        StartDate: $("#StartDate").val(),
-        EndDate: $("#EndDate").val(),
-        DoctorName: $("#DoctorName").val(),
-        DepartmentId: $("#DepartmentId").val(),
-        Status: $("#Status").val(),
+        Name: $("#name").val(),
+        UseNo: $("#workNumber").val(),
+        StartDate: $("#startDate").val(),
+        EndDate: $("#endDate").val(),
+        DepartmentId: $("#department").val(),
         PageIndex: index || 1,
         PageSize: pageSize || 10
     }
@@ -66,33 +65,66 @@ function PageTool(count) {
     });
 }
 
-function Cancel(id) {
+function openAdd() {
+    if ($("#workNumber").val() == null || $("#workNumber").val() == "") {
+        alert("请输入工号");
+        return;
+    }
+    $("#addSchedulingModal").modal("show");
+
+}
+
+function GetAddData() {
+    return {
+        UserNo: $("#workNumber").val(),
+        StartDate: $("#addStartDate").val(),
+        EndDate: $("#addEndDate").val(),
+        DepartmentId: $("#addDepartment").val(),
+        SchedulingType: $("#SchedulingType").val()
+    }
+}
+
+function AddScheduling() {
+    var model = GetAddData();
     $.post(
-        `/Pa/DeleteAppointment?appointmentId=${id}`,
+        "/Department/AddScheduling",
+        model,
         function (result) {
             if (result.isSuccess) {
-                ShowTip("success", "操作成功");
-
+                ShowTip("success", "添加成功");
             } else {
                 ShowTip("warning", result.message);
-
             }
         }
     )
 }
 
-function ChangeStatus(appointmentId, status) {
-    if (confirm("确认该操作?")) {
+function Delete(id) {
+    var isDelete = confirm("确认是否删除该条数据？");
+    if (isDelete) {
         $.post(
-            `/PA/ChangeAppointmentStatus`,
-            { AppointmentId: appointmentId, Status: status },
+            `/Department/DeleteScheduling?scheduling=${id}`,
             function (result) {
                 if (result.isSuccess) {
-                    ShowTip("success", "操作成功")
+                    ShowTip("success", "删除成功");
+
                 } else {
                     ShowTip("warning", result.message);
+
                 }
             }
         )
     }
+}
+
+function LoadDepartment() {
+    $.get(
+        `/Department/GetAllDepartment`,
+        function (result) {
+            if (result.isSuccess) {
+                var html = template("departmentHtml", result);
+                $("#addDepartment").html(html);
+            }
+        }
+    )
 }

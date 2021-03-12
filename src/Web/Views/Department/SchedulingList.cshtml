@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewData["Title"] = "SchedulingList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">工号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="workNumber" name="workNumber" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <button class="btn btn-google" onclick="Search(1)">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="listTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>工号</th>
+                                <th>姓名</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+
+                                <th>科室</th>
+                                <th>班次</th>
+                                <th>操作人</th>
+                                <th>操作时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+        <div>
+            <button class="btn btn-google" onclick="openAdd()">添加班次</button>
+        </div>
+        <div id="page">
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="addSchedulingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加排班</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">开始时间:</label>
+                        <input type="text" class="form-control" id="addStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">结束时间:</label>
+                        <input type="text" class="form-control" id="addEndDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">班次:</label>
+                        <select class="form-control">
+                            <option>请选择</option>
+                            <option value="0">早班</option>
+                            <option value="1">午班</option>
+                            <option value="2">全天</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">科室:</label>
+                        <select class="form-control" id="addDepartment">
+                          
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="AddScheduling()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/static/Department/schedulingList.js"></script>
+    <script type="text/javascript">
+    </script>
+}
+
+<script id="listHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.userNo}}</td>
+        <td>{{value.userName}}</td>
+        <td>{{value.startDate}}</td>
+        <td>{{value.endDate}}</td>
+        <td>{{value.departmentName}}</td>
+
+        <td>{{value.schedulingType}}</td>
+        <td>{{value.oprName}}</td>
+        <td>{{value.oprDate}}</td>
+
+        <td>
+            <button class="btn btn-primary" onclick="Delete('{{value.id}}')">删除</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
+<script id="departmentHtml" type="text/html">
+    {{each result value index}}
+    <option value="{{value.id}}">{{value.name}}</option>
+    {{/each}}
+</script>

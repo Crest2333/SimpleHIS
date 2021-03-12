@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Scheduling;
 
 namespace ABPExample.Query.Interface
 {
@@ -14,6 +15,6 @@ namespace ABPExample.Query.Interface
 
         Task<ModelResult<DoctorInfoDto>> DetailAsync(int id);
 
-
+        Task<ModelResult<List<SchedulingDto>>> GetSchedulingByUserId(int userId, DateTime? startDate, DateTime? endDate, int departmentId);
     }
 }

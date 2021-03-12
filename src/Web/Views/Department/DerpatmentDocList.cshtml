@@ -30,12 +30,12 @@
                 <div class="table-responsive">
                     <table id="listTable" class="table">
                         <thead>
-                        <tr>
-                            <th>工号</th>
-                            <th>姓名</th>
-                            <th>性别</th>
-                            <th>操作</th>
-                        </tr>
+                            <tr>
+                                <th>工号</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>操作</th>
+                            </tr>
                         </thead>
                         <tbody id="listBody">
                         </tbody>
@@ -53,6 +53,51 @@
         </div>
     </div>
 
+</div>
+
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加成员</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table id="listTable" class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>工号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="listOtherBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-12 d-flex justify-content-between">
+                    <div>
+                        <button class="btn btn-google" onclick="ShowBatchAdd()">批量添加成员</button>
+                    </div>
+                    <div id="pageOther">
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="BatchAddUser()">确定</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="BatchAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,11 +138,27 @@
         <td>{{value.name}}</td>
         <td>{{value.gender}}</td>
         <td>
-            <button class="btn btn-primary" onclick="Delete('{{value.Id}}')">删除</button>
+            <button class="btn btn-primary" onclick="Delete('{{value.id}}')">删除</button>
+            <a class="btn btn-primary" href="/Department/SchedulingList?userId={{value.id}}">查看排班</a>
         </td>
     </tr>
     {{/each}}
 </script>
+
+<script id="otherListHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td><input type="checkbox" value="{{value.id}}" name="userId" /> </td>
+        <td>{{value.userAccount}}</td>
+        <td>{{value.userName}}</td>
+        <td>{{value.genderDesc}}</td>
+        <td>
+            <button class="btn btn-primary" onclick="AddDoc('{{value.id}}')">添加</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
 
 @section Scripts{
     <script src="~/static/Department/docList.js"></script>

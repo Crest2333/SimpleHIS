@@ -19,5 +19,7 @@ namespace ABPExample.Application.Interface
         Task<ModelResult<AppointmentInfoDetailDto>> GetAppointmentInfoDetail(int id);
 
         Task<ModelResult<PageDto<AppointmentInfoListDto>>> GetAppointmentInfoList(AppointmentInfoListSearchDto param);
+
+        Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentInputDto inputDto);
     }
 }

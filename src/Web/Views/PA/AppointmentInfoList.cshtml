@@ -8,7 +8,7 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                
+
                 <div class="row">
                     <div class="col-xl-3 row ">
                         <label class="col-sm-3 col-form-label" style="text-align: right">姓名</label>
@@ -44,7 +44,6 @@
                         <label class="col-sm-3 col-form-label" style="text-align: right">部门</label>
                         <div class="col-sm-9">
                             <select type="text" class="form-control" id="DepartmentId" name="DepartmentId" value="">
-
                             </select>
                         </div>
                     </div>
@@ -52,13 +51,12 @@
                         <label class="col-sm-3 col-form-label" style="text-align: right">状态</label>
                         <div class="col-sm-9">
                             <select type="text" class="form-control" id="Status" name="Status" value="">
-
                             </select>
                         </div>
                     </div>
-                    
 
-                  
+
+
                     <div class="col-xl-3 row ">
                         <button class="btn btn-google" onclick="Search(1)">搜索</button>
                     </div>
@@ -72,18 +70,18 @@
                 <div class="table-responsive">
                     <table id="listTable" class="table">
                         <thead>
-                        <tr>
-                            <th>预约号</th>
-                            <th>姓名</th>
-                            <th>性别</th>
-                            <th>电话号码</th>
-                            <th>身份证号</th>
-                            <th>时间</th>
-                            <th>医生</th>
-                            <th>科室</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
+                            <tr>
+                                <th>预约号</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>电话号码</th>
+                                <th>身份证号</th>
+                                <th>时间</th>
+                                <th>医生</th>
+                                <th>科室</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
                         </thead>
                         <tbody id="listBody">
                         </tbody>
@@ -94,7 +92,6 @@
     </div>
     <div class="col-12 d-flex justify-content-between">
         <div>
-            <button class="btn btn-google" onclick="ShowBatchAdd()">批量添加成员</button>
         </div>
         <div id="page">
 
@@ -106,17 +103,28 @@
     {{each list value index}}
     <tr>
         <td>{{value.appointmentNo}}</td>
-        <td>{{value.patientName}}></td>
+        <td>{{value.patientName}}</td>
         <td>{{value.gender}}</td>
         <td>{{value.phoneNumber}}</td>
         <td>{{value.identityId}}</td>
-        <td>{{value.userName}}</td>
-        <td>{{value.genderDesc}}</td>
-        <td>{{value.phoneNumber}}</td>
-        <td>{{value.email}}</td>
-        <td>{{value.userIdentity}}</td>
+        <td>{{value.appointmentDate}}</td>
+        <td>{{value.doctorName}}</td>
+        <td>{{value.department}}</td>
+        <td>{{value.status}}</td>
+
         <td>
-            <button class="btn btn-primary" onclick="">详情</button>
+            {{if value.status==1}}
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','2')">报道</button>
+            {{/if}}
+            {{if value.status==2}}
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')"> 已缴费</button>
+            {{/if}}
+            {{if value.status==3}}
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">就诊中</button>
+            {{/if}}
+            <button class="btn btn-primary" >编辑</button>
+            <a href="/PA/AppointmentDetail?appointmentId={{value.id}}" class="btn btn-primary">详情</a>
+            <button class="btn btn-primary" onclick="Cancel('{{value.id}}')">取消</button>
         </td>
     </tr>
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Scheduling;
 using Volo.Abp.MultiTenancy;
 
 namespace ABPExample.Query.Interface
@@ -33,5 +34,9 @@ namespace ABPExample.Query.Interface
         Task<ModelResult> BatchRemovePersonnel(List<int> idList);
 
         Task<ModelResult<List<DepartmentInfoListDto>>> GetAllDepartment();
+       
+        Task<ModelResult<PageDto<SchedulingInfoDto>>> GetSchedulingInfo(GetSchedulingInputDto getSchedulingInputDto);
+
+        Task<ModelResult<bool>> AddScheduling(AddSchedulingInputDto input);
     }
 }

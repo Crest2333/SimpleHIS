@@ -8,8 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ABPExample.EntityFramework.Common;
 using ABPExample.Query.Common;
 using AutoMapper;
 using Volo.Abp;
@@ -37,6 +39,8 @@ namespace Web
                  options.LoginPath = "/Account/Login";
                  options.LogoutPath = "/Account/Logout";
              });
+            DiagnosticListener.AllListeners.Subscribe(new CommandListener());
+
         }
         public override void OnApplicationInitialization(
             ApplicationInitializationContext context)

@@ -8,7 +8,7 @@ namespace ABPExample.Domain.Dtos.Department
     {
         public string Name { get; set; }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public int PersonnelCount { get; set; }
 

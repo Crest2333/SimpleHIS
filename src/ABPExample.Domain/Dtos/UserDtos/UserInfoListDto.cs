@@ -8,6 +8,7 @@ namespace ABPExample.Domain.Dtos.UserDtos
     public class UserInfoListDto
     {
         public int Id { get; set; }
+
         public string UserAccount { get; set; }
 
         public string UserName { get; set; }
@@ -20,6 +21,9 @@ namespace ABPExample.Domain.Dtos.UserDtos
 
         public EnumGender Gender { get; set; }
 
+        public string DepartmentName { get; set; }
+
+        public string RoleName { get; set; }
         public string GenderDesc
         {
             get

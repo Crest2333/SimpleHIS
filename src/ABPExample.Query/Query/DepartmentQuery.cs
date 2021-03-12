@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Dtos.Department;
+using ABPExample.Domain.Dtos.Scheduling;
 using ABPExample.Domain.Models;
 using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
@@ -19,11 +20,13 @@ namespace ABPExample.Query.Query
     {
         private readonly IAppDbContext _context;
         private readonly IObjectMapper _mapper;
+        private readonly IUserQuery _userQuery;
 
-        public DepartmentQuery(IAppDbContext context,IObjectMapper mapper)
+        public DepartmentQuery(IAppDbContext context, IObjectMapper mapper,IUserQuery userQuery)
         {
             _context = context;
             _mapper = mapper;
+            _userQuery = userQuery;
         }
 
         public async Task<ModelResult> Add(AddDepartmentInputDto inputDto)
@@ -127,7 +130,94 @@ namespace ABPExample.Query.Query
         {
             var result = await _context.Department.Where(c => !c.IsDeleted).ToListAsync();
             return new ModelResult<List<DepartmentInfoListDto>>
-                {IsSuccess = true, Result = _mapper.Map<List<Department>, List<DepartmentInfoListDto>>(result)};
+            { IsSuccess = true, Result = _mapper.Map<List<Department>, List<DepartmentInfoListDto>>(result) };
+        }
+
+        public async Task<ModelResult<PageDto<SchedulingInfoDto>>> GetSchedulingInfo(GetSchedulingInputDto param)
+        {
+            var query = from a in _context.Scheduling
+                join b in _context.Users on a.UserId equals b.Id
+                join department in _context.Department on a.DepartmentId equals department.Id
+                join c in _context.Users on a.OprId equals c.Id into d
+                from e in d.DefaultIfEmpty()
+                where !a.IsDeleted
+                where string.IsNullOrEmpty(param.Name) || param.Name == b.UserName
+                where string.IsNullOrEmpty(param.UseNo) || param.UseNo == b.UserAccount
+                where !param.DepartmentId.HasValue || param.DepartmentId == a.DepartmentId
+                where !param.StartDate.HasValue || a.StartDate >= param.StartDate
+                where !param.EndDate.HasValue || a.EndDate <= param.EndDate
+                select new SchedulingInfoDto
+                {
+                    DepartmentName = department.Name,
+                    SchedulingType = a.SchedulingType,
+                    StartDate = a.StartDate,
+                    EndDate = a.EndDate,
+                    UserId = a.UserId,
+                    UserName = b.UserName,
+                    OprDate = a.OprDate,
+                    OprName = e.UserName,
+                    OprNo = e.UserAccount,
+                    UserNo = a.UserNo,
+                    Id = a.Id
+                };
+            var count = await query.CountAsync();
+            var list = await query
+                .OrderBy(c=>c.StartDate)
+                .Skip(param.PageSize * (param.PageIndex - 1))
+                .Take(param.PageSize)
+                .ToListAsync();
+
+            return new ModelResult<PageDto<SchedulingInfoDto>> {Result = new PageDto<SchedulingInfoDto>(count, list)};
+        }
+
+        public async Task<ModelResult<bool>> AddScheduling(AddSchedulingInputDto input)
+        {
+            var model = _mapper.Map<AddSchedulingInputDto, Scheduling> (input);
+            var userInfo = await _userQuery.GetUserInfoAsync(new List<string> {input.UserNo});
+            if (!userInfo.Any())
+                return new ModelResult<bool> {IsSuccess = false, Message = "无效用户ID"};
+            var schedulingList = await _context.Scheduling
+                .Where(c => c.UserNo == input.UserNo && !c.IsDeleted)
+                .Where(c => c.StartDate <= input.EndDate&& c.EndDate >= input.StartDate)
+                .OrderBy(c=>c.StartDate)
+                .ToListAsync();
+
+            if (schedulingList.Any())
+            {
+                var info = schedulingList
+                    .FirstOrDefault(c => c.StartDate < input.StartDate && c.EndDate <= input.EndDate);
+                if (info != null)
+                {
+                    info.EndDate = input.StartDate;
+                    _context.Update(info);
+                }
+
+                var middleInfo = schedulingList.Where(c => c.StartDate > input.StartDate && c.EndDate < input.EndDate)
+                    .ToList();
+
+                middleInfo.ForEach(item =>
+                {
+                    item.IsDeleted = true;
+                });
+                if(middleInfo.Any())
+                    _context.UpdateRange(middleInfo);
+
+                var lastInfo =  schedulingList
+                    .FirstOrDefault(c => c.StartDate < input.EndDate && c.EndDate >input.EndDate);
+                if (lastInfo != null)
+                {
+                    lastInfo.StartDate = input.EndDate;
+                    _context.Update(lastInfo);
+                }
+            }
+            if(schedulingList.Any()&&schedulingList.Count>1)
+            model.OprDate=DateTime.Now;
+            model.OprNo = "SYS";
+            model.OprId = -1;
+            model.UserId = userInfo.First().UserId;
+            await _context.AddAsync(model);
+            await _context.SaveChangesAsync();
+            return new ModelResult<bool> {Message = "添加成功", Result = true};
         }
 
         public async Task<ModelResult> Delete(long id)
@@ -144,21 +234,21 @@ namespace ABPExample.Query.Query
 
         public async Task<PageDto<DepartmentInfoListDto>> List(DepartmentSearchDto inputDto)
         {
-            var query =  _context.Department
+            var query = _context.Department
                 .WhereIf(!string.IsNullOrWhiteSpace(inputDto.Name), c => c.Name == inputDto.Name)
                 .Where(c => !c.IsDeleted);
-            var count =await query.CountAsync();
-            var list=await query
+            var count = await query.CountAsync();
+            var list = await query
                 .Skip(inputDto.PageSize * (inputDto.PageIndex - 1))
                 .Take(inputDto.PageSize)
                 .Select(c => new DepartmentInfoListDto
                 {
-                    Name=c.Name,
-                    CreationTime=c.CreationTime,
-                    Id=c.Id
+                    Name = c.Name,
+                    CreationTime = c.CreationTime,
+                    Id = c.Id
                 })
                 .ToListAsync();
-            return new PageDto<DepartmentInfoListDto>(count,list) ;
+            return new PageDto<DepartmentInfoListDto>(count, list);
         }
 
         public async Task<ModelResult> Modify(int id)

@@ -15,15 +15,16 @@ namespace Web.Controllers
         {
             _doctorApplication = doctorApplication;
         }
+
+
         public IActionResult Index()
         {
             return View();
         }
 
-        //public async Task<JsonResult> GetDoctorInfoListAsync()
-        //{
-        //    return Json(await _doctorApplication.)
-        //}
-
+        public async Task<JsonResult> GetSchedulingByUserId(int userId, DateTime? startDate, DateTime? endDate, int departmentId)
+        {
+            return Json(await _doctorApplication.GetSchedulingByUserId(userId, startDate, endDate,departmentId));
+        }
     }
 }

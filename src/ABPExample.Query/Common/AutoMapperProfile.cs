@@ -7,6 +7,7 @@ using System.Text;
 using ABPExample.Domain.Dtos.Department;
 using ABPExample.Domain.Dtos.MedicalHistory;
 using ABPExample.Domain.Dtos.Role;
+using ABPExample.Domain.Dtos.Scheduling;
 using AutoMapper;
 using Volo.Abp.DependencyInjection;
 
@@ -40,7 +41,10 @@ namespace ABPExample.Query.Common
 
             CreateMap<Department, DepartmentInfoListDto>();
 
-            CreateMap<Role, RoleInfoDto>();
+            CreateMap<Role, RoleInfoDto>()
+                .ForMember(dto=>dto.RoleId,src=>src.MapFrom(option=>option.Id));
+
+            CreateMap<AddSchedulingInputDto, Scheduling>();
         }
     }
 }

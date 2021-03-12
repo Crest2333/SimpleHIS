@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Scheduling;
 using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Application.Application
@@ -65,6 +66,17 @@ namespace ABPExample.Application.Application
         public async Task<ModelResult<List<DepartmentInfoListDto>>> GetAllDepartment()
         {
             return await _departmentQuery.GetAllDepartment();
+        }
+
+        public async Task<ModelResult<PageDto<SchedulingInfoDto>>> GetSchedulingInfo(GetSchedulingInputDto param)
+        {
+            return await _departmentQuery.GetSchedulingInfo(param);
+
+        }
+
+        public async Task<ModelResult<bool>> AddScheduling(AddSchedulingInputDto input)
+        {
+            return await _departmentQuery.AddScheduling(input);
         }
 
         public async Task<ModelResult<PageDto<DepartmentInfoListDto>>> List(DepartmentSearchDto inputDto)

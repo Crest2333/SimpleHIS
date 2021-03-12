@@ -109,7 +109,7 @@ function LoadDate() {
 function Add() {
     var model = GetAddData();
     $.post(
-        "/PA/AppointmentInfoList",
+        "/PA/AddAppointment",
         model,
         function (result) {
             if (result.isSuccess) {
@@ -122,12 +122,31 @@ function Add() {
     )
 }
 
+function GetScheduling() {
+    var departmentId = $("input[name='department']:checked").val();
+    var userId = $("input[name='doctor']:checked").val();
+    var startDate = $("#startDate").val();
+    var endDate = $("#endDate").val();
+
+    $.get(
+        `/Doctor/GetSchedulingByUserId?userId=${userId}&startDate=${startDate}&endDate=${endDate}&departmentId=${departmentId}`,
+        function (result) {
+            if (result.isSuccess) {
+                var html = template("dateHtml", result);
+                $("#date").html(html);
+            } else {
+                ShowTip("warning", result.message);
+            }
+        }
+    )
+}
+
 function GetAddData() {
     return {
         PatientId: patientId,
-        DepartmentId: staticDepartmentId,
-        DoctorId: staticDoctorId,
-        AppointmentDate: $("#appointmentDate").val(),
+        DepartmentId: $("input[name='department']:checked").val(),
+        DoctorId: $("input[name='doctor']:checked").val(),
+        AppointmentDate: $("input[name='appointmentTime']:checked").val(),
         Describe: $("#describe").val(),
         AppointmentTime: $("input[name='appointmentTime']:checked").val()
     }

@@ -89,24 +89,56 @@ namespace ABPExample.Query.Query
 
         public async Task<PageDto<UserInfoListDto>> GetUserInfoList(UserInfoListSearchDto inputDto)
         {
-            var query = from a in _context.Users
-                        where !a.IsDeleted
-                        select new UserInfoListDto
-                        {
-                            Id = a.Id,
-                            Email = a.Email,
-                            Gender = (EnumGender)a.Gender,
-                            PhoneNumber = a.PhoneNumber,
-                            UserAccount = a.UserAccount,
-                            UserIdentity = a.UserIdentity,
-                            UserName = a.UserName,
-                        };
+            var query = GetUserQuery(inputDto);
             var count = await query.CountAsync();
             if (inputDto.PageIndex > 0 && inputDto.PageSize > 0)
                 query = query.Skip((inputDto.PageIndex) - 1).Take(inputDto.PageSize);
             var list = await query.ToListAsync();
 
             return new PageDto<UserInfoListDto>(count, list);
+        }
+
+        private  IQueryable<UserInfoListDto> GetUserQuery(UserInfoListSearchDto inputDto)
+        {
+            if (inputDto.DepartmentId.HasValue)
+            {
+                return from a in _context.Users
+                       from b in _context.DepartmentMapper.Where(c=>c.UserId==a.Id&&c.DepartmentId==inputDto.DepartmentId).DefaultIfEmpty()
+                       join e in _context.Department on b.DepartmentId equals e.Id into f 
+                       from g in f.DefaultIfEmpty()
+                       where !a.IsDeleted 
+                       where inputDto.IsOther.Value||b.DepartmentId==inputDto.DepartmentId
+                       where !inputDto.IsOther.Value||b==null
+                       select new UserInfoListDto
+                       {
+                           Id = a.Id,
+                           Email = a.Email,
+                           Gender = (EnumGender)a.Gender,
+                           PhoneNumber = a.PhoneNumber,
+                           UserAccount = a.UserAccount,
+                           UserIdentity = a.UserIdentity,
+                           UserName = a.UserName,
+                           DepartmentName = g.Name
+                       };
+            }
+            else
+            {
+                return from a in _context.Users
+                       from b in _context.RoleMapper.Where(c => c.UserId == a.Id).DefaultIfEmpty()
+                       from c in _context.Role.Where(c => c.Id == b.RoleId).DefaultIfEmpty()
+                       where !a.IsDeleted
+                       select new UserInfoListDto
+                       {
+                           Id = a.Id,
+                           Email = a.Email,
+                           Gender = (EnumGender)a.Gender,
+                           PhoneNumber = a.PhoneNumber,
+                           UserAccount = a.UserAccount,
+                           UserIdentity = a.UserIdentity,
+                           UserName = a.UserName,
+                           RoleName = c.Name
+                       };
+            }
         }
 
         public async Task<UserInfoDetailDto> GetUserInfoDetail(int id)
@@ -273,6 +305,17 @@ namespace ABPExample.Query.Query
         public async Task<List<TestExport>> GetTestExportList()
         {
             return await _context.TestExport.ToListAsync();
+        }
+
+        public async Task<List<UseInfo>> GetUserInfoAsync(IReadOnlyCollection<string> userNoList)
+        {
+            return await _context.Users.Where(c => !c.IsDeleted && userNoList.Contains(c.UserAccount))
+                .Select(c=>new UseInfo
+                {
+                    UserId = c.Id,
+                    UserName = c.UserName,
+                    UserNo = c.UserAccount
+                }).ToListAsync();
         }
     }
 }

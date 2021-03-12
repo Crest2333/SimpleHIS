@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using ABPExample.Application.Interface;
 using ABPExample.Domain.Dtos.Department;
 using ABPExample.Domain.Dtos.Doctor;
+using ABPExample.Domain.Dtos.Scheduling;
+using ABPExample.Domain.Dtos.UserDtos;
+using ABPExample.Domain.Public;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -12,10 +15,14 @@ namespace Web.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentApplication _departmentApplication;
+        private readonly IDoctorApplication _doctorApplication;
+        private readonly IUserApplication _userApplication;
 
-        public DepartmentController(IDepartmentApplication departmentApplication,IDoctorApplication doctorApplication)
+        public DepartmentController(IDepartmentApplication departmentApplication,IDoctorApplication doctorApplication,IUserApplication userApplication)
         {
             _departmentApplication = departmentApplication;
+            _doctorApplication = doctorApplication;
+            _userApplication = userApplication;
         }
         public IActionResult Index()
         {
@@ -34,6 +41,7 @@ namespace Web.Controllers
             return Json(await _departmentApplication.List(param));
         }
 
+        [HttpGet]
         public async Task<JsonResult> GetAllDepartment()
         {
             return Json(await _departmentApplication.GetAllDepartment());
@@ -91,6 +99,27 @@ namespace Web.Controllers
                 PageIndex = 1,
                 PageSize = 10000
             }));
+        }
+
+        public async Task<JsonResult> GetUserInfoByDepartmentId(GetDoctorInputDto param)
+        {
+            return Json(await _userApplication.GetUserInfoList(new UserInfoListSearchDto
+                {DepartmentId = param.DepartmentId, PageIndex = param.PageIndex, PageSize = param.PageSize, IsOther = true}));
+        }
+
+        public IActionResult SchedulingList(int doctorId)
+        {
+            return View();
+        }
+
+        public async Task<JsonResult> GetSchedulingList(GetSchedulingInputDto param)
+        {
+            return Json( await _departmentApplication.GetSchedulingInfo(param));
+        }
+
+        public async Task<JsonResult> AddScheduling(AddSchedulingInputDto input)
+        {
+            return Json(await _departmentApplication.AddScheduling(input));
         }
     }
 }

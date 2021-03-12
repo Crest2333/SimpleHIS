@@ -30,4 +30,8 @@
     <ProjectReference Include="..\ABPExample.Domain\ABPExample.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="新文件夹\" />
+  </ItemGroup>
+
 </Project>

@@ -9,6 +9,8 @@ using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
 using Volo.Abp.DependencyInjection;
 using System.Linq;
+using ABPExample.Domain.Dtos.Scheduling;
+using ABPExample.Query.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABPExample.Query.Query
@@ -24,6 +26,40 @@ namespace ABPExample.Query.Query
         public async Task<ModelResult<DoctorInfoDto>> DetailAsync(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ModelResult<List<SchedulingDto>>> GetSchedulingByUserId(int userId,DateTime? startDate,DateTime? endDate,int departmentId)
+        {
+            var scheduling = await _context.Scheduling.Where(c => c.UserId == userId && !c.IsDeleted)
+                .Where(c => c.StartDate <= endDate.Value && c.EndDate >= startDate.Value)
+                .Where(c=>c.DepartmentId==departmentId)
+                .ToListAsync();
+
+            if (!scheduling.Any())
+                return new ModelResult<List<SchedulingDto>> {IsSuccess = false, Message = "该名医生在该时间段没有排班"};
+            var appointmentList = await _context.Appointment.Where(c => c.DoctorId == userId && !c.IsDeleted)
+                .Where(c => c.Status != -1)
+                .Where(c=>c.AppointmentDate>=startDate&&c.AppointmentDate<=endDate)
+                .ToListAsync();
+            var result = new List<SchedulingDto>(); 
+            while (startDate.Value.Date<=endDate.Value.Date)
+            {
+                var item = new SchedulingDto
+                {
+                    SchedulingDate = $"{startDate.Value:yyyy-MM-dd}",
+                };
+                foreach (var time in ConstValue.AppointmentTime)
+                {
+                    if (appointmentList.All(c => c.AppointmentTime != time))
+                    {
+                        item.AppointmentNum.Add(time);
+                    }
+                }
+                result.Add(item);
+                startDate= startDate.Value.AddDays(1);
+            }
+
+            return new ModelResult<List<SchedulingDto>> {Result = result};
         }
 
         public async Task<ModelResult<PageDto<DoctorInfoDto>>> ListAsync(GetDoctorInputDto param)
