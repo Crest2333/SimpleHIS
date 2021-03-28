@@ -55,6 +55,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
 
         public DbSet<TestExport> TestExport { get ; set; }
 
+        public DbSet<MedicalAdvice> MedicalAdvice { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

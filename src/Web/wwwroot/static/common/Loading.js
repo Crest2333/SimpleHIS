@@ -1,6 +1,7 @@
 ﻿$(function () {
     AjaxLoad();
     AjaxEndLoad();
+    AjaxError();
 })
 
 function AjaxLoad() {
@@ -21,7 +22,7 @@ function AjaxError() {
     $(document).ajaxError(function (e, xhr, opt) {
         setTimeout(function () {
             RemoveLoading()
-            Tip('warning', '网络错误')
+            ShowTip('warning', '网络错误')
         }, 300)
     });
 }

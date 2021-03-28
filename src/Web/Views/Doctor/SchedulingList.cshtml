@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewData["Title"] = "SchedulingList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card" style="display: none">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">工号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="workNumber" name="workNumber" value="@ViewBag.UseNo" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3 row ">
+                        <button class="btn btn-google" onclick="Search(1)">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="listTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>工号</th>
+                                <th>姓名</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+
+                                <th>科室</th>
+                                <th>班次</th>
+                                <th>操作人</th>
+                                <th>操作时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/static/Department/schedulingList.js"></script>
+    <script type="text/javascript">
+    </script>
+}
+
+<script id="listHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.userNo}}</td>
+        <td>{{value.userName}}</td>
+        <td>{{value.startDate}}</td>
+        <td>{{value.endDate}}</td>
+        <td>{{value.departmentName}}</td>
+
+        <td>{{value.schedulingType}}</td>
+        <td>{{value.oprName}}</td>
+        <td>{{value.oprDate}}</td>
+
+        <td>
+            <button class="btn btn-primary" onclick="Delete('{{value.id}}')">删除</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>

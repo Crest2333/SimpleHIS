@@ -24,7 +24,6 @@ namespace Web.Controllers
         {
             return View();
         }
-        [Authorize]
         public IActionResult List()
         {
             return View();

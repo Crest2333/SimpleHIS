@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Models;
+using ABPExample.Domain.Models.Enum;
 using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
@@ -32,7 +33,7 @@ namespace ABPExample.Query.Query
 
             var query = new Appointment
             {
-                Status = 1,
+                Status = AppointmentStatusEnum.Reserved,
                 AppointmentDate = inputDto.AppointmentDate,
                 CreationTime = DateTime.Now,
                 DepartmentId = inputDto.DepartmentId,
@@ -78,7 +79,7 @@ namespace ABPExample.Query.Query
             var result = await (
                 from a in _context.Appointment
                 join b in _context.Patients on a.PatientId equals b.Id
-                join c in _context.Users on a.DoctorNo equals c.UserAccount
+                join c in _context.Users on a.DoctorId equals c.Id
                 join d in _context.Department on a.DepartmentId equals d.Id
                 where a.Id == id && !a.IsDeleted
                 select new AppointmentInfoDetailDto
@@ -113,7 +114,7 @@ namespace ABPExample.Query.Query
                         where string.IsNullOrWhiteSpace(param.DoctorName) || c.UserName == param.DoctorName
                         where string.IsNullOrWhiteSpace(param.PatientName) || b.FullName == param.PatientName
                         where string.IsNullOrWhiteSpace(param.PhoneNumber) || b.PhoneNumber == param.PhoneNumber
-                        where !param.Status.HasValue || a.Status == param.Status
+                        where !param.Status.HasValue ||(int) a.Status == param.Status
                         where !param.StartDate.HasValue || a.AppointmentDate >= param.StartDate.Value
                         where !param.EndDate.HasValue || a.AppointmentDate <= param.EndDate
                         where !a.IsDeleted

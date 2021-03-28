@@ -18,7 +18,7 @@ namespace Web.Controllers
         private readonly IDoctorApplication _doctorApplication;
         private readonly IUserApplication _userApplication;
 
-        public DepartmentController(IDepartmentApplication departmentApplication,IDoctorApplication doctorApplication,IUserApplication userApplication)
+        public DepartmentController(IDepartmentApplication departmentApplication, IDoctorApplication doctorApplication, IUserApplication userApplication)
         {
             _departmentApplication = departmentApplication;
             _doctorApplication = doctorApplication;
@@ -104,17 +104,19 @@ namespace Web.Controllers
         public async Task<JsonResult> GetUserInfoByDepartmentId(GetDoctorInputDto param)
         {
             return Json(await _userApplication.GetUserInfoList(new UserInfoListSearchDto
-                {DepartmentId = param.DepartmentId, PageIndex = param.PageIndex, PageSize = param.PageSize, IsOther = true}));
+            { DepartmentId = param.DepartmentId, PageIndex = param.PageIndex, PageSize = param.PageSize, IsOther = true }));
         }
 
-        public IActionResult SchedulingList(int doctorId)
+        public async Task<IActionResult> SchedulingList(int? userId)
         {
+            if (userId.HasValue)
+                ViewBag.UserNo = (await _userApplication.GetUserInfoDetail(userId.Value)).Result.UserAccount;
             return View();
         }
 
         public async Task<JsonResult> GetSchedulingList(GetSchedulingInputDto param)
         {
-            return Json( await _departmentApplication.GetSchedulingInfo(param));
+            return Json(await _departmentApplication.GetSchedulingInfo(param));
         }
 
         public async Task<JsonResult> AddScheduling(AddSchedulingInputDto input)

@@ -1,19 +1,41 @@
-﻿$(function () {
-    Search(1)
-})
+﻿let doctorId;
+let isAddOrEdit;
+$(function () {
+    var request = GetRequest();
+    doctorId = request["doctorId"];
+    GetPatientInfo(patientId);
+    console.log(request);
+    Search(1);
+    GetHistoryInfo(1);
+    isAddOrEdit = 1;
+});
+
+
+function GetRequest() {
+    const url = location.search; //获取url中"?"符后的字串
+    let theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        let str = url.substr(1);
+        strs = str.split("&");
+        for (let i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}
+
 let pageIndex = 1;
 let pageSize = 10;
 function Search(index) {
     pageIndex = index;
     var model = GetData(pageIndex);
     $.post(
-        "/Department/GetDepartmentList",
+        `/Doctor/GetAppointmentList`,
         model,
         function (res) {
             console.log(res)
             if (res.isSuccess) {
                 if (res.result.count > 0) {
-                    //var html = $("#listHtml").tmpl(res.result.list)
                     var html = template("listHtml", res.result);
                     console.log(html)
                     if (pageIndex == 1) {
@@ -31,7 +53,13 @@ function Search(index) {
 
 function GetData(index) {
     var data = {
-        Name: $("#name").val(),
+        PatientName: $("#PatientName").val(),
+        PhoneNumber: $("#PhoneNumber").val(),
+        StartDate: $("#StartDate").val(),
+        EndDate: $("#EndDate").val(),
+        DepartmentId: $("#DepartmentId").val(),
+        Status: $("#Status").val(),
+        DoctorId: doctorId,
         PageIndex: index || 1,
         PageSize: pageSize || 10
     }
@@ -59,56 +87,3 @@ function PageTool(count) {
         });
     });
 }
-
-function ShowAdd() {
-    $("#departmentName").val(null);
-    $("#addModal").modal("show");
-}
-
-function Add() {
-    var data = {
-        Name: $("#departmentName").val()
-    }
-    console.log(data);
-    $.post(
-        `/Department/Add`,
-        data,
-        function (result) {
-            console.log(result)
-            if (result.isSuccess) {
-                ShowTip('success', '添加成功');
-                $("#addModal").modal("hide");
-            }
-            else {
-                ShowTip('warning', result.Message);
-                $("#addModal").modal("hide");
-            }
-        }
-    )
-}
-
-function Delete(id) {
-    var isDelete = confirm("确认删除?");
-    if (isDelete) {
-        $.post(
-            `/Department/BatchDelete`,
-            { idList:[id] },
-            function (result) {
-                if (result.isSuccess) {
-                    ShowTip('success', '删除成功');
-
-                } else {
-                    ShowTip('warning', result.Message);
-                }
-                $("#addModal").modal("hide");
-                Search(pageIndex);
-            }
-        )
-    }
-    else {
-        $("#addModal").modal("hide");
-    }
-}
-
-
-

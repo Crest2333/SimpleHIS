@@ -38,7 +38,7 @@ namespace ABPExample.Query.Query
             if (!scheduling.Any())
                 return new ModelResult<List<SchedulingDto>> {IsSuccess = false, Message = "该名医生在该时间段没有排班"};
             var appointmentList = await _context.Appointment.Where(c => c.DoctorId == userId && !c.IsDeleted)
-                .Where(c => c.Status != -1)
+                .Where(c => (int)c.Status != -1)
                 .Where(c=>c.AppointmentDate>=startDate&&c.AppointmentDate<=endDate)
                 .ToListAsync();
             var result = new List<SchedulingDto>(); 

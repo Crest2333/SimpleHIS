@@ -21,6 +21,8 @@ namespace ABPExample.Domain.Dtos.Appointment
 
         public int? DepartmentId { get; set; }
 
+        public int? DoctorId { get; set; }
+
         public int? Status { get; set; }
 
     }

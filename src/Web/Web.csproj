@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Department\SchedulingList.cshtml" />
+    <Content Remove="Views\Doctor\AppointmentList.cshtml" />
     <Content Remove="Views\PA\AddAppointment.cshtml" />
   </ItemGroup>
 
@@ -30,16 +31,22 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Department\SchedulingList.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Doctor\AppointmentList.cshtml" />
     <_ContentIncludedByDefault Remove="Views\PA\AddAppointment.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Department\SchedulingList.cshtml" />
+    <None Include="Views\Doctor\AppointmentList.cshtml" />
     <None Include="Views\PA\AddAppointment.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Department\SchedulingList.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Doctor\AppointmentList.cshtml" />
   </ItemGroup>
 
 </Project>

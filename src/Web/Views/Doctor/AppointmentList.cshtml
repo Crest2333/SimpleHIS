@@ -1,7 +1,8 @@
-﻿
+﻿@model object
+
 @{
-    ViewData["Title"] = "AppointmentInfoList";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "title";
+    Layout = "_Layout";
 }
 
 <div class="row">
@@ -99,6 +100,7 @@
     </div>
 
 </div>
+
 <script id="listHtml" type="text/html">
     {{each list value index}}
     <tr>
@@ -113,24 +115,20 @@
         <td>{{value.statusDesc}}</td>
 
         <td>
-            {{if value.status==0}}
+            {{if value.status==1}}
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','2')">报道</button>
             {{/if}}
-            {{if value.status==1}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')">就诊中</button>
-            {{/if}}
             {{if value.status==2}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')">已就诊</button>
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')"> 已缴费</button>
             {{/if}}
             {{if value.status==3}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')"></button>
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">就诊中</button>
             {{/if}}
             <button class="btn btn-primary">编辑</button>
             <a href="/PA/AppointmentDetail?appointmentId={{value.id}}" class="btn btn-primary">详情</a>
-            {{if value.status==0||value.status==1}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">取消</button>
-            {{/if}}
-            
+            <a href="/Doctor/DoctorWork?appointmentId={{value.id}}" class="btn btn-primary">就诊</a>
+
+            <button class="btn btn-primary" onclick="Cancel('{{value.id}}')">取消</button>
         </td>
     </tr>
 
@@ -138,5 +136,6 @@
 </script>
 @section Scripts
 {
-    <script src="~/static/PA/AppointmentList.js"></script>
+    <script src="~/static/Doctor/AppointmentList.js"></script>
+
 }

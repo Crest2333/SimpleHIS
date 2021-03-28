@@ -55,8 +55,9 @@ namespace ABPExample.Query.Query
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,info.UserName),
-                    new Claim(ClaimTypes.Role, info.Id.ToString())
+                    new Claim("Name",info.UserName),
+                    new Claim("Role", info.Id.ToString()),
+                    new Claim("UserNo",info.UserAccount)
                 };
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);

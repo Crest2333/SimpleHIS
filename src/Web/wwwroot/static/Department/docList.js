@@ -1,4 +1,5 @@
 ﻿$(function () {
+    Search(1)
 
 })
 let departmentId = 1;

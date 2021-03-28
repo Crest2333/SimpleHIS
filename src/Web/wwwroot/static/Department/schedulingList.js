@@ -1,5 +1,64 @@
 ﻿$(function () {
     LoadDepartment()
+    Search(1)
+    laydate.render({
+        elem: '#addStartDate'
+    });
+    layui.use("laydate",
+        function() {
+            var start = laydate.render({
+                elem: '#addStartDate' //指定元素
+                ,
+                theme: 'blue',
+                type: 'datetime' //控件选择类型
+                ,
+                max: nowtime,
+                done: function(value, date, endDate) {
+                    //结束时间的最小时间
+                    end.config.min = {
+                        year: date.year,
+                        month: date.month - 1,
+                        date: date.date,
+                        hours: date.hours,
+                        minutes: date.minutes,
+                        seconds: date.seconds
+                    }
+                }
+            });
+
+            var end = laydate.render({
+                elem: '#addEndDate' //指定元素
+                ,
+                theme: 'blue',
+                type: 'datetime',
+                max: nowtime,
+                done: function(value, date, endDate) {
+                    if (value === '' || value === null) {
+                        //清空时，开始时间的最大时间是当前时间
+                        var nowDate = new Date();
+                        start.config.max = {
+                            year: nowDate.getFullYear(),
+                            month: nowDate.getMonth(),
+                            date: nowDate.getDate(),
+                            hours: nowDate.getHours(),
+                            minutes: nowDate.getMinutes(),
+                            seconds: nowDate.getSeconds()
+                        };
+                        return
+                    }
+                    //开始时间的最大时间
+                    start.config.max = {
+                        year: date.year,
+                        month: date.month - 1,
+                        date: date.date,
+                        hours: date.hours,
+                        minutes: date.minutes,
+                        seconds: date.seconds
+                    }
+                }
+            });
+        });
+    BindDate();
 })
 let departmentId = 1;
 let pageIndex = 1;
@@ -127,4 +186,40 @@ function LoadDepartment() {
             }
         }
     )
+}
+
+
+function BindDate() {
+    //开始时间id="start",结束时间id="end";
+    var start = {
+        elem: '#addStartDate',
+        type: 'date',
+        min: '2000-09-10',
+        max: '2333-09-20',
+        show: true,
+        closeStop: '#start'
+
+    };
+    var end = {
+        elem: '#addEndDate',
+        type: 'date',
+        min: '2000-09-10',
+        max: '2333-09-20',
+        show: true,
+        closeStop: '#end'
+    };
+    lay('#addStartDate').on('click',
+        function(e) {
+            if ($('#addStartDate').val() != null && $('#addStartDate').val() != undefined && $('#addStartDate').val() != '') {
+                start.max = $('#addStartDate').val();
+            }
+            laydate.render(start);
+        });
+    lay('#addEndDate').on('click',
+        function(e) {
+            if ($('#addStartDate').val() != null && $('#addStartDate').val() != undefined && $('#addStartDate').val() != '') {
+                end.min = $('#addStartDate').val();
+            }
+            laydate.render(end);
+        });
 }

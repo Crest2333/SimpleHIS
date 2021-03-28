@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Models.Enum;
 
 namespace ABPExample.Domain.Models
 {
@@ -24,7 +25,7 @@ namespace ABPExample.Domain.Models
 
         public DateTime AppointmentDate { get; set; }
 
-        public int Status { get; set; }
+        public AppointmentStatusEnum Status { get; set; }
 
         public string Describe { get; set; }
 

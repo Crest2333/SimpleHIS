@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Common;
 
 namespace ABPExample.Domain.Dtos.Appointment
 {
@@ -27,7 +28,9 @@ namespace ABPExample.Domain.Dtos.Appointment
 
         public string Department { get; set; }
 
-        public int Status { get; set; }
+        public AppointmentStatusEnum Status { get; set; }
+
+        public string StatusDesc => Status.GetDescription();
 
     }
 }
