@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ABPExample.Domain\ABPExample.Domain.csproj" />
-    <ProjectReference Include="..\ABPExample.Query\ABPExample.Query.csproj" />
+    <ProjectReference Include="..\ABPExample.Domain\HIS.Domain.csproj" />
+    <ProjectReference Include="..\ABPExample.Query\HIS.Query.csproj" />
   </ItemGroup>
 
   <ItemGroup>

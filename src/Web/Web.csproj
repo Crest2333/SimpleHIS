@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ABPExample.Application\ABPExample.Application.csproj" />
+    <ProjectReference Include="..\ABPExample.Application\HIS.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

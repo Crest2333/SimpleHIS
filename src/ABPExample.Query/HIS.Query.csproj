@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ABPExample.Domain\ABPExample.Domain.csproj" />
-    <ProjectReference Include="..\ABPExample.EntityFramework\ABPExample.EntityFramework.csproj" />
+    <ProjectReference Include="..\ABPExample.Domain\HIS.Domain.csproj" />
+    <ProjectReference Include="..\ABPExample.EntityFramework\HIS.EntityFramework.csproj" />
   </ItemGroup>
 
 </Project>

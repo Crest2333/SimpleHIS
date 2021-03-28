@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ABPExample.Domain\ABPExample.Domain.csproj" />
+    <ProjectReference Include="..\ABPExample.Domain\HIS.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

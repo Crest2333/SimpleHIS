@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABPExample.Application", "ABPExample.Application\ABPExample.Application.csproj", "{AED05A38-C2BD-475D-B60C-9ED139E32F2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIS.Application", "ABPExample.Application\HIS.Application.csproj", "{AED05A38-C2BD-475D-B60C-9ED139E32F2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABPExample.Domain", "ABPExample.Domain\ABPExample.Domain.csproj", "{35679746-2327-4399-851B-338F9B276E6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIS.Domain", "ABPExample.Domain\HIS.Domain.csproj", "{35679746-2327-4399-851B-338F9B276E6E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABPExample.Query", "ABPExample.Query\ABPExample.Query.csproj", "{DDAF59A3-CC77-443B-9E6F-05C8A7065505}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIS.Query", "ABPExample.Query\HIS.Query.csproj", "{DDAF59A3-CC77-443B-9E6F-05C8A7065505}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABPExample.EntityFramework", "ABPExample.EntityFramework\ABPExample.EntityFramework.csproj", "{8E6CCF4D-0571-4238-B17C-4DAD01BE3039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIS.EntityFramework", "ABPExample.EntityFramework\HIS.EntityFramework.csproj", "{8E6CCF4D-0571-4238-B17C-4DAD01BE3039}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{E4BCD480-9F61-418B-A729-0300ECC0198F}"
 EndProject
