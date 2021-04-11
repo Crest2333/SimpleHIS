@@ -12,7 +12,7 @@ namespace ABPExample.Application.Interface
     public interface IPatientApplication
     {
 
-        Task<ModelResult> Add(AddPatientInfoDto model);
+        Task<ModelResult<int>> Add(AddPatientInfoDto model);
 
         Task<ModelResult> Delete(int id);
 
@@ -29,5 +29,8 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> BatchAdd(List<AddPatientInfoDto> modelList);
 
         Task<ModelResult> BatchAddIllnessHistory(List<AddPastHistoryDto> modelList);
-    }
+
+        Task<PatientInfoDetailDto> GetPatientByUserIdAsync(int userId);
+
+   }
 }

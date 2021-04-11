@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Volo.Abp" Version="3.3.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ABPExample.Application\HIS.Application.csproj" />
+    <ProjectReference Include="..\ABPExample.Domain\HIS.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

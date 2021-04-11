@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace ABPExample.Domain.Public
 {
-    public class FullEntity:ISoftDelete,IHasCreationTime,IHasModificationTime
+    public class FullEntity:  ISoftDelete,IHasCreationTime,IHasModificationTime
     {
         [Key]
         public int Id { get; set; }

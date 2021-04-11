@@ -39,5 +39,7 @@ namespace ABPExample.Application.Interface
         Task<ModelResult<PageDto<SchedulingInfoDto>>> GetSchedulingInfo(GetSchedulingInputDto param);
 
         Task<ModelResult<bool>> AddScheduling(AddSchedulingInputDto input);
+
+        Task<List<DepartmentInfoListDto>> GetDepartmentByDoctorIdAsync(int doctorId);
     }
 }

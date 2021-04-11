@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIS.EntityFramework", "ABPE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{E4BCD480-9F61-418B-A729-0300ECC0198F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientWeb", "PatientWeb\PatientWeb.csproj", "{795EA872-1BE9-454C-BD39-7D77CAC3FA2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{E4BCD480-9F61-418B-A729-0300ECC0198F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4BCD480-9F61-418B-A729-0300ECC0198F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4BCD480-9F61-418B-A729-0300ECC0198F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{795EA872-1BE9-454C-BD39-7D77CAC3FA2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{795EA872-1BE9-454C-BD39-7D77CAC3FA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{795EA872-1BE9-454C-BD39-7D77CAC3FA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{795EA872-1BE9-454C-BD39-7D77CAC3FA2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

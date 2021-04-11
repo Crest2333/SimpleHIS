@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Scheduling;
+using HIS.Domain.Dtos.Doctor;
 
 namespace ABPExample.Query.Interface
 {
@@ -16,5 +17,12 @@ namespace ABPExample.Query.Interface
         Task<ModelResult<DoctorInfoDto>> DetailAsync(int id);
 
         Task<ModelResult<List<SchedulingDto>>> GetSchedulingByUserId(int userId, DateTime? startDate, DateTime? endDate, int departmentId);
+
+        /// <summary>
+        ///    获取医生信息
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<ModelResult<PageDto<DoctorEntityDto>>> GetDoctorListAsync(GetDoctorInputDto param);
     }
 }

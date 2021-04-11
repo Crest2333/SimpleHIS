@@ -1,0 +1,299 @@
+﻿
+@{
+    ViewData["Title"] = "PatientDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row col-12 justify-content-center">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                基本信息
+            </div>
+            <div class="card-body">
+                <div class="row" id="patientiInfo">
+                    <div class="row col-12 align-items-center justify-content-center">
+                        <div style="text-align:center">
+                            <h3>暂未完善相应的信息</h3>
+                            <button class="btn btn-lg btn-primary" onclick="ShowAdd()">完善</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-header">
+                预约记录
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive col-12">
+                            <table id="listTable" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>预约号</th>
+                                        <th>时间</th>
+                                        <th>医生</th>
+                                        <th>科室</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listBody">
+                                    <tr>
+                                        <td colspan="6">
+                                            暂无数据
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-12 d-flex justify-content-between">
+                        <div id=historyPage">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="listHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.appointmentNo}}</td>
+        <td>{{value.userName}}</td>
+        <td>{{value.genderDesc}}</td>
+        <td>{{value.phoneNumber}}</td>
+        <td>{{value.email}}</td>
+        <td>{{value.userIdentity}}</td>
+        <td>
+            <button class="btn btn-primary" onclick="">详情</button>
+        </td>
+    </tr>
+
+    {{/each}}
+</script>
+
+
+
+<script id="historyListHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.name}}</td>
+        <td>{{value.describe}}</td>
+        <td>{{value.createBy}}</td>
+        <td>{{value.startDate}}</td>
+
+        <td>
+            <button class="btn btn-primary" onclick="Delete('{{value.id}}')">删除</button>
+            <button class="btn btn-primary" onclick="InitHistoryInfo('{{value.id}}')">编辑</button>
+        </td>
+    </tr>
+
+    {{/each}}
+</script>
+
+<script id="baseInfo" type="text/html">
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            姓名
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" id="FullName" disabled="disabled" name="FullName" value="{{fullName}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            性别
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" id="gender" disabled="disabled" name="gender" value="{{gender}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            年龄
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="age" disabled="disabled" value="{{dateOfBirth}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            身高
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="heigth" disabled="disabled" value="{{height}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            体重
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="width" disabled="disabled" value="{{weight}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            血型
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="bloodType" disabled="disabled" value="{{bloodType}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            身份证号
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="identityId" disabled="disabled" value="{{identityId}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            电话
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="phoneNumber" disabled="disabled" value="{{phoneNumber}}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 row form-group">
+        <label class="col-form-label col-3 text-right">
+            地址
+        </label>
+        <div class="col-9">
+            <input type="text" class="form-control-plaintext" name="address" disabled="disabled" value="{{address}}" />
+        </div>
+    </div>
+</script>
+<div class="modal fade" id="AddHistoryModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加或编辑患者既往史信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label col-sm-2">名称:</label>
+                            <input type="text" class="form-control col-sm-10" id="HistoryName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">描述:</label>
+                            <textarea type="text" class="form-control col-sm-10" rows="5" id="Describe"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">开始时间:</label>
+                            <input type="text" class="form-control col-sm-10" rows="5" id="StartDate" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="AddOrEditHistory()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加患者</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label col-sm-2">姓名:</label>
+                            <input type="text" class="form-control col-sm-10" id="FullName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label for="message-text" class="col-form-label  col-sm-2">性别:</label>
+                            <select class="form-control col-sm-10" id="Gender">
+                                <option selected="selected" value="1">
+                                    男
+                                </option>
+
+                                <option value="2">
+                                    女
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">电话:</label>
+                            <input type="text" class="form-control col-sm-10" id="PhoneNumber">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">身份证号:</label>
+                            <input type="text" class="form-control col-sm-10" id="IdentityId">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">身高:</label>
+                            <input class="form-control col-sm-10" id="Height"></input>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">体重:</label>
+                            <input class="form-control col-sm-10" id="Weight"></input>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">血型:</label>
+                            <input class="form-control col-sm-10" id="BloodType"></input>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-12">
+                            <label class="col-form-label  col-sm-2">出生年月:</label>
+                            <input class="form-control col-sm-10" id="DateOfBirth"></input>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="Add()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/static/PA/PatientInfoDetail.js"></script>
+}

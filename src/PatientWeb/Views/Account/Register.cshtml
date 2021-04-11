@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "登录";
+    Layout = "~/Views/Shared/LoginLayout.cshtml";
+}
+<div class="main-wrapper">
+    <div class="page-wrapper full-page">
+        <div class="page-content d-flex align-items-center justify-content-center">
+
+            <div class="row w-100 mx-0 auth-page">
+                <div class="col-md-8 col-xl-6 mx-auto">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-4 pr-md-0">
+                                <div class="auth-left-wrapper">
+
+                                </div>
+                            </div>
+                            <div class="col-md-8 pl-md-0">
+                                <div class="auth-form-wrapper px-4 py-5">
+                                    <a href="#" class="noble-ui-logo d-block mb-2">康仁医院信息管理系统客户端</a>
+                                    <h5 class="text-muted font-weight-normal mb-4">注册成为系统用户</h5>
+                                    <form class="forms-sample" asp-action="Register" id="registerForm">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">手机号</label>
+                                            <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" placeholder="手机号">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">邮箱</label>
+                                            <input type="text" class="form-control" name="Email" id="Email" placeholder="邮箱">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">密码</label>
+                                            <input type="password" class="form-control" name="PassWord" id="passWord" autocomplete="current-password" placeholder="邮箱">
+                                        </div>
+                                        <div class="form-group">
+                                            <span style="color:red">
+                                                @ViewBag.Error
+                                            </span>
+                                        </div>
+                                        <div class="mt-3">
+                                            <div class="btn btn-primary mr-2 mb-2 mb-md-0" onclick="Submit()">注册</div>
+                                        </div>
+                                        <a href="/Account/Login" class="d-block mt-3 text-muted">已有账号</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/static/Account/Authentication.js"></script>
+    <script type="text/javascript">
+        function Submit() {
+            var model = $("#registerForm").serialize();
+            $.post(
+                "/Account/Register",
+                model,
+                function (result) {
+                    if (result.isSuccess) {
+                        ShowTip("success", "注册成功,即将跳转登录");
+                        setTimeout(function() {
+                                window.open("/Account/Login");
+                            },
+                            3)
+                    } else {
+                        ShowTip("warning", result.message);
+                    }
+                }
+            )
+        }
+    </script>
+}

@@ -21,7 +21,7 @@ namespace ABPExample.Application.Application
             _patientQuery = patientQuery;
         }
 
-        public async Task<ModelResult> Add(AddPatientInfoDto model)
+        public async Task<ModelResult<int>> Add(AddPatientInfoDto model)
         {
             return await _patientQuery.Add(model);
         }
@@ -39,6 +39,11 @@ namespace ABPExample.Application.Application
         public async Task<ModelResult> BatchAddIllnessHistory(List<AddPastHistoryDto> modelList)
         {
             return await _patientQuery.BatchAddIllnessHistory(modelList);
+        }
+
+        public async Task<PatientInfoDetailDto> GetPatientByUserIdAsync(int userId)
+        {
+           return await _patientQuery.GetPatientByUserIdAsync(userId);
         }
 
         public async Task<ModelResult> BatchDelete(List<long> id)

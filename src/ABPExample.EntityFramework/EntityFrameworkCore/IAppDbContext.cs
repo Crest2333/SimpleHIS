@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
+using HIS.Domain.Models;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
@@ -37,6 +39,17 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
         DbSet<TestExport> TestExport { get; set; }
 
         DbSet<MedicalAdvice> MedicalAdvice { get; set; }
+
+        DbSet<PatientUser> PatientUser { get; set; }
+
+        DbSet<PatientsMapping> PatientsMapping { get; set; }
+
+        DbSet<Doctor> Doctor { get; set; }
+
+        void Modified<TEntity, TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> func) where TEntity : class;
+
+        void ModifiedRange<TEntity, TProperty>(IEnumerable<TEntity> entity, Expression<Func<TEntity, TProperty>> func) where TEntity : class;
+
 
     }
 }

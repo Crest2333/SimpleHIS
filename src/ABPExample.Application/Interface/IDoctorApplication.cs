@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Doctor;
 using ABPExample.Domain.Dtos.MedicalAdvice;
 using ABPExample.Domain.Dtos.Scheduling;
+using HIS.Domain.Dtos.Doctor;
 
 namespace ABPExample.Application.Interface
 {
@@ -17,5 +19,7 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> AddOrEditMedicalAdviceAsync(MedicalAdviceInputDto inputDto);
 
         Task<ModelResult<MedicalAdviceEntityDto>> GetMedicalAdviceAsync(int appointmentId);
+
+        Task<ModelResult<PageDto<DoctorEntityDto>>> GetDoctorListAsync(GetDoctorInputDto param);
     }
 }

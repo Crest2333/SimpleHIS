@@ -10,6 +10,8 @@ using ABPExample.Domain.Dtos.MedicalHistory;
 using ABPExample.Domain.Dtos.Role;
 using ABPExample.Domain.Dtos.Scheduling;
 using AutoMapper;
+using HIS.Domain.Dtos.PatientUser;
+using HIS.Domain.Models;
 using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Query.Common
@@ -48,6 +50,9 @@ namespace ABPExample.Query.Common
             CreateMap<AddSchedulingInputDto, Scheduling>();
 
             CreateMap<MedicalAdviceInputDto, MedicalAdvice>();
+
+            CreateMap<RegisterInputDto, PatientUser>()
+                .ForMember(dto=>dto.UserPwd,src=>src.MapFrom(option=>option.PassWord));
         }
     }
 }

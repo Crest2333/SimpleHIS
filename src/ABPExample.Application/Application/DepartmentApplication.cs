@@ -79,6 +79,11 @@ namespace ABPExample.Application.Application
             return await _departmentQuery.AddScheduling(input);
         }
 
+        public async Task<List<DepartmentInfoListDto>> GetDepartmentByDoctorIdAsync(int doctorId)
+        {
+           return await _departmentQuery.GetDepartmentByDoctorIdAsync(doctorId);
+        }
+
         public async Task<ModelResult<PageDto<DepartmentInfoListDto>>> List(DepartmentSearchDto inputDto)
         {
             return new ModelResult<PageDto<DepartmentInfoListDto>> { Result = await _departmentQuery.List(inputDto), IsSuccess = true };
