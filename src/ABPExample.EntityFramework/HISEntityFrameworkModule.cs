@@ -10,10 +10,10 @@ using Volo.Abp.Modularity;
 namespace ABPExample.EntityFramework
 {
     [DependsOn(
-        typeof(ABPExampleDomainModule),
+        typeof(HISDomainModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule)
         )]
-    public class ABPExampleEntityFrameworkModule:AbpModule
+    public class HISEntityFrameworkModule:AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

@@ -18,9 +18,9 @@ namespace HIS.Query.Query
    public  class PatientUserQuery:IPatientUserQuery,ITransientDependency
     {
         private readonly IAppDbContext _context;
-        private readonly IObjectMapper<ABPExampleQueryModule> _mapper;
+        private readonly IObjectMapper<HISQueryModule> _mapper;
 
-        public PatientUserQuery(IAppDbContext context,IObjectMapper<ABPExampleQueryModule> mapper)
+        public PatientUserQuery(IAppDbContext context,IObjectMapper<HISQueryModule> mapper)
         {
             _context = context;
             _mapper = mapper;

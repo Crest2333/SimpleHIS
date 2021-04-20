@@ -130,6 +130,7 @@ namespace ABPExample.Query.Query
          var query = from a in _context.Users
                      from b in _context.DepartmentMapper.Where(c => c.UserId == a.Id)
                      from d in _context.Department.Where(c => c.Id == b.DepartmentId)
+                     where !a.IsDeleted&&!b.IsDeleted&&!d.IsDeleted
                      where string.IsNullOrEmpty(param.Name) || a.UserName == param.Name
                      where param.DepartmentId <= 0 || param.DepartmentId == d.Id
                      orderby a.Id descending

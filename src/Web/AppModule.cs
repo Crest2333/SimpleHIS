@@ -24,10 +24,10 @@ namespace Web
 {
     [DependsOn(typeof(AbpAspNetCoreMvcModule),
       typeof(AbpAutofacModule),
-      typeof(ABPExampleEntityFrameworkModule),
-      typeof(ABPExampleDomainModule),
-      typeof(ABPExampleApplicationModule),
-      typeof(ABPExampleQueryModule))]
+      typeof(HISEntityFrameworkModule),
+      typeof(HISDomainModule),
+      typeof(HISApplicationModule),
+      typeof(HISQueryModule))]
     public class AppModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

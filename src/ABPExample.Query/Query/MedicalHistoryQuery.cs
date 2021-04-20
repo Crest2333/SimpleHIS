@@ -19,9 +19,9 @@ namespace ABPExample.Query.Query
     public class MedicalHistoryQuery : IMedicalHistoryQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
-        private readonly IObjectMapper<ABPExampleQueryModule> _mapper;
+        private readonly IObjectMapper<HISQueryModule> _mapper;
 
-        public MedicalHistoryQuery(IAppDbContext context, IObjectMapper<ABPExampleQueryModule> mapper)
+        public MedicalHistoryQuery(IAppDbContext context, IObjectMapper<HISQueryModule> mapper)
         {
             _context = context;
             _mapper = mapper;

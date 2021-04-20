@@ -40,6 +40,16 @@ namespace ABPExample.Application.Application
         public async Task<ModelResult> AddUser(AddUserInputDto inputDto)
         {
             var passwordHasher = new PasswordHasher<Users>();
+            var list=  await _query.GetUserInfoList(new UserInfoListSearchDto
+                {PageIndex = 1, PageSize = 10, IdentityId = inputDto.Identity});
+            if (list.Count > 0)
+                return new ModelResult {IsSuccess = false, Message = "身份证号重复"};
+
+            list=  await _query.GetUserInfoList(new UserInfoListSearchDto
+                 { PageIndex = 1, PageSize = 10, PhoneNumber = inputDto.PhoneNumber });
+            if (list.Count > 0)
+                return new ModelResult { IsSuccess = false, Message = "手机号重复" };
+
             var query = new Users
             {
                 CreationTime = DateTime.Now,
@@ -87,7 +97,13 @@ namespace ABPExample.Application.Application
 
         public async Task<ModelResult<PageDto<UserInfoListDto>>> GetUserInfoList(UserInfoListSearchDto inputDto)
         {
-            var result = await _query.GetUserInfoList(inputDto);
+            var result =(inputDto.IsRoleUser.HasValue&&inputDto.IsRoleUser.Value)? await _query.GetUserRoleListAsync(inputDto):await _query.GetUserInfoList(inputDto);
+            return new ModelResult<PageDto<UserInfoListDto>> { Code = 200, IsSuccess = true, Result = result };
+        }
+
+        public async Task<ModelResult<PageDto<UserInfoListDto>>> GetUserRoleListAsync(UserInfoListSearchDto inputDto)
+        {
+            var result = await _query.GetUserRoleListAsync(inputDto);
             return new ModelResult<PageDto<UserInfoListDto>> { Code = 200, IsSuccess = true, Result = result };
         }
 
@@ -177,11 +193,8 @@ namespace ABPExample.Application.Application
 
         public async Task<ModelResult> DeleteUser(long id)
         {
-            for(var index = 1; index <= 60000; index++)
-            {
-                await _query.AddTest();
-            }
-            return null;
+
+            return await _query.DeleteUser(id);
         }
 
         public async Task<ModelResult> BatchDeleteUser(List<long> idList)

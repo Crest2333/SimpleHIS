@@ -10,16 +10,16 @@ using Volo.Abp.Modularity;
 
 namespace ABPExample.Query
 {
-    [DependsOn(typeof(ABPExampleDomainModule)
-      ,typeof(ABPExampleEntityFrameworkModule),typeof(AbpAutoMapperModule))]
-    public class ABPExampleQueryModule:AbpModule
+    [DependsOn(typeof(HISDomainModule)
+      ,typeof(HISEntityFrameworkModule),typeof(AbpAutoMapperModule))]
+    public class HISQueryModule:AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<ABPExampleQueryModule>();
+            context.Services.AddAutoMapperObjectMapper<HISQueryModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<ABPExampleQueryModule>();
+                options.AddMaps<HISQueryModule>();
             });
         }
     }

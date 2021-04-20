@@ -107,5 +107,9 @@ namespace PatientWeb.Controllers
          return Json(await _patientApplication.Edit(inputDto));
       }
 
+      public IActionResult Online()
+      {
+          return View();
+      }
    }
 }

@@ -13,7 +13,7 @@ namespace ABPExample.Application.Interface
 {
     public interface IUserApplication
     {
-        Task<AuthUserInfoDto> Authentication(LoginInputDto inputDto) ;
+        Task<AuthUserInfoDto> Authentication(LoginInputDto inputDto);
 
         Task<bool> Register(RegisterInputDto inputDto);
 
@@ -24,6 +24,9 @@ namespace ABPExample.Application.Interface
         Task<ModelResult> BatchAddUser(IFormFile file);
 
         Task<ModelResult<PageDto<UserInfoListDto>>> GetUserInfoList(UserInfoListSearchDto inputDto);
+
+        Task<ModelResult<PageDto<UserInfoListDto>>> GetUserRoleListAsync(UserInfoListSearchDto inputDto);
+
 
         Task<ModelResult<UserInfoDetailDto>> GetUserInfoDetail(int id);
 

@@ -20,10 +20,10 @@ namespace ABPExample.Query.Query
     public class MedicalAdviceQuery:IMedicalAdviceQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
-        private readonly IObjectMapper<ABPExampleQueryModule> _mapper;
+        private readonly IObjectMapper<HISQueryModule> _mapper;
         private readonly IUserQuery _userQuery;
 
-        public MedicalAdviceQuery(IAppDbContext context,IObjectMapper<ABPExampleQueryModule> mapper,IUserQuery userQuery)
+        public MedicalAdviceQuery(IAppDbContext context,IObjectMapper<HISQueryModule> mapper,IUserQuery userQuery)
         {
             _context = context;
             _mapper = mapper;

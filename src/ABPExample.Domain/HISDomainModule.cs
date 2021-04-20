@@ -7,7 +7,7 @@ using System.Text;
 namespace ABPExample.Domain
 {
 
-    public class ABPExampleDomainModule:AbpModule
+    public class HISDomainModule:AbpModule
     {
        
     }

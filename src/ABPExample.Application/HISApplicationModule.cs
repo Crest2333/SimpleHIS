@@ -3,12 +3,13 @@ using ABPExample.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Volo.Abp;
 
 namespace ABPExample.Application
 {
-   [DependsOn(typeof(ABPExampleDomainModule))]
-    public class ABPExampleApplicationModule:AbpModule
+   [DependsOn(typeof(HISDomainModule))]
+    public class HISApplicationModule:AbpModule
     {
-      
+        
     }
 }

@@ -12,7 +12,7 @@ namespace ABPExample.Domain.Models
 
         public int UserId { get; set; }
 
-        public long DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
 
         public DateTime CreationTime { get; set; }
 

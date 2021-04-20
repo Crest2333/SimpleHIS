@@ -1,5 +1,6 @@
 ﻿$(function () {
     GetList(1)
+    InitRole();
 })
 
 let pageIndex = 1;
@@ -34,6 +35,13 @@ function GetList(index) {
 
 function GetData(index) {
     var data = {
+        Email: $("#getEmail").val(),
+        PhoneNumber: $("#getPhoneNumber").val(),
+        IdentityId: $("#getIdentity").val(),
+        Name: $("#getName").val(),
+        Gender: $("#getGender").val(),
+        RoleId: $("#roleDiv").val(),
+        IsRoleUser: $("#isUserRole").val(),
         PageIndex: index || 1,
         PageSize: size || 10
     }
@@ -68,7 +76,13 @@ function AddUser() {
         "AddUser",
         model,
         function (res) {
-            console.log(res)
+            if (res.isSuccess) {
+                ShowTip("success", "添加成功");
+                $("#exampleModal").modal("hide");
+            } else {
+                ShowTip("warning", res.message);
+
+            }
         }
     )
 }
@@ -147,6 +161,31 @@ function ResetPassWord(userId) {
     })
 }
 
+function InitUserInfo(userId) {
+    $.get(
+        `/User/GetUserInfoBuUserId?userId=${userId}`,
+        function (result) {
+            console.log(result);
+            if (result.isSuccess) {
+                BindUserInfo(result.result)
+                $("#editModal").modal("show")
+            } else {
+
+            }
+        }
+    )
+}
+
+function BindUserInfo(data) {
+
+    $("#editName").val(data.userName);
+    $("#editGender").val(data.gender);
+    $("#editPhone").val(data.phoneNumber);
+    $("#editEmail").val(data.email);
+    $("#editIdentity").val(data.userIdentity);
+
+}
+
 function Delete() {
     $.ajax({
         method: 'put',
@@ -220,5 +259,41 @@ function AddRole() {
     )
 }
 
+function EditUser() {
+    var model = {
 
+    }
+}
+
+function DeleteRole(id) {
+    if (confirm("确认删除")) {
+        $.get(
+            `/User/DeleteRole?userId=${id}`,
+            function (result) {
+                if (result.isSuccess) {
+                    ShowTip('success', '删除成功');
+                }
+                else {
+                    ShowTip('warning', result.message);
+                }
+            }
+        )
+    }
+}
+
+function DeleteUser(id) {
+    if (confirm("确认删除")) {
+        $.get(
+            `/User/DeleteUser?userId=${id}`,
+            function (result) {
+                if (result.isSuccess) {
+                    ShowTip('success', '删除成功');
+                }
+                else {
+                    ShowTip('warning', result.message);
+                }
+            }
+        )
+    }
+}
 

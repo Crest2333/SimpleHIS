@@ -60,5 +60,25 @@ namespace Web.Controllers
             MemoryStream stream = (MemoryStream)await _userApplication.ExportUserInfo();
             return File(stream.ToArray(), "application/ms-excel", "fileName.xlsx");
         }
+
+        public async Task<JsonResult> GetUserInfoBuUserId(int userId)
+        {
+            return Json(await _userApplication.GetUserInfoDetail(userId));
+        }
+
+        public IActionResult UserRoleList()
+        {
+            return View();
+        }
+
+        public async Task<JsonResult> DeleteRole(int userId)
+        {
+            return Json(await _userApplication.DeleteUserRole(userId));
+        }
+
+        public async Task<JsonResult> DeleteUser(int userId)
+        {
+            return Json(await _userApplication.DeleteUser(userId));
+        }
     }
 }

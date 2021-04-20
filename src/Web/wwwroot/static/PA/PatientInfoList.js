@@ -1,5 +1,16 @@
 ﻿$(function () {
+    layui.use("laydate",
 
+        function () {
+            var laydate = layui.laydate;
+            var start = laydate.render({
+                elem: '#DateOfBirth' //指定元素
+                
+                
+               
+            });
+
+        });
 });
 let pageIndex = 1;
 let pageSize = 10;

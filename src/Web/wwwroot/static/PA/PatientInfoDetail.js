@@ -8,6 +8,18 @@ $(function () {
     Search(1);
     GetHistoryInfo(1);
     isAddOrEdit = 1;
+    layui.use("laydate",
+
+        function () {
+            var laydate = layui.laydate;
+            var start = laydate.render({
+                elem: '#StartDate' //指定元素
+
+
+
+            });
+
+        });
 });
 
 

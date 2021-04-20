@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="Comme\**" />
+    <Compile Remove="新文件夹\**" />
     <EmbeddedResource Remove="Comme\**" />
+    <EmbeddedResource Remove="新文件夹\**" />
     <None Remove="Comme\**" />
+    <None Remove="新文件夹\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,10 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ABPExample.Domain\HIS.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="新文件夹\" />
   </ItemGroup>
 
 </Project>

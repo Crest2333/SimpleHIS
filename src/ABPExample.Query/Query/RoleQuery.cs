@@ -17,9 +17,9 @@ namespace ABPExample.Query.Query
     public class RoleQuery : IRoleQuery, ITransientDependency
     {
         private readonly IAppDbContext _context;
-        private readonly IObjectMapper<ABPExampleQueryModule> _mapper;
+        private readonly IObjectMapper<HISQueryModule> _mapper;
 
-        public RoleQuery(IAppDbContext context, IObjectMapper<ABPExampleQueryModule> mapper)
+        public RoleQuery(IAppDbContext context, IObjectMapper<HISQueryModule> mapper)
         {
             _context = context;
             _mapper = mapper;

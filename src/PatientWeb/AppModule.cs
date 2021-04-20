@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PatientWeb.Common;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
@@ -21,10 +22,10 @@ namespace PatientWeb
 {
     [DependsOn(typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAutofacModule),
-        typeof(ABPExampleEntityFrameworkModule),
-        typeof(ABPExampleDomainModule),
-        typeof(ABPExampleApplicationModule),
-        typeof(ABPExampleQueryModule))]
+        typeof(HISEntityFrameworkModule),
+        typeof(HISDomainModule),
+        typeof(HISApplicationModule),
+        typeof(HISQueryModule))]
     public class AppModule:AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -36,6 +37,7 @@ namespace PatientWeb
                     options.LoginPath = "/Account/Login";
                     options.LogoutPath = "/Account/Logout";
                 });
+            context.Services.AddWebSocketManager();
             DiagnosticListener.AllListeners.Subscribe(new CommandListener());
 
         }
@@ -60,6 +62,8 @@ namespace PatientWeb
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseWebSockets();
+            app.MapSockets( "/ws", context.ServiceProvider.GetService<WebSocketMessageHandler>());
             app.UseConfiguredEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

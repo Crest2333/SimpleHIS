@@ -23,14 +23,12 @@ namespace ABPExample.Query.Query
    public class PatientQuery : IPatientQuery, ITransientDependency
    {
       private readonly IAppDbContext _context;
-      private readonly IObjectMapper<ABPExampleQueryModule> _mapper;
-      private readonly IQueryProvider _queryProvider;
+      private readonly IObjectMapper<HISQueryModule> _mapper;
 
-      public PatientQuery(IAppDbContext context, IObjectMapper<ABPExampleQueryModule> mapper,IQueryProvider queryProvider)
+      public PatientQuery(IAppDbContext context, IObjectMapper<HISQueryModule> mapper)
       {
          _context = context;
          _mapper = mapper;
-         _queryProvider = queryProvider;
       }
       public async Task<ModelResult<int>> Add(AddPatientInfoDto model)
       {
