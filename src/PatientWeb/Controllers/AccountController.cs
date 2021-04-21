@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.UserDtos;
 using HIS.Application.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using RegisterInputDto = HIS.Domain.Dtos.PatientUser.RegisterInputDto;
@@ -50,10 +51,13 @@ namespace PatientWeb.Controllers
             return Json(await _patientUserApplication.RegisterAsync(input));
         }
 
+        [Authorize]
         public IActionResult DashBoard()
         {
             return View();
         }
+
+        [Authorize]
 
         public IActionResult PatientDetail()
         {

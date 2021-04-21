@@ -114,6 +114,7 @@ namespace ABPExample.Query.Query
                         where string.IsNullOrWhiteSpace(param.DoctorName) || c.UserName == param.DoctorName
                         where string.IsNullOrWhiteSpace(param.PatientName) || b.FullName == param.PatientName
                         where string.IsNullOrWhiteSpace(param.PhoneNumber) || b.PhoneNumber == param.PhoneNumber
+                        where !param.DoctorId.HasValue||param.DoctorId.Value<=0||a.DoctorId==param.DoctorId
                         where !param.Status.HasValue ||(int) a.Status == param.Status
                         where !param.StartDate.HasValue || a.AppointmentDate >= param.StartDate.Value
                         where !param.EndDate.HasValue || a.AppointmentDate <= param.EndDate

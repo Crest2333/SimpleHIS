@@ -5,9 +5,9 @@
             var laydate = layui.laydate;
             var start = laydate.render({
                 elem: '#DateOfBirth' //指定元素
-                
-                
-               
+
+
+
             });
 
         });
@@ -110,7 +110,7 @@ function GetAddInfo() {
 function Delete(id) {
     var isDelete = confirm("确认删除？");
     if (isDelete) {
-        $.post(
+        $.get(
             `/PA/DeletePatient?id=${id}`,
             function (result) {
                 if (result.isSuccess) {
@@ -121,6 +121,66 @@ function Delete(id) {
 
                 }
             });
+    }
+}
+
+function OpenEdit(id) {
+    $.get(
+        `/PA/GetPatientInfoDetail?id=${id}`,
+        function (result) {
+            if (result.isSuccess) {
+                console.log(result);
+                InitEditUserInfo(result.result);
+                $("#editModal").modal("show")
+            } else {
+                ShowTip("warning", result.Message);
+
+            }
+        }
+    )
+}
+
+function InitEditUserInfo(data) {
+    $("#patientId").val(data.id)
+    $("#EditFullName").val(data.fullName);
+        $("#EditPhoneNumber").val(data.phoneNumber);
+        $("#EditIdentityId").val(data.identityId);
+        $("#EditGender").val(data.gender);
+        $("#EditHeight").val(data.height);
+        $("#EditWeight").val(data.weight);
+        $("#EditAddress").val(data.address);
+        $("#EditDateOfBirth").val(data.dateOfBirth);
+        $("#EditBloodType").val(data.bloodType)
+}
+
+function Edit() {
+    if (confirm("确认保存？")) {
+        var model = {
+            Id:$("#patientId").val(),
+            FullName: $("#EditFullName").val(),
+            PhoneNumber: $("#EditPhoneNumber").val(),
+            IdentityId: $("#EditIdentityId").val(),
+            Gender: $("#EditGender").val(),
+            Height: $("#EditHeight").val(),
+            Weight: $("#EditWeight").val(),
+            Address: $("#EditAddress").val(),
+            DateOfBirth: $("#EditDateOfBirth").val(),
+            BloodType: $("#EditBloodType").val()
+        }
+        $.post(
+            "/PA/EditPatientInfo",
+            model,
+            function(result) {
+                if (result.isSuccess) {
+                    ShowTip("success", result.Message);
+                    $("#editModal").modal("hide");
+                    Search(pageIndex);
+                } else {
+                    ShowTip("warning", result.Message);
+
+                }
+            }
+            )
     }
 }
 

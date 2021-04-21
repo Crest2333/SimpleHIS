@@ -209,8 +209,8 @@ namespace ABPExample.Query.Query
                     _context.Modified(info, c => c.StartDate);
                 }
             }
-            if (schedulingList.Any() && schedulingList.Count > 1)
-                model.OprDate = DateTime.Now;
+
+            model.OprDate = DateTime.Now;
             model.OprNo = "SYS";
             model.OprId = -1;
             model.UserId = userInfo.First().UserId;

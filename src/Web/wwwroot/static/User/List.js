@@ -177,7 +177,7 @@ function InitUserInfo(userId) {
 }
 
 function BindUserInfo(data) {
-
+    $("#editUserId").val(data.id);
     $("#editName").val(data.userName);
     $("#editGender").val(data.gender);
     $("#editPhone").val(data.phoneNumber);
@@ -261,9 +261,28 @@ function AddRole() {
 
 function EditUser() {
     var model = {
-
+        Id: $("#editUserId").val(),
+        Name: $("#editName").val(),
+        Gender: $("#editGender").val(),
+        PhoneNumber: $("#editPhone").val(),
+        Email: $("#editEmail").val(),
+        Identity: $("#editIdentity").val()
     }
+    $.post(
+        "/User/EditUser",
+        model,
+        function(result) {
+            if (result.isSuccess) {
+                ShowTip('success', '修改成功');
+            }
+            else {
+                ShowTip('warning', result.message);
+            }
+        }
+        )
 }
+
+
 
 function DeleteRole(id) {
     if (confirm("确认删除")) {

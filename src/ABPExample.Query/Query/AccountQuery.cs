@@ -40,6 +40,7 @@ namespace ABPExample.Query.Query
                 where !a.IsDeleted && !b.IsDeleted && !c.IsDeleted
                 select new
                 {
+                    UserId= a.Id,
                     a.UserAccount,
                     a.UserName,
                     a.UserPwd,
@@ -57,6 +58,7 @@ namespace ABPExample.Query.Query
                 {
                     new Claim("Name",info.UserName),
                     new Claim("Role", info.Id.ToString()),
+                    new Claim("UserId",info.UserId.ToString()),
                     new Claim("UserNo",info.UserAccount)
                 };
                 var claimsIdentity = new ClaimsIdentity(

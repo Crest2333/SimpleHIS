@@ -45,7 +45,7 @@ namespace ABPExample.Query.Query
 
          await _context.AddAsync(query);
          var result = await _context.SaveChangesAsync();
-         return new ModelResult<int> { Code = 200, IsSuccess = true, Message = "添加成功", Result = result };
+         return new ModelResult<int> { Code = 200, IsSuccess = true, Message = "添加成功", Result = query.Id };
       }
 
       public async Task<ModelResult> AddIllnessHistory(AddPastHistoryDto model)

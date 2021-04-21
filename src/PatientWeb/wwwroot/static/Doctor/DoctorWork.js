@@ -68,8 +68,8 @@ function AddOrEditMedicalAdvice() {
         function (result) {
             if (result.isSuccess) {
                 console.log(result);
+                window.location.href = "/Doctor/AppointmentList";
 
-                windows.open("/Doctor/AppointmentList");
             } else {
                 ShowTip("warning", result.message);
             }

@@ -48,6 +48,11 @@ namespace Web.Controllers
             return Json(await _userApplication.BatchAddUser(file));
         }
 
+        public async Task<JsonResult> EditUser(EditUserInfoDto inputDto)
+        {
+            return Json(await _userApplication.EditUserInfo(inputDto));
+        }
+
         [HttpPut]
         public async Task<JsonResult> ResetPassWord(int userId)
         {

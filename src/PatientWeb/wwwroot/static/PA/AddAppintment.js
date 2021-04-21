@@ -114,7 +114,7 @@ function Add() {
         function (result) {
             if (result.isSuccess) {
                 ShowTip("success", "添加成功");
-                window.location.href = "/Appointment/List";
+                window.location.href = "/Account/DashBoard";
             } else {
                 ShowTip("warning", result.message);
             }

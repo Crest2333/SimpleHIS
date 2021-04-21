@@ -181,6 +181,11 @@ namespace ABPExample.Query.Query
             var userInfo = await _context.Users.FirstOrDefaultAsync(c => c.Id == infoDto.Id);
             if (userInfo == null)
                 return new ModelResult { IsSuccess = false, Message = "没有查询到相关信息！" };
+            userInfo.UserName = infoDto.Name;
+            userInfo.Email = infoDto.Email;
+            userInfo.UserIdentity = infoDto.Identity;
+            userInfo.PhoneNumber = infoDto.PhoneNumber;
+            userInfo.Gender = (Gender)(int)infoDto.Gender;
             _context.Update(userInfo);
             await _context.SaveChangesAsync();
             return new ModelResult { IsSuccess = true, Message = "修改成功" };

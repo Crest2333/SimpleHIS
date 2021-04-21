@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ABPExample.Application.Interface;
 using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Dtos.MedicalAdvice;
+using ABPExample.Query.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,6 +47,8 @@ namespace Web.Controllers
 
         public async Task<JsonResult> GetAppointmentList(AppointmentInfoListSearchDto param)
         {
+            param.DoctorId = User.Claims.First(c => c.Type == "UserId").Value.ToInt();
+
             return Json(await _appointmentApplication.GetAppointmentInfoList(param));
         }
 
@@ -65,5 +68,6 @@ namespace Web.Controllers
         {
             return Json(await _doctorApplication.GetMedicalAdviceAsync(appointmentId));
         }
+
     }
 }

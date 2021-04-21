@@ -35,12 +35,7 @@
                             <input type="text" class="form-control" id="EndDate" name="EndDate" value="" />
                         </div>
                     </div>
-                    <div class="col-xl-3 row ">
-                        <label class="col-sm-3 col-form-label" style="text-align: right">医生名称</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="DoctorName" name="DoctorName" value="" />
-                        </div>
-                    </div>
+                   
                     <div class="col-xl-3 row ">
                         <label class="col-sm-3 col-form-label" style="text-align: right">部门</label>
                         <div class="col-sm-9">
@@ -118,10 +113,8 @@
             {{if value.status==1}}
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','2')">报道</button>
             {{/if}}
+            
             {{if value.status==2}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')"> 已缴费</button>
-            {{/if}}
-            {{if value.status==3}}
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">就诊中</button>
             {{/if}}
             <button class="btn btn-primary">编辑</button>

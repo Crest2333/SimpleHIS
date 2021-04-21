@@ -53,6 +53,12 @@ namespace Web.Controllers
         }
 
         [HttpGet]
+        public async Task<JsonResult> DeletePatient(int id)
+        {
+            return Json(await _patientApplication.Delete(id));
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetPatientInfoDetail(int id)
         {
             return Json(await _patientApplication.Detail(id));
