@@ -28,5 +28,7 @@ namespace ABPExample.Domain.Dtos.Scheduling
 
         public DateTime OprDate { get; set; }
 
+        public int DepartmentId { get; set; }
+
     }
 }

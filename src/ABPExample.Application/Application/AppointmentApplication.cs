@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Models.Enum;
 using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Application.Application
@@ -14,10 +15,12 @@ namespace ABPExample.Application.Application
     public class AppointmentApplication: IAppointmentApplication,ITransientDependency
     {
         private readonly IPAQuery _pAQuery;
+        private readonly IAppointmentQuery _appointmentQuery;
 
-        public AppointmentApplication( IPAQuery pAQuery)
+        public AppointmentApplication( IPAQuery pAQuery,IAppointmentQuery appointmentQuery)
         {
             _pAQuery = pAQuery;
+            _appointmentQuery = appointmentQuery;
         }
 
         public async Task<ModelResult> AddAppointment(AddAppointmentInfoDto inputDto)
@@ -49,6 +52,18 @@ namespace ABPExample.Application.Application
         {
 
             return await _pAQuery.ChangeAppointmentStatus(inputDto);
+        }
+
+        public async Task UpdateAppointmentStatusAsync()
+        {
+            var list = await _appointmentQuery.GetExpireAppointmentAsync();
+
+            list.ForEach(c =>
+            {
+                c.Status = AppointmentStatusEnum.NoReport;
+            });
+
+            await _appointmentQuery.BatchUpdate(list);
         }
     }
 }

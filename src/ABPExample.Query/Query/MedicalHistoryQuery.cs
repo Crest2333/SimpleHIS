@@ -31,6 +31,13 @@ namespace ABPExample.Query.Query
             var query = _context.PastHistories.Where(c => c.PatientId == param.PatientId);
             var list = await query.Skip((param.PageIndex - 1) * param.PageSize).Take(param.PageSize)
                 .ToListAsync();
+            var userNoList = list.Select(c => c.CreateBy).ToList();
+            var userInfo = await _context.Users.Where(c => userNoList.Contains(c.UserAccount)).ToListAsync();
+            foreach (var item in list)
+            {
+                if (userInfo.Any(c => c.UserAccount == item.CreateBy))
+                    item.CreateBy = userInfo.FirstOrDefault(c => c.UserAccount == item.CreateBy)?.UserName;
+            }
             return new ModelResult<PageDto<MedicalInfoDto>>
             {
                 IsSuccess = true,
@@ -68,5 +75,7 @@ namespace ABPExample.Query.Query
                 : new ModelResult<MedicalInfoDto>
                 { IsSuccess = true, Result = _mapper.Map<PastHistories, MedicalInfoDto>(model) };
         }
+
+        
     }
 }

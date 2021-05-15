@@ -34,8 +34,8 @@ namespace ABPExample.Query.Query
         {
             var info = await (
                 from a in _context.Users
-                join b in _context.RoleMapper on a.Id equals b.UserId
-                join c in _context.Role on b.RoleId equals c.Id
+                from  b in _context.RoleMapper.Where(rm=>rm.UserId==a.Id&&!rm.IsDeleted).DefaultIfEmpty()
+                from c in _context.Role.Where(r=>r.Id==b.RoleId&&!r.IsDeleted)
                 where a.UserAccount == inputDto.AccountNo
                 where !a.IsDeleted && !b.IsDeleted && !c.IsDeleted
                 select new

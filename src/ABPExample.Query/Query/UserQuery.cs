@@ -231,6 +231,7 @@ namespace ABPExample.Query.Query
             var userInfo = await (
                 from a in _context.Users
                 from b in _context.RoleMapper.Where(c => c.UserId == a.Id).DefaultIfEmpty()
+                where a.Id == id
                 select b).FirstOrDefaultAsync();
             if (userInfo == null)
                 return new ModelResult { IsSuccess = false, Message = "没有找到相关信息！" };
@@ -251,7 +252,7 @@ namespace ABPExample.Query.Query
                         where inputDto.Name.IsNullOrEmpty() || inputDto.Name == a.UserName
                         where inputDto.Email.IsNullOrEmpty() || inputDto.Email == a.Email
                         where !inputDto.RoleId.HasValue || inputDto.RoleId < 0 || inputDto.RoleId.Value == c.Id
-                        where !a.IsDeleted
+                        where !a.IsDeleted && !b.IsDeleted && !c.IsDeleted
                         select new UserInfoListDto
                         {
                             Id = a.Id,
@@ -269,6 +270,17 @@ namespace ABPExample.Query.Query
             var list = await query.ToListAsync();
 
             return new PageDto<UserInfoListDto>(count, list);
+        }
+
+        public async Task<ModelResult<UseInfo>> GetUserInfoByUserNoAsync(string userNo)
+        {
+            var result = await _context
+                .Users.
+                Where(c => c.UserAccount == userNo && !c.IsDeleted).
+                Select(c => new UseInfo { UserId = c.Id, UserName = c.UserName, UserNo = c.UserAccount }).FirstOrDefaultAsync();
+            if (result == null)
+                return new ModelResult<UseInfo> { Message = "无效工号", IsSuccess = false };
+            return ModelResult<UseInfo>.Instance.Ok("",result);
         }
 
         public async Task<ModelResult> DeleteUser(long id)

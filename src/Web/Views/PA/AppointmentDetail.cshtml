@@ -4,3 +4,122 @@
     Layout = "_Layout";
 }
 
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-header"><label>预约详情</label></div>
+            <div class="card-body">
+                <div class="row ">
+                    <input type="hidden" value="@ViewBag.AppointmentId" id="appointmentId" />
+                    <div class="col-lg-12">
+                        <div class="row col-lg-12">
+                            <div class="row col-3">
+                                <label>姓名：</label>
+                                <div class="col-9" id="patientName">
+
+                                    患者一号
+                                </div>
+                            </div>
+                            <div class="row col-3">
+                                <label>性别：</label>
+                                <div class="col-9" id="gender">
+                                    患者一号
+                                </div>
+                            </div>
+                            <div class="row col-3 ">
+                                <label>生日：</label>
+                                <div class="col-9" id="dateOfBirth">
+                                    患者一号
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-lg-12">
+                            <div class="col-3 row">
+                                <label>体重：</label>
+                                <div class="col-9" id="weight">
+
+                                    患者一号
+                                </div>
+                            </div>
+                            <div class="col-3 row">
+                                <label>血型：</label>
+                                <div class="col-9" id="bloodType">
+
+                                    患者一号
+                                </div>
+                            </div>
+
+
+                            <div class="col-3 row">
+                                <label>身高</label>
+                                <div class="col-9" id="height">
+
+                                    患者一号
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row col-lg-12">
+                            <div class="col-3 row">
+                                <label>描述：</label>
+                                <div class="col-9" id="describe">
+
+                                    患者一号
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row col-lg-12">
+                            <div class="col-3 row">
+                                <label>医生：</label>
+                                <div class="col-9" id="doctor">
+
+                                    患者一号
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row col-lg-12">
+                            <div class="col-3 row">
+                                <label>时间：</label>
+                                <div class="col-9" id="appointmentDate">
+
+                                    患者一号
+                                </div>
+                            </div>
+
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-header"><label>就诊信息</label></div>
+            <div class="card-body">
+                <div  id="adviceInfo">
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <!-- endinject -->
+    <!-- custom js for this page -->
+    <script>
+
+    </script>
+
+    <script src="~/static/PA/AppointmentDetail.js"></script>
+
+}
+

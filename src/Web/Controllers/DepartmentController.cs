@@ -8,10 +8,13 @@ using ABPExample.Domain.Dtos.Doctor;
 using ABPExample.Domain.Dtos.Scheduling;
 using ABPExample.Domain.Dtos.UserDtos;
 using ABPExample.Domain.Public;
+using ABPExample.Query.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IDepartmentApplication _departmentApplication;
@@ -121,7 +124,38 @@ namespace Web.Controllers
 
         public async Task<JsonResult> AddScheduling(AddSchedulingInputDto input)
         {
+            input.OprId = User.Claims.First(c => c.Type == "UserId").Value.ToInt();
+            
             return Json(await _departmentApplication.AddScheduling(input));
         }
+
+        public async Task<JsonResult> DeleteDeportmentDoc(int id)
+        {
+            return Json(await _departmentApplication.DeleteDeportmentDocAsync(id));
+        }
+
+        public async Task<JsonResult> GetDoctorList()
+        {
+            return Json(await _departmentApplication.GetDoctorListAsync());
+        }
+
+        public async Task<JsonResult> GetDepartmentByDoctorNo(string doctorNo)
+        {
+            var userInfo = await _userApplication.GetUserInfoByUserNoAsync(doctorNo);
+            if (!userInfo.IsSuccess)
+                return Json(null);
+            return Json(await _departmentApplication.GetDepartmentByDoctorIdAsync(userInfo.Result.UserId));
+        }
+
+        public async Task<JsonResult> GetSchedulingById(int id)
+        {
+            return Json(await _departmentApplication.GetSchedulingByIdAsync(id));
+        }
+
+        public async Task<JsonResult> DeleteScheduling(int schedulingId)
+        {
+            return Json(await _departmentApplication.DeleteSchedulingAsync(schedulingId));
+        }
+
     }
 }

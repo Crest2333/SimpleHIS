@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Scheduling;
+using HIS.Domain.Dtos.Department;
 using Volo.Abp.MultiTenancy;
 
 namespace ABPExample.Query.Interface
@@ -40,5 +41,11 @@ namespace ABPExample.Query.Interface
         Task<ModelResult<bool>> AddScheduling(AddSchedulingInputDto input);
 
         Task<List<DepartmentInfoListDto>> GetDepartmentByDoctorIdAsync(int doctorId);
+
+        Task<ModelResult> DeleteDeportmentDocAsync(int id);
+
+        Task<ModelResult<List<DepartmentDoctorInfoDto>>> GetDoctorListAsync();
+        Task<ModelResult<SchedulingInfoDto>> GetSchedulingByIdAsync(int id);
+        Task<ModelResult> DeleteSchedulingAsync(int schedulingId);
     }
 }

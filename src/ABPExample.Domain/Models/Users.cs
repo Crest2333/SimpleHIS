@@ -2,11 +2,12 @@
 using ABPExample.Domain.Public;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace ABPExample.Domain.Models
 {
-    public class Users:FullEntity
+    public class Users : FullEntity
     {
         public string UserAccount { get; set; }
 
@@ -27,8 +28,11 @@ namespace ABPExample.Domain.Models
 
     public enum Gender
     {
-        Man,
-        Woman,
-        Other
+        [Description("男")]
+        Man = 1,
+        [Description("女")]
+        Woman = 2,
+        [Description("其他")]
+        Other = 3,
     }
 }

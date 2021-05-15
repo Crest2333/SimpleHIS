@@ -12,5 +12,6 @@ namespace ABPExample.Query.Interface
         Task<ModelResult> AddOrEditRole(AddRoleInputDto input);
 
         Task<ModelResult<List<RoleInfoDto>>> GetAllRole();
+        Task<ModelResult<RoleInfoDto>> GetUserRoleByUserIdAsync(int userId);
     } 
 }

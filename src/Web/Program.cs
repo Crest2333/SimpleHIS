@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Web.Common;
 
 namespace Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static  void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+             CreateHostBuilder(args).Build().Run();
         }
 
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -21,7 +22,7 @@ namespace Web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    
+
                 })
                 .UseAutofac();
     }

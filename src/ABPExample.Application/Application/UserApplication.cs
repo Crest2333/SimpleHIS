@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -40,7 +41,19 @@ namespace ABPExample.Application.Application
         public async Task<ModelResult> AddUser(AddUserInputDto inputDto)
         {
             var passwordHasher = new PasswordHasher<Users>();
-            var list=  await _query.GetUserInfoList(new UserInfoListSearchDto
+
+            if(inputDto.Identity.Length!=18)
+                return new ModelResult { IsSuccess = false, Message = "身份证号格式错误" };
+
+            var regEmail = new Regex("^[\\w-]+@[\\w-]+\\.(com|net|org|edu|mil|tv|biz|info)$");
+            if (!regEmail.Match(inputDto.Email).Success)
+                return new ModelResult { IsSuccess = false, Message = "邮箱格式错误" };
+
+            var rexPhone = new Regex(@"^\d+$");
+            if (!rexPhone.IsMatch(inputDto.PhoneNumber))
+                return new ModelResult { IsSuccess = false, Message = "电话必须为数字" };
+
+            var list =  await _query.GetUserInfoList(new UserInfoListSearchDto
                 {PageIndex = 1, PageSize = 10, IdentityId = inputDto.Identity});
             if (list.Count > 0)
                 return new ModelResult {IsSuccess = false, Message = "身份证号重复"};
@@ -49,6 +62,11 @@ namespace ABPExample.Application.Application
                  { PageIndex = 1, PageSize = 10, PhoneNumber = inputDto.PhoneNumber });
             if (list.Count > 0)
                 return new ModelResult { IsSuccess = false, Message = "手机号重复" };
+
+            list = await _query.GetUserInfoList(new UserInfoListSearchDto
+                { PageIndex = 1, PageSize = 10, Email = inputDto.Email });
+            if (list.Count > 0)
+                return new ModelResult { IsSuccess = false, Message = "邮箱重复" };
 
             var query = new Users
             {
@@ -66,6 +84,11 @@ namespace ABPExample.Application.Application
             await _query.AddUser(query);
 
             return new ModelResult { Code = 200, IsSuccess = true, Message = "添加成功" };
+        }
+
+        public async Task<ModelResult<UseInfo>> GetUserInfoByUserNoAsync(string userNo)
+        {
+            return await _query.GetUserInfoByUserNoAsync(userNo);
         }
 
         public async Task<ModelResult> BatchAddUser(List<AddUserInputDto> inputDtoList)
@@ -149,13 +172,13 @@ namespace ABPExample.Application.Application
                 switch (data.Rows[i]["性别"].ToString())
                 {
                     case "男":
-                        item.Gender = Domain.Models.Enum.EnumGender.man;
+                        item.Gender = Domain.Models.Enum.EnumGender.Man;
                         break;
                     case "女":
-                        item.Gender = Domain.Models.Enum.EnumGender.woman;
+                        item.Gender = Domain.Models.Enum.EnumGender.Woman;
                         break;
                     case "其他":
-                        item.Gender = Domain.Models.Enum.EnumGender.other;
+                        item.Gender = Domain.Models.Enum.EnumGender.Other;
                         break;
                     default:
                         return new ModelResult { IsSuccess = false, Message = "性别字段数据格式错误" };

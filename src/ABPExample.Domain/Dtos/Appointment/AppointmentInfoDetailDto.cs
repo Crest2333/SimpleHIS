@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Common;
+using ABPExample.Domain.Models;
 using ABPExample.Domain.Models.Enum;
 
 namespace ABPExample.Domain.Dtos.Appointment
@@ -11,7 +13,10 @@ namespace ABPExample.Domain.Dtos.Appointment
 
         public string PatientName { get; set; }
 
-        public string Gender { get; set; }
+        public  Gender Gender { get; set; }
+
+        public string GenderDesc => Gender.GetDescription();
+
 
         public string DoctorNo { get; set; }
 

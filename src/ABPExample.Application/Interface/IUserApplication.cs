@@ -19,6 +19,8 @@ namespace ABPExample.Application.Interface
 
         Task<ModelResult> AddUser(AddUserInputDto inputDto);
 
+        Task<ModelResult<UseInfo>> GetUserInfoByUserNoAsync(string userNo);
+
         Task<ModelResult> BatchAddUser(List<AddUserInputDto> inputDtoList);
 
         Task<ModelResult> BatchAddUser(IFormFile file);

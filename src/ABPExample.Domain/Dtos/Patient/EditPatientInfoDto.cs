@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Models;
 
 namespace ABPExample.Domain.Dtos.Patient
 {
@@ -16,7 +17,7 @@ namespace ABPExample.Domain.Dtos.Patient
 
         public string IdentityId { get; set; }
 
-        public EnumGender Gender { get; set; }
+        public Gender Gender { get; set; }
 
         public decimal? Height { get; set; }
 

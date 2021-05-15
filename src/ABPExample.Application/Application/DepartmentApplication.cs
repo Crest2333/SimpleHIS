@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Scheduling;
+using HIS.Domain.Dtos.Department;
 using Volo.Abp.DependencyInjection;
+using DoctorInfoDto = ABPExample.Domain.Dtos.Doctor.DoctorInfoDto;
 
 namespace ABPExample.Application.Application
 {
@@ -82,6 +84,26 @@ namespace ABPExample.Application.Application
         public async Task<List<DepartmentInfoListDto>> GetDepartmentByDoctorIdAsync(int doctorId)
         {
            return await _departmentQuery.GetDepartmentByDoctorIdAsync(doctorId);
+        }
+
+        public Task<ModelResult> DeleteDeportmentDocAsync(int id)
+        {
+            return _departmentQuery.DeleteDeportmentDocAsync(id);
+        }
+
+        public Task<ModelResult<List<DepartmentDoctorInfoDto>>> GetDoctorListAsync()
+        {
+            return _departmentQuery.GetDoctorListAsync();
+        }
+
+        public async Task<ModelResult<SchedulingInfoDto>> GetSchedulingByIdAsync(int id)
+        {
+            return await _departmentQuery.GetSchedulingByIdAsync(id);
+        }
+
+        public async Task<ModelResult> DeleteSchedulingAsync(int schedulingId)
+        {
+            return await _departmentQuery.DeleteSchedulingAsync(schedulingId);
         }
 
         public async Task<ModelResult<PageDto<DepartmentInfoListDto>>> List(DepartmentSearchDto inputDto)

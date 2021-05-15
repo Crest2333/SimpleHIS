@@ -7,6 +7,8 @@ using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Dtos.MedicalHistory;
 using ABPExample.Domain.Dtos.Patient;
 using ABPExample.Domain.Public;
+using ABPExample.Query.Common;
+using HIS.Application.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -16,13 +18,18 @@ namespace Web.Controllers
         private readonly IAppointmentApplication _appointmentApplication;
         private readonly IPatientApplication _patientApplication;
         private readonly IMedicalHistoryApplication _medicalHistory;
+        private readonly IUserApplication _userApplication;
+        private readonly IPatientUserApplication _patientUserApplication;
 
 
-        public PAController(IAppointmentApplication appointmentApplication, IPatientApplication patientApplication, IMedicalHistoryApplication medicalHistory)
+        public PAController(IAppointmentApplication appointmentApplication, IPatientApplication patientApplication, IMedicalHistoryApplication medicalHistory
+        ,IUserApplication userApplication,IPatientUserApplication patientUserApplication)
         {
             _appointmentApplication = appointmentApplication;
             _patientApplication = patientApplication;
             _medicalHistory = medicalHistory;
+            _userApplication = userApplication;
+            _patientUserApplication = patientUserApplication;
         }
         public IActionResult Index()
         {
@@ -81,9 +88,17 @@ namespace Web.Controllers
             return Json(await _patientApplication.Edit(inputDto));
         }
 
+        public async Task<JsonResult> DeleteHistory(int patientId)
+        {
+            return Json(await _medicalHistory.Delete(patientId));
+        }
+
         [HttpPost]
         public async Task<JsonResult> AddMedicalHistory(AddPastHistoryDto inputDto)
         {
+            inputDto.CreateBy =
+                (await _userApplication.GetUserInfoDetail(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value
+                    .ToInt())).Result.UserAccount;
             return Json(await _patientApplication.AddIllnessHistory(inputDto));
         }
 
@@ -96,6 +111,8 @@ namespace Web.Controllers
 
         public async Task<JsonResult> GetMedicalHistoryByPatientId(GetMedicalInputDto param)
         {
+            var patientInfo = await _patientApplication.GetPatientByUserIdAsync(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value.ToInt());
+           
             return Json(await _medicalHistory.List(param));
         }
 
@@ -118,6 +135,7 @@ namespace Web.Controllers
 
         public IActionResult AppointmentDetail(int appointmentId)
         {
+            ViewBag.AppointmentId = appointmentId;
             return View();
         }
         [HttpPost]
@@ -137,6 +155,8 @@ namespace Web.Controllers
         {
             return Json(await _appointmentApplication.ChangeAppointmentStatus(inputDto));
         }
+
+       
         #endregion
 
     }

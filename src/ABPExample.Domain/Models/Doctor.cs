@@ -6,10 +6,9 @@ using ABPExample.Domain.Public;
 
 namespace HIS.Domain.Models
 {
-   [Table("Doctors")]
+   [Table("DoctorInfo")]
    public class Doctor:FullEntity
    {
-      public string Name  { get; set; }
 
       public string DoctorImg { get; set; }
 

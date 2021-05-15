@@ -24,12 +24,22 @@ $(function () {
             }
 
             if (currentIndex == 1 && newIndex == 2) {
-
+                var doctorChecked = $("input[name='doctor']:checked").val();
+                if (doctorChecked == null) {
+                    ShowTip("warning", "请选择一名医生");
+                    return;
+                }
             }
 
             if (currentIndex == 2 && newIndex == 3) {
-
+                if ($("input[name='appointmentTime']:checked").val() == null) {
+                    ShowTip("warning", "请选择一个时间");
+                    return;
+                }
+                
             }
+
+
             return true;
         },
         //onStepChanged: function (event, currentIndex, priorIndex) {// 下一步切换完成得监听

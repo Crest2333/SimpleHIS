@@ -30,11 +30,11 @@ namespace ABPExample.Domain.Dtos.UserDtos
             {
                 switch (Gender)
                 {
-                    case EnumGender.man:
+                    case EnumGender.Man:
                         return "男";
-                    case EnumGender.woman:
+                    case EnumGender.Woman:
                         return "女";
-                    case EnumGender.other:
+                    case EnumGender.Other:
                         return "其他";
                     default:
                         return null;

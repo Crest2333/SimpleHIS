@@ -13,5 +13,6 @@ namespace ABPExample.Application.Interface
 
         Task<ModelResult<List<RoleInfoDto>>> GetAllRole();
 
+        Task<ModelResult<RoleInfoDto>> GetUserRoleByUserIdAsync(int userId);
     }
 }

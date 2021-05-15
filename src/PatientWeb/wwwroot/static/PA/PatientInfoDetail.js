@@ -145,3 +145,20 @@ function GetAddInfo() {
     return model;
 }
 
+function DeleteHistory(id) {
+    if (confirm("确定删除？")) {
+        $.post(
+            `/PA/DeleteHistory?patientId=${id}`,
+            function(result) {
+                if (result.isSuccess) {
+                    ShowTip("success", result.Message);
+                    Search(pageIndex);
+                    $("#addModal").modal("hide");
+                } else {
+                    ShowTip("warning", result.Message);
+                }
+            }
+            )
+    }
+}
+

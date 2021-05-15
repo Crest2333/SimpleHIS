@@ -44,5 +44,7 @@ namespace ABPExample.Query.Interface
         Task<List<UseInfo>> GetUserInfoAsync(IReadOnlyCollection<string> userNoList);
 
         Task<PageDto<UserInfoListDto>> GetUserRoleListAsync(UserInfoListSearchDto inputDto);
+
+        Task<ModelResult<UseInfo>> GetUserInfoByUserNoAsync(string userNo);
     }
 }

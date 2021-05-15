@@ -8,6 +8,8 @@ namespace ABPExample.Domain.Dtos.Doctor
     {
         public int DepartmentId { get; set; }
 
+        public bool? IsManager { get; set; }
+
         public string Name { get; set; }
 
         public DateTime? StartDate { get; set; }
@@ -17,5 +19,7 @@ namespace ABPExample.Domain.Dtos.Doctor
         public int PageIndex { get; set; }
 
         public int PageSize { get; set; }
+
+        public string SearchValue { get; set; }
     }
 }

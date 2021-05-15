@@ -7,9 +7,12 @@ using ABPExample.Domain.Dtos.Common;
 using ABPExample.Domain.Dtos.Department;
 using ABPExample.Domain.Dtos.Scheduling;
 using ABPExample.Domain.Models;
+using ABPExample.Domain.Models.Enum;
 using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
+using HIS.Domain.Dtos.Department;
+using HIS.Query.Common;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
@@ -146,6 +149,7 @@ namespace ABPExample.Query.Query
                         where !param.DepartmentId.HasValue || param.DepartmentId == a.DepartmentId
                         where !param.StartDate.HasValue || a.StartDate >= param.StartDate
                         where !param.EndDate.HasValue || a.EndDate <= param.EndDate
+                        where !b.IsDeleted && !department.IsDeleted
                         select new SchedulingInfoDto
                         {
                             DepartmentName = department.Name,
@@ -162,7 +166,7 @@ namespace ABPExample.Query.Query
                         };
             var count = await query.CountAsync();
             var list = await query
-                .OrderBy(c => c.StartDate)
+                .OrderBy(c => c.UserId)
                 .Skip(param.PageSize * (param.PageIndex - 1))
                 .Take(param.PageSize)
                 .ToListAsync();
@@ -174,6 +178,8 @@ namespace ABPExample.Query.Query
         {
             var model = _mapper.Map<AddSchedulingInputDto, Scheduling>(input);
             var userInfo = await _userQuery.GetUserInfoAsync(new List<string> { input.UserNo });
+            var oprInfo = await _userQuery.GetUserInfoDetail(input.OprId);
+            model.OprNo = oprInfo.UserAccount;
             if (!userInfo.Any())
                 return new ModelResult<bool> { IsSuccess = false, Message = "无效用户ID" };
             var schedulingList = await _context.Scheduling
@@ -211,8 +217,7 @@ namespace ABPExample.Query.Query
             }
 
             model.OprDate = DateTime.Now;
-            model.OprNo = "SYS";
-            model.OprId = -1;
+
             model.UserId = userInfo.First().UserId;
             await _context.AddAsync(model);
             await _context.SaveChangesAsync();
@@ -229,6 +234,131 @@ namespace ABPExample.Query.Query
                               Id = b.Id,
                               Name = b.Name
                           }).ToListAsync();
+        }
+
+        public async Task<ModelResult> DeleteDeportmentDocAsync(int id)
+        {
+            var entity = await _context.DepartmentMapper.FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+            if (entity == null)
+                return new ModelResult { IsSuccess = false, Message = "无效Id" };
+
+            entity.IsDeleted = true;
+            _context.Modified(entity, c => c.IsDeleted);
+            await _context.SaveChangesAsync();
+            return new ModelResult();
+        }
+
+        public async Task<ModelResult<List<DepartmentDoctorInfoDto>>> GetDoctorListAsync()
+        {
+            var list = await (
+                from a in _context.Users
+                join b in _context.RoleMapper on a.Id equals b.UserId
+                join c in _context.Doctor on a.Id equals c.UserId
+                join e in _context.DepartmentMapper on a.Id equals e.UserId
+                join f in _context.Department on e.DepartmentId equals f.Id
+                where !a.IsDeleted && !b.IsDeleted && !c.IsDeleted && !e.IsDeleted && !f.IsDeleted
+                where b.RoleId == 1
+                select new
+                {
+                    Id = a.Id,
+                    Name = a.UserName,
+                    WorkNo = a.UserAccount,
+                    Gender =
+                        a.Gender == Domain.Models.Gender.Man ? "男" :
+                        a.Gender == Domain.Models.Gender.Woman ? "女" : "其他",
+                    ImgUrl = c.DoctorImg,
+                    DepartmentId = f.Id,
+                    DepartmentName = f.Name,
+                }).ToListAsync();
+            var result = list.GroupBy(c => new { c.Id }).Select(c => new DepartmentDoctorInfoDto
+            {
+                DepartmentNameList = c.Select(c => c.DepartmentName).ToList(),
+                DoctorInfo = c.Select(a => new DoctorInfoDto
+                {
+                    DoctorId = a.Id,
+                    DoctorNo = a.WorkNo,
+                    DoctorName = a.Name,
+                    ImgUrl = a.ImgUrl
+                }).FirstOrDefault()
+            }).ToList();
+            return ModelResult<List<DepartmentDoctorInfoDto>>.Instance.Ok("", result);
+        }
+
+        public async Task<ModelResult<SchedulingInfoDto>> GetSchedulingByIdAsync(int id)
+        {
+            var result = await (
+                from a in _context.Scheduling
+                join b in _context.Users on a.UserId equals b.Id
+                join department in _context.Department on a.DepartmentId equals department.Id
+                join c in _context.Users on a.OprId equals c.Id into d
+                from e in d.DefaultIfEmpty()
+                where !a.IsDeleted
+                where a.Id == id
+                where !b.IsDeleted && !department.IsDeleted
+                orderby b.Id
+                select new SchedulingInfoDto
+                {
+                    Id = a.Id,
+                    DepartmentId = department.Id,
+                    DepartmentName = department.Name,
+                    SchedulingType = a.SchedulingType,
+                    StartDate = a.StartDate,
+                    EndDate = a.EndDate,
+                    UserId = a.UserId,
+                    UserName = b.UserName,
+                    OprDate = a.OprDate,
+                    OprName = e.UserName,
+                    OprNo = e.UserAccount,
+                    UserNo = a.UserNo
+                }).FirstOrDefaultAsync();
+            if (result == null)
+                return new ModelResult<SchedulingInfoDto> { IsSuccess = false, Message = "无效Id" };
+
+            return ModelResult<SchedulingInfoDto>.Instance.Ok("", result);
+        }
+
+        public async Task<ModelResult> DeleteSchedulingAsync(int schedulingId)
+        {
+            var entity = await _context.Scheduling.FirstOrDefaultAsync(c => c.Id == schedulingId && !c.IsDeleted);
+            if (entity == null)
+                return new ModelResult { IsSuccess = false, Message = "无效Id" };
+
+            var appointmentList = await _context.Appointment.Where(c =>
+                    c.AppointmentDate.Date >= entity.StartDate.Date && c.AppointmentDate.Date <= entity.EndDate.Date &&
+                    !c.IsDeleted && c.Status == AppointmentStatusEnum.Reserved)
+                .ToListAsync();
+            if (appointmentList.Any())
+            {
+                var patientIdList = appointmentList.Select(c => c.PatientId).ToList();
+
+                var emailInfo = await (
+                    from a in _context.PatientUser
+                    join b in _context.PatientsMapping on a.Id equals b.UserId
+                    where !a.IsDeleted && !b.IsDeleted && patientIdList.Contains(b.PatientId)
+                    select new { b.PatientId, a.Email }
+                ).ToListAsync();
+
+                foreach (var item in appointmentList)
+                {
+                    if (emailInfo.Any(c => c.PatientId == item.PatientId))
+                    {
+                        var emailList = emailInfo.Where(c => c.PatientId == item.PatientId).ToList();
+                        foreach (var email in emailList)
+                        {
+                            EmailHelper.Send(email.Email, "预约信息", $"您于{item.AppointmentDate:yyyy-MM-dd} {item.AppointmentTime}的预约因所医生排班更改，系统已自动将您的预约取消");
+
+                        }
+                    }
+
+                    item.Status = AppointmentStatusEnum.Cancelled;
+                }
+                _context.UpdateRange(appointmentList);
+            }
+
+            entity.IsDeleted = true;
+
+            await _context.SaveChangesAsync();
+            return ModelResult.Instance;
         }
 
         public async Task<ModelResult> Delete(long id)

@@ -186,20 +186,25 @@ function Export() {
 let userId;
 
 function OpenRoleModal(id) {
-    $("#roleModal").modal("show");
-    userId = id;
-    InitRole();
-}
-
-function InitRole() {
     $.get(
-        "/Role/GetAllRole",
+        `/Role/GetUserRoleByUserId?userId=${id}`,
         function (result) {
-            var html = template("roleHtml", result);
-            $("#roleDiv").html(html);
+            if (result.isSuccess) {
+                console.log(result)
+                if (result.result != null) {
+                    $("#role").val(result.result.roleId)
+                }
+                $("#roleModal").modal("show");
+                userId = id;
+
+            } else {
+                ShowTip('warning', result.message);
+            }
         }
     )
 }
+
+
 
 function AddRole() {
     var model = {
@@ -211,6 +216,8 @@ function AddRole() {
         model,
         function (result) {
             if (result.isSuccess) {
+                $("#roleModal").modal("hide");
+
                 ShowTip('success', '添加成功');
             }
             else {

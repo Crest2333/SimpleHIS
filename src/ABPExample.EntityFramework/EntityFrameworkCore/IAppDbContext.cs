@@ -46,6 +46,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
 
         DbSet<Doctor> Doctor { get; set; }
 
+        DbSet<ChatLog> ChatLog { get; set; }
+
         void Modified<TEntity, TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> func) where TEntity : class;
 
         void ModifiedRange<TEntity, TProperty>(IEnumerable<TEntity> entity, Expression<Func<TEntity, TProperty>> func) where TEntity : class;

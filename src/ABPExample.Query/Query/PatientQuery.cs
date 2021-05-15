@@ -33,17 +33,26 @@ namespace ABPExample.Query.Query
       public async Task<ModelResult<int>> Add(AddPatientInfoDto model)
       {
          var query = new Patients();
+
+         
          query = _mapper.Map<AddPatientInfoDto, Patients>(model);
          query.IsDeleted = false;
          query.CreationTime = DateTime.Now;
          query.LastModificationTime = DateTime.Now;
-
+         
+         
          var isExistence = await _context.Patients
-            .Where(c => c.FullName == model.FullName && c.IdentityId == model.IdentityId && !c.IsDeleted).AnyAsync();
+            .Where(c =>  c.IdentityId == model.IdentityId && !c.IsDeleted).AnyAsync();
          if (isExistence)
             return new ModelResult<int> { IsSuccess = false, Message = "添加失败，该患者已存在！" };
 
-         await _context.AddAsync(query);
+         isExistence = await _context.Patients
+             .Where(c => c.PhoneNumber == model.PhoneNumber && !c.IsDeleted).AnyAsync();
+
+         if (isExistence)
+             return new ModelResult<int> { IsSuccess = false, Message = "添加失败，手机号已存在" };
+
+            await _context.AddAsync(query);
          var result = await _context.SaveChangesAsync();
          return new ModelResult<int> { Code = 200, IsSuccess = true, Message = "添加成功", Result = query.Id };
       }
@@ -54,7 +63,6 @@ namespace ABPExample.Query.Query
          query.CreationTime = DateTime.Now;
          query.LastModificationTime = DateTime.Now;
          query.IsDeleted = false;
-         query.CreateBy = "123";
          var isExistence = await _context.PastHistories
             .Where(c => !c.IsDeleted && c.Name == model.Name && c.PatientId == model.PatientId).AnyAsync();
          if (isExistence)

@@ -12,10 +12,6 @@ namespace ABPExample.Domain.Dtos.Doctor
 
         public DateTime WorkStartDate { get; set; }
 
-        //public int Status { get; set; }
-
-        //public int Grade { get; set; }
-
         public string Gender { get; set; }
 
         public int DepartmentId { get; set; }

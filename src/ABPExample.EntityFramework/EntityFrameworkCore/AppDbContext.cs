@@ -65,6 +65,8 @@ namespace ABPExample.EntityFramework.EntityFrameworkCore
 
         public DbSet<Doctor> Doctor { get; set; }
 
+        public DbSet<ChatLog> ChatLog { get; set; }
+
         public void Modified<TEntity, TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> func)where  TEntity:class
         {
             base.Entry(entity).Property(func).IsModified = true;

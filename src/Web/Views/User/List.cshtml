@@ -82,15 +82,15 @@
                 </div>
 
             </div>
-            
+
         </div>
 
     </div>
-    <div class="col-12 d-flex justify-content-between"  >
+    <div class="col-12 d-flex justify-content-between">
         <div>
             <button class="btn btn-google" onclick="ShowAddUserPage()">添加员工</button>
             <button class="btn btn-google" onclick="ShowBatchAddUserPage()">批量添加</button>
-            <button class="btn btn-google" onclick="Export()" >导出</button>
+            <button class="btn btn-google" onclick="Export()">导出</button>
         </div>
         <div id="page">
 
@@ -120,7 +120,7 @@
                             <option selected="selected" value="1">
                                 男
                             </option>
-                            
+
                             <option value="2">
                                 女
                             </option>
@@ -210,7 +210,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label>上传文件 &nbsp;&nbsp;&nbsp;<a href ="~/file/批量添加账号模板.xlsx">点击下载模板</a></label>
+                        <label>上传文件 &nbsp;&nbsp;&nbsp;<a href="~/file/批量添加账号模板.xlsx">点击下载模板</a></label>
                         <input type="file" name="batchFile" id="batchFile" class="file-upload-default">
                         <div class="input-group col-xs-12">
                             <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
@@ -219,7 +219,7 @@
                             </span>
                         </div>
                     </div>
-                   
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -244,7 +244,7 @@
                     <div class="form-group">
                         <label>选择角色</label>
                         <div class="input-group col-xs-12" id="roleDiv">
-                            
+
                         </div>
                     </div>
 
@@ -285,10 +285,14 @@
 </script>
 
 <script id="roleHtml" type="text/html">
-    {{each result value index}}
-        <input type="radio" name="role" value="{{value.roleId}}"/><label>{{value.name}}</label>
-
-    {{/each}}
+    
+    <select class="form-control" id="role">
+        <option value="1">医生</option>
+        <option value="2">PA</option>
+        <option value="4">主任医生</option>
+        <option value="7">管理员</option>
+    </select>
+   
 </script>
 
 

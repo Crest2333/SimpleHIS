@@ -85,5 +85,10 @@ namespace Web.Controllers
         {
             return Json(await _userApplication.DeleteUser(userId));
         }
+
+        public IActionResult DoctorManager()
+        {
+            return View();
+        }
     }
 }

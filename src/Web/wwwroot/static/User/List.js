@@ -223,11 +223,24 @@ function Export() {
 }
 
 let userId;
-
 function OpenRoleModal(id) {
-    $("#roleModal").modal("show");
-    userId = id;
-    InitRole();
+    $.get(
+        `/Role/GetUserRoleByUserId?userId=${id}`,
+        function (result) {
+            if (result.isSuccess) {
+                console.log(result)
+
+                if (result.result != null) {
+                    $("#role").val(result.result.roleId)
+                }
+                $("#roleModal").modal("show");
+                userId = id;
+
+            } else {
+                ShowTip('warning', result.message);
+            }
+        }
+    )
 }
 
 function InitRole() {
@@ -243,7 +256,7 @@ function InitRole() {
 function AddRole() {
     var model = {
         UserId: userId,
-        RoleId: $("input[name='role']:checked").val()
+        RoleId: $("#role").val()
     }
     $.post(
         "/Role/AddOrEditRole",

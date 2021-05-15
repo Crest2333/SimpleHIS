@@ -181,6 +181,7 @@ function AddDoc(id) {
         model,
         function (result) {
             if (result.isSuccess) {
+                SearchOther(pageOtherIndex)
                 ShowTip("success", "添加成功");
             } else {
                 ShowTip("warning", result.message);

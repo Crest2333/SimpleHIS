@@ -28,5 +28,7 @@ namespace HIS.Domain.Dtos.Doctor
 
       public string Introduce { get; set; }
 
+      public DateTime? LastModificationTime { get; set; }
+
    }
 }

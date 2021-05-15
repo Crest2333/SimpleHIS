@@ -16,6 +16,7 @@ namespace ABPExample.Domain.Dtos.Scheduling
 
         public int  DepartmentId { get; set; }
 
+        public int OprId { get; set; }
 
     }
 }

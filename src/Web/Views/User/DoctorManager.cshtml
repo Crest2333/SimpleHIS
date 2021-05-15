@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewData["Title"] = "DoctorManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">姓名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="getName" name="getName" value="" />
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 row ">
+                        <label class="col-sm-3 col-form-label" style="text-align:right">工号</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="getUserNo" name="getUserNo" value="" />
+                        </div>
+                    </div>
+                    <input type="hidden" value="true" id="isUserRole" />
+
+                    
+                    <div class="col-xl-3 row ">
+                        <button class="btn btn-google" onclick="Search(1)">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="listTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>账号</th>
+                                <th>姓名</th>
+                                <th>描述</th>
+                                <th>图片</th>
+                                <th>最后更新时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listBody">
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+        <div>
+
+        </div>
+        <div id="page">
+
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">编辑信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Doctor/EditDoctorInfo" id="editForm">
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <div class="input-group col-xs-12">
+                            <input type="text" name="name" id="name" disabled="disabled" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>描述</label>
+                        <div class="input-group col-xs-12">
+                            <textarea  name="Introduce" id="Introduce" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>图片</label>
+                        <input type="file" name="batchFile" id="batchFile" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                            <img name="imgUrl" id="imgUrl"  style="cursor: pointer; max-height: 100px;max-width: 100px" src="\Images\医生.png" alt="Alternate Text" onclick="changeImg()" />
+                            <input type="file"  name="imgFile" id="imgFile" value="" style="display: none"/>
+                        </div>
+                    </div>
+                    
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="Edit()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="listHtml" type="text/html">
+    {{each list value index}}
+    <tr>
+        <td>{{value.workNo}}</td>
+        <td>{{value.name}}</td>
+        <td>{{value.introduce}}</td>
+        <td><img  src="{{value.imgUrl}}" /> </td>
+        <td>{{value.lastModificationTime}}</td>
+        <td>
+            <button class="btn btn-primary" onclick="OpenEdit('{{value.id}}')">编辑</button>
+        </td>
+    </tr>
+
+    {{/each}}
+</script>
+
+<script id="roleHtml" type="text/html">
+    {{each result value index}}
+    <option value="{{value.roleId}}">{{value.name}}</option>
+
+    {{/each}}
+</script>
+
+@section Scripts{
+    <script src="~/static/Doctor/DoctorManager.js"></script>
+    <script type="text/javascript">
+    </script>
+}

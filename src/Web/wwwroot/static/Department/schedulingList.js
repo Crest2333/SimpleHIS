@@ -5,17 +5,14 @@
     //    elem: '#addStartDate'
     //});
     layui.use("laydate",
-   
+
         function () {
             var laydate = layui.laydate;
             var start = laydate.render({
                 elem: '#addStartDate' //指定元素
                 ,
-                theme: 'blue',
-                type: 'datetime' //控件选择类型
-                ,
                 format: 'yyyy-MM-dd',
-                done: function(value, date, endDate) {
+                done: function (value, date, endDate) {
                     //结束时间的最小时间
                     end.config.min = {
                         year: date.year,
@@ -31,11 +28,62 @@
             var end = laydate.render({
                 elem: '#addEndDate' //指定元素
                 ,
-                theme: 'blue',
-                type: 'datetime',
                 format: 'yyyy-MM-dd',
 
-                done: function(value, date, endDate) {
+                done: function (value, date, endDate) {
+                    if (value === '' || value === null) {
+                        //清空时，开始时间的最大时间是当前时间
+                        var nowDate = new Date();
+                        start.config.max = {
+                            year: nowDate.getFullYear(),
+                            month: nowDate.getMonth(),
+                            date: nowDate.getDate(),
+                            hours: nowDate.getHours(),
+                            minutes: nowDate.getMinutes(),
+                            seconds: nowDate.getSeconds()
+                        };
+                        return
+                    }
+                    //开始时间的最大时间
+                    start.config.max = {
+                        year: date.year,
+                        month: date.month - 1,
+                        date: date.date,
+                        hours: date.hours,
+                        minutes: date.minutes,
+                        seconds: date.seconds
+                    }
+                }
+            });
+        });
+
+    layui.use("laydate",
+
+        function () {
+            var laydate = layui.laydate;
+            var start = laydate.render({
+                elem: '#editStartDate' //指定元素
+                ,
+                format: 'yyyy-MM-dd',
+                done: function (value, date, endDate) {
+                    //结束时间的最小时间
+                    end.config.min = {
+                        year: date.year,
+                        month: date.month - 1,
+                        date: date.date,
+                        hours: date.hours,
+                        minutes: date.minutes,
+                        seconds: date.seconds
+                    }
+                }
+            });
+
+            var end = laydate.render({
+                elem: '#editEndDate' //指定元素
+                ,
+                format: 'yyyy-MM-dd',
+
+                done: function (value, date, endDate) {
                     if (value === '' || value === null) {
                         //清空时，开始时间的最大时间是当前时间
                         var nowDate = new Date();
@@ -118,7 +166,7 @@ function PageTool(count) {
                 console.log(obj.curr)
                 console.log(first);
                 if (!first) {
-                    GetList(obj.curr)
+                    Search(obj.curr)
                     //do something
                 }
             }
@@ -127,11 +175,29 @@ function PageTool(count) {
 }
 
 function openAdd() {
+    $("#startDate").val(null);
+    $("#endDate").val(null);
     if ($("#workNumber").val() == null || $("#workNumber").val() == "") {
         alert("请输入工号");
         return;
     }
-    $("#addSchedulingModal").modal("show");
+    var doctorNo = $("#workNumber").val();
+    $.get(
+        `/Department/GetDepartmentByDoctorNo?doctorNo=${doctorNo}`,
+        function (result) {
+            if (result == null) {
+                ShowTip("warning","无效工号");
+
+                return;
+            }
+            var list = {
+                result
+            }
+            var html = template("departmentHtml", list);
+            $("#addDepartment").html(html);
+            $("#addSchedulingModal").modal("show");
+        })
+  
 
 }
 
@@ -152,7 +218,10 @@ function AddScheduling() {
         model,
         function (result) {
             if (result.isSuccess) {
+                $("#addSchedulingModal").modal("hide");
+                Search(pageIndex);
                 ShowTip("success", "添加成功");
+
             } else {
                 ShowTip("warning", result.message);
             }
@@ -164,7 +233,7 @@ function Delete(id) {
     var isDelete = confirm("确认是否删除该条数据？");
     if (isDelete) {
         $.post(
-            `/Department/DeleteScheduling?scheduling=${id}`,
+            `/Department/DeleteScheduling?schedulingId=${id}`,
             function (result) {
                 if (result.isSuccess) {
                     ShowTip("success", "删除成功");
@@ -184,7 +253,7 @@ function LoadDepartment() {
         function (result) {
             if (result.isSuccess) {
                 var html = template("departmentHtml", result);
-                $("#addDepartment").html(html);
+                $("#editDepartment").html(html);
             }
         }
     )
@@ -211,17 +280,75 @@ function BindDate() {
         closeStop: '#end'
     };
     lay('#addStartDate').on('click',
-        function(e) {
+        function (e) {
             if ($('#addStartDate').val() != null && $('#addStartDate').val() != undefined && $('#addStartDate').val() != '') {
                 start.max = $('#addStartDate').val();
             }
             laydate.render(start);
         });
     lay('#addEndDate').on('click',
-        function(e) {
+        function (e) {
             if ($('#addStartDate').val() != null && $('#addStartDate').val() != undefined && $('#addStartDate').val() != '') {
                 end.min = $('#addStartDate').val();
             }
             laydate.render(end);
         });
+}
+
+let userNo;
+let userId;
+function OpenEdit(id) {
+    $.get(
+        `/Department/GetSchedulingById?id=${id}`,
+        function (result) {
+            if (result.isSuccess) {
+                $.get(
+                    `/Department/GetDepartmentByDoctorNo?doctorNo=${result.result.userNo}`,
+                    function (res) {
+                        if (res == null) {
+                            ShowTip("warning", "无效工号");
+                            return;
+                        }
+                        var list = {
+                            result: res
+                        }
+                        var html = template("departmentHtml", list);
+                        $("#editDepartment").html(html);
+                        $("#editDepartment").val(result.result.departmentId);
+                        $("#editSchedulingModal").modal("show")
+                    })
+                userNo = result.result.userNo;
+                $("#editStartDate").val(result.result.startDate);
+                $("#editEndDate").val(result.result.endDate);
+              
+
+            } else {
+                ShowTip("warning",result.message);
+            }
+        }
+    )
+}
+
+function Edit() {
+   
+      var model=   {
+          UserNo: userNo,
+            StartDate: $("#editStartDate").val(),
+            EndDate: $("#editEndDate").val(),
+            DepartmentId: $("#editDepartment").val()
+        }
+      $.post(
+          "/Department/AddScheduling",
+          model,
+          function (result) {
+              if (result.isSuccess) {
+                  $("#editSchedulingModal").modal("hide");
+                  Search(pageIndex);
+                  ShowTip("success", "添加成功");
+
+              } else {
+                  ShowTip("warning", result.message);
+              }
+          }
+      )
 }

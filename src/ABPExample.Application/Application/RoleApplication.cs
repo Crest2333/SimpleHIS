@@ -29,5 +29,9 @@ namespace ABPExample.Application.Application
             return await _roleQuery.GetAllRole();
         }
 
+        public async Task<ModelResult<RoleInfoDto>> GetUserRoleByUserIdAsync(int userId)
+        {
+            return await _roleQuery.GetUserRoleByUserIdAsync(userId);
+        }
     }
 }

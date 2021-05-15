@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Scheduling;
 using HIS.Domain.Dtos.Doctor;
+using HIS.Domain.Dtos.Chat;
 
 namespace ABPExample.Query.Interface
 {
@@ -24,5 +25,11 @@ namespace ABPExample.Query.Interface
         /// <param name="param"></param>
         /// <returns></returns>
         Task<ModelResult<PageDto<DoctorEntityDto>>> GetDoctorListAsync(GetDoctorInputDto param);
+
+        Task<ModelResult> EditDoctorInfoAsync(DoctorInfoInputDto inputDto);
+
+        Task<DoctorEntityDto> GetDoctorInfoDetailAsync(int userId);
+
+        Task<ModelResult<List<ChatUserInfoDto>>> GetOnlineUserAsync(int doctorId);
     }
 }

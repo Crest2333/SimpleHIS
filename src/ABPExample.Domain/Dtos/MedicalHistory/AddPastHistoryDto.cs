@@ -14,5 +14,7 @@ namespace ABPExample.Domain.Dtos.MedicalHistory
 
         public DateTime StartDate { get; set; }
 
+        public string CreateBy { get; set; }
+
     }
 }

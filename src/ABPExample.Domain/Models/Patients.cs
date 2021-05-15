@@ -14,7 +14,7 @@ namespace ABPExample.Domain.Models
 
         public string IdentityId { get; set; }
 
-        public EnumGender Gender { get; set; }
+        public Gender Gender { get; set; }
 
         public decimal? Height { get; set; }
 

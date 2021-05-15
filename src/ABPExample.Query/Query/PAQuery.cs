@@ -34,7 +34,7 @@ namespace ABPExample.Query.Query
             var query = new Appointment
             {
                 Status = AppointmentStatusEnum.Reserved,
-                AppointmentDate = inputDto.AppointmentDate,
+                AppointmentDate = Convert.ToDateTime($"{inputDto.AppointmentDate:yyyy-MM-dd} { Convert.ToDateTime(inputDto.AppointmentTime):HH:mm}"),
                 CreationTime = DateTime.Now,
                 DepartmentId = inputDto.DepartmentId,
                 Describe = inputDto.Describe,
@@ -91,7 +91,7 @@ namespace ABPExample.Query.Query
                     Describe = a.Describe,
                     DoctorName = c.UserName,
                     DoctorNo = c.UserAccount,
-                    Gender = b.Gender.ToString(),
+                    Gender = b.Gender,
                     PatientName = b.FullName,
                     Address = b.Address,
                     BloodType = b.BloodType,

@@ -35,7 +35,7 @@ namespace ABPExample.Query.Query
                 query.RoleId = input.RoleId;
                 _context.Update(query);
                 await _context.SaveChangesAsync();
-                return new ModelResult {Message = "添加成功"};
+                return new ModelResult { Message = "添加成功" };
             }
             else
             {
@@ -46,7 +46,7 @@ namespace ABPExample.Query.Query
                 };
                 await _context.AddAsync(model);
                 await _context.SaveChangesAsync();
-                return new ModelResult {Message = "添加成功"};
+                return new ModelResult { Message = "添加成功" };
             }
 
         }
@@ -57,6 +57,18 @@ namespace ABPExample.Query.Query
             return new ModelResult<List<RoleInfoDto>> { Result = _mapper.Map<List<Role>, List<RoleInfoDto>>(query) };
         }
 
+        public async Task<ModelResult<RoleInfoDto>> GetUserRoleByUserIdAsync(int userId)
+        {
+            var result = await (from a in _context.RoleMapper
+                                join b in _context.Role on a.RoleId equals b.Id
+                                where a.UserId == userId && !a.IsDeleted
+                                select new RoleInfoDto
+                                {
+                                    RoleId = a.RoleId,
+                                    Name = b.Name
+                                }).FirstOrDefaultAsync();
+            return ModelResult<RoleInfoDto>.Instance.Ok(string.Empty,result);
 
+        }
     }
 }

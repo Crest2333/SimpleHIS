@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 using ABPExample.Domain.Dtos.Doctor;
 using ABPExample.Domain.Dtos.MedicalAdvice;
 using ABPExample.Domain.Dtos.Scheduling;
+using ABPExample.Domain.Dtos.UserDtos;
+using HIS.Domain.Dtos.Chat;
 using HIS.Domain.Dtos.Doctor;
+using Microsoft.AspNetCore.Http;
 
 namespace ABPExample.Application.Interface
 {
@@ -21,5 +24,14 @@ namespace ABPExample.Application.Interface
         Task<ModelResult<MedicalAdviceEntityDto>> GetMedicalAdviceAsync(int appointmentId);
 
         Task<ModelResult<PageDto<DoctorEntityDto>>> GetDoctorListAsync(GetDoctorInputDto param);
+
+        Task<ModelResult> EditDoctorInfoAsync(DoctorInfoInputDto inputDto, IFormFile file);
+
+        Task<ModelResult<DoctorEntityDto>> GetDoctorInfoDetailAsync(int userId);
+
+        Task<ModelResult<List<ChatUserInfoDto>>> GetOnlineUserAsync(int doctorId);
+
+
+        Task<ModelResult<List<ChatLogDto>>> GetChatLogByUserIdAsync(int userId, int toInt);
     }
 }
