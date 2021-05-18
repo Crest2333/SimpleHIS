@@ -354,9 +354,7 @@ namespace ABPExample.Query.Query
                 }
                 _context.UpdateRange(appointmentList);
             }
-
             entity.IsDeleted = true;
-
             await _context.SaveChangesAsync();
             return ModelResult.Instance;
         }

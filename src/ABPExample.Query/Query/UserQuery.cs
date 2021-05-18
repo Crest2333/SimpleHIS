@@ -103,12 +103,12 @@ namespace ABPExample.Query.Query
             if (inputDto.DepartmentId.HasValue)
             {
                 return from a in _context.Users
-                       from b in _context.DepartmentMapper.Where(c => c.UserId == a.Id && c.DepartmentId == inputDto.DepartmentId).DefaultIfEmpty()
+                       from b in _context.DepartmentMapper.Where(c => c.UserId == a.Id && c.DepartmentId == inputDto.DepartmentId&&!c.IsDeleted).DefaultIfEmpty()
                        join e in _context.Department on b.DepartmentId equals e.Id into f
                        from g in f.DefaultIfEmpty()
                        where !a.IsDeleted
 
-                       where inputDto.IsOther.Value || b.DepartmentId == inputDto.DepartmentId
+                       where inputDto.IsOther.Value 
                        where !inputDto.IsOther.Value || b == null
                        select new UserInfoListDto
                        {
@@ -125,8 +125,8 @@ namespace ABPExample.Query.Query
             else
             {
                 return from a in _context.Users
-                       from b in _context.RoleMapper.Where(c => c.UserId == a.Id).DefaultIfEmpty()
-                       from c in _context.Role.Where(c => c.Id == b.RoleId).DefaultIfEmpty()
+                       from b in _context.RoleMapper.Where(c => c.UserId == a.Id&&!c.IsDeleted).DefaultIfEmpty()
+                       from c in _context.Role.Where(c => c.Id == b.RoleId&&!c.IsDeleted).DefaultIfEmpty()
                        where !inputDto.Gender.HasValue || inputDto.Gender.Value < 0 || inputDto.Gender.Value == (int)a.Gender
                        where inputDto.IdentityId.IsNullOrEmpty() || inputDto.IdentityId == a.UserIdentity
                        where inputDto.PhoneNumber.IsNullOrEmpty() || inputDto.PhoneNumber == a.PhoneNumber
@@ -198,7 +198,7 @@ namespace ABPExample.Query.Query
             if (userInfo == null)
                 return new ModelResult { IsSuccess = false, Message = "没有查询到相关信息！" };
 
-            var result = passwordHasher.VerifyHashedPassword(userInfo, userInfo.UserPwd, inputDto.OldPassWord);
+            var result = passwordHasher.VerifyHashedPassword(userInfo, userInfo.UserPwd, inputDto.NewPassWord);
             if (result != PasswordVerificationResult.Success)
                 return new ModelResult { IsSuccess = false, Message = "密码错误！" };
 

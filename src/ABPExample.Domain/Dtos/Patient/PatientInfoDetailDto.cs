@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ABPExample.Domain.Common;
 using ABPExample.Domain.Models.Enum;
 
 namespace ABPExample.Domain.Dtos.Patient
@@ -26,5 +27,7 @@ namespace ABPExample.Domain.Dtos.Patient
         public DateTime? DateOfBirth { get; set; }
 
         public string BloodType { get; set; }
+
+        public string GenderDesc => Gender.GetDescription();
     }
 }

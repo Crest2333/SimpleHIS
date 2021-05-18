@@ -213,6 +213,15 @@ function GetAddData() {
 
 function AddScheduling() {
     var model = GetAddData();
+    console.log(model)
+    if (model.StartDate == null||model.StartDate=="") {
+        ShowTip("warning", "请输入开始时间");
+        return;
+    }
+    if (model.EndDate == null||model.EndDate=="") {
+        ShowTip("warning", "请输入结束时间");
+        return;
+    }
     $.post(
         "/Department/AddScheduling",
         model,

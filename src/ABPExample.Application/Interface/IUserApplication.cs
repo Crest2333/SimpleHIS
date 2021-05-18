@@ -5,6 +5,7 @@ using ABPExample.Domain.Public;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace ABPExample.Application.Interface
 
         Task<ModelResult> BatchAddUser(List<AddUserInputDto> inputDtoList);
 
-        Task<ModelResult> BatchAddUser(IFormFile file);
+        Task<ModelResult<DataTable>> BatchAddUser(IFormFile file);
 
         Task<ModelResult<PageDto<UserInfoListDto>>> GetUserInfoList(UserInfoListSearchDto inputDto);
 

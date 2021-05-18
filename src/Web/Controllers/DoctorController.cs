@@ -15,15 +15,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class DoctorController : Controller
     {
         private readonly IDoctorApplication _doctorApplication;
         private readonly IAppointmentApplication _appointmentApplication;
+        private readonly IUserApplication _userApplication;
 
-        public DoctorController(IDoctorApplication doctorApplication, IAppointmentApplication appointmentApplication)
+        public DoctorController(IDoctorApplication doctorApplication, IAppointmentApplication appointmentApplication,IUserApplication userApplication)
         {
             _doctorApplication = doctorApplication;
             _appointmentApplication = appointmentApplication;
+            _userApplication = userApplication;
         }
 
 
@@ -64,6 +67,7 @@ namespace Web.Controllers
 
         public async Task<JsonResult> AddOrEditMedicalAdvice(MedicalAdviceInputDto inputDto)
         {
+
             return Json(await _doctorApplication.AddOrEditMedicalAdviceAsync(inputDto));
         }
 
@@ -93,8 +97,12 @@ namespace Web.Controllers
             return Json(await _doctorApplication.GetDoctorInfoDetailAsync(userId));
         }
 
-        public IActionResult OnLine()
+        public async Task<IActionResult> OnLine()
         {
+           var userInfo= 
+                await _userApplication.GetUserInfoDetail(User.Claims.First(c => c.Type == "UserId").Value.ToInt());
+           if (userInfo.Result != null)
+               ViewBag.Name = userInfo.Result.UserName;
             return View();
         }
 

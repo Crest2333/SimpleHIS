@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Public;
 using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Query.Query
@@ -78,6 +79,18 @@ namespace ABPExample.Query.Query
             }
             else
                 return false;
+        }
+
+        public async Task<ModelResult> EditPassWordAsync(EditPassWordDto inputDto)
+        {
+            var userInfo = await _context.Users.FirstOrDefaultAsync(c => c.Id == inputDto.Id);
+            if (userInfo == null)
+                return new ModelResult { IsSuccess = false, Message = "没有查询到相关信息！" };
+            var passwordHasher = new PasswordHasher<Users>();
+            userInfo.UserPwd = passwordHasher.HashPassword(userInfo, inputDto.NewPassWord);
+            _context.Update(userInfo);
+            await _context.SaveChangesAsync();
+            return new ModelResult { IsSuccess = true, Message = "重置密码成功！" };
         }
     }
 }

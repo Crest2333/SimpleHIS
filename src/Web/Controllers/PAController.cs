@@ -9,27 +9,30 @@ using ABPExample.Domain.Dtos.Patient;
 using ABPExample.Domain.Public;
 using ABPExample.Query.Common;
 using HIS.Application.Interface;
+using HIS.Domain.Dtos.Appointment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    public class PAController : Controller
+    [Authorize]
+
+    public class PAController : AbpController
     {
         private readonly IAppointmentApplication _appointmentApplication;
         private readonly IPatientApplication _patientApplication;
         private readonly IMedicalHistoryApplication _medicalHistory;
         private readonly IUserApplication _userApplication;
-        private readonly IPatientUserApplication _patientUserApplication;
 
 
         public PAController(IAppointmentApplication appointmentApplication, IPatientApplication patientApplication, IMedicalHistoryApplication medicalHistory
-        ,IUserApplication userApplication,IPatientUserApplication patientUserApplication)
+        ,IUserApplication userApplication)
         {
             _appointmentApplication = appointmentApplication;
             _patientApplication = patientApplication;
             _medicalHistory = medicalHistory;
             _userApplication = userApplication;
-            _patientUserApplication = patientUserApplication;
         }
         public IActionResult Index()
         {
@@ -151,12 +154,22 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ChangeAppointmentStatus(EditAppointmentInputDto inputDto)
+        public async Task<JsonResult> ChangeAppointmentStatus(EditAppointmentStatusInputDto inputDto)
         {
             return Json(await _appointmentApplication.ChangeAppointmentStatus(inputDto));
         }
 
-       
+        public IActionResult EditAppointment(int appointmentId)
+        {
+            ViewBag.Id = appointmentId;
+            return View();
+        }
+
+        [HttpPost]
+        public async  Task<JsonResult> EditAppointment(EditAppointmentInputDto inputDto)
+        {
+            return Json(await _appointmentApplication.EditAppointmentAsync(inputDto));
+        }
         #endregion
 
     }

@@ -80,8 +80,7 @@ function Add() {
                 $("#addModal").modal("hide");
             }
             else {
-                ShowTip('warning', result.Message);
-                $("#addModal").modal("hide");
+                ShowTip('warning', result.message);
             }
         }
     )

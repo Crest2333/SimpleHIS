@@ -90,7 +90,6 @@
         <div>
             <button class="btn btn-google" onclick="ShowAddUserPage()">添加员工</button>
             <button class="btn btn-google" onclick="ShowBatchAddUserPage()">批量添加</button>
-            <button class="btn btn-google" onclick="Export()">导出</button>
         </div>
         <div id="page">
 
@@ -208,14 +207,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="import" action="/User/BatchAddUser" method="post" enctype="multipart/form-data" >
                     <div class="form-group">
                         <label>上传文件 &nbsp;&nbsp;&nbsp;<a href="~/file/批量添加账号模板.xlsx">点击下载模板</a></label>
-                        <input type="file" name="batchFile" id="batchFile" class="file-upload-default">
+                        <input type="file" name="file" id="batchFile" accept="xls/xlsx" class="file-upload-default">
                         <div class="input-group col-xs-12">
-                            <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                            <input type="text" class="form-control file-upload-info" disabled="" id="fileName" placeholder="文件">
                             <span class="input-group-append">
-                                <button class="file-upload-browse btn btn-primary" type="button">上传</button>
+                                <button class="file-upload-browse btn btn-primary" type="button" >上传</button>
                             </span>
                         </div>
                     </div>

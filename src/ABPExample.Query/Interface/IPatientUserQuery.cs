@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using HIS.Domain.Dtos.PatientUser;
+using HIS.Domain.Models;
 
 namespace HIS.Query.Interface
 {
@@ -15,5 +16,8 @@ namespace HIS.Query.Interface
         Task<bool> EditPatientUserAsync(PatientInputDto input);
 
         Task<bool> AddPatientMapperAsync(int userId, int patientId);
+        Task<PatientUser> GetPatientUserByEmail(string inputDtoEmail);
+
+        Task<int> UpdateAsync(PatientUser entity);
     }
 }

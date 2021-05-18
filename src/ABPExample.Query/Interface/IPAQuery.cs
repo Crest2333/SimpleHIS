@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using HIS.Domain.Dtos.Appointment;
 
 namespace ABPExample.Query.Interface
 {
@@ -20,6 +21,6 @@ namespace ABPExample.Query.Interface
 
         Task<ModelResult<PageDto<AppointmentInfoListDto>>> GetAppointmentInfoList(AppointmentInfoListSearchDto param);
 
-        Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentInputDto inputDto);
+        Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentStatusInputDto inputDto);
     }
 }

@@ -27,6 +27,9 @@ namespace ABPExample.Application.Application
         }
         public async Task<ModelResult> Add(AddDepartmentInputDto inputDto)
         {
+            if (inputDto.Name.IsNullOrWhiteSpace())
+                return new ModelResult {IsSuccess = false, Message = "请输入名称"};
+
             return await _departmentQuery.Add(inputDto);
         }
 

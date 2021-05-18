@@ -10,5 +10,7 @@ namespace HIS.Domain.Dtos.Chat
 
         public string Name { get; set; }
 
+        public int? NewMessage { get; set; }
+
     }
 }

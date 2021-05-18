@@ -11,11 +11,13 @@ using ABPExample.Domain.Public;
 using ABPExample.Query.Interface;
 using HIS.Application.Interface;
 using HIS.Domain.Dtos.Chat;
+using HIS.Domain.Dtos.PatientUser;
 using HIS.Query.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Caching.Memory;
 using Volo.Abp.DependencyInjection;
 using RegisterInputDto = HIS.Domain.Dtos.PatientUser.RegisterInputDto;
 
@@ -27,13 +29,15 @@ namespace HIS.Application.Application
         private readonly IHttpContextAccessor _accessor;
         private readonly IPatientQuery _patientQuery;
         private readonly IChatQuery _chatQuery;
+        private readonly IMemoryCache _memoryCache;
 
-        public PatientUserApplication(IPatientUserQuery patientUserQuery, IHttpContextAccessor accessor, IPatientQuery patientQuery, IChatQuery chatQuery)
+        public PatientUserApplication(IPatientUserQuery patientUserQuery, IHttpContextAccessor accessor, IPatientQuery patientQuery, IChatQuery chatQuery,IMemoryCache memoryCache)
         {
             _patientUserQuery = patientUserQuery;
             _accessor = accessor;
             _patientQuery = patientQuery;
             _chatQuery = chatQuery;
+            _memoryCache = memoryCache;
         }
 
 
@@ -55,7 +59,7 @@ namespace HIS.Application.Application
         {
             var result = await _patientUserQuery.AuthenticationAsync(input.AccountNo, input.PassWord);
 
-            if (result == null) return new ModelResult { IsSuccess = false, Message = "密码错误" };
+            if (result == null||!result.Any()) return new ModelResult { IsSuccess = false, Message = "密码错误" };
 
             var claims = new List<Claim>
             {
@@ -126,7 +130,36 @@ namespace HIS.Application.Application
             if (message.IsNullOrWhiteSpace())
                 return new ModelResult<bool> {IsSuccess = false, Message = "不能输入空格"};
 
-            return new ModelResult<bool> {IsSuccess = await _chatQuery.AddAsync(message, patientUserId, doctorId,from)};
+            return new ModelResult<bool> {IsSuccess = await _chatQuery.AddAsync(message, patientUserId, doctorId,from,false)};
+        }
+
+        public async Task<ModelResult> ResetPassWordAsync(ResetPassWordDto inputDto)
+        {
+            if (inputDto.Email.IsNullOrWhiteSpace())
+                return new ModelResult { IsSuccess = false, Message = "邮箱不能为空" };
+            var code = _memoryCache.Get(inputDto.Email);
+            if (code == null)
+                return new ModelResult {IsSuccess = false, Message = "验证码错误"};
+
+            if(Convert.ToInt32(code)!=inputDto.Code)
+                return new ModelResult { IsSuccess = false, Message = "验证码错误" };
+
+            if(inputDto.PassWord.IsNullOrWhiteSpace())
+                return new ModelResult { IsSuccess = false, Message = "密码不能为空" };
+
+            var userInfo = await _patientUserQuery.GetPatientUserByEmail(inputDto.Email);
+
+            if(userInfo==null)
+                return new ModelResult { IsSuccess = false, Message = "无效邮箱" };
+
+            userInfo.UserPwd = inputDto.PassWord;
+            var success= await _patientUserQuery.UpdateAsync(userInfo)>0;
+            if(success)
+                return ModelResult.Instance;
+            else
+            {
+                return new ModelResult {IsSuccess = false, Message = "数据保存失败"};
+            }
         }
     }
 }

@@ -59,5 +59,16 @@ namespace HIS.Query.Query
            await _context.AddAsync(entity);
            return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<PatientUser> GetPatientUserByEmail(string inputDtoEmail)
+        {
+            return await _context.PatientUser.FirstOrDefaultAsync(c => c.Email == inputDtoEmail && !c.IsDeleted);
+        }
+
+        public async Task<int> UpdateAsync(PatientUser entity)
+        {
+            _context.Update(entity);
+            return await _context.SaveChangesAsync();
+        }
     }
 }

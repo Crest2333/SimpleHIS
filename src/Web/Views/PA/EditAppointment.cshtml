@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "EditAppointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<input type="hidden" value="@ViewBag.Id" id="appointmentId"/>
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">患者管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">修改预约</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">添加预约</h4>
+                <div id="wizard">
+                    <h2>第一步</h2>
+                    <section>
+                        <h4>选择科室</h4>
+                        <div class="row col-12" id="departmentList">
+
+                        </div>
+                    </section>
+
+                    <h2>第二步</h2>
+                    <section>
+                        <h4>选择医生</h4>
+                        <div class="row col-12" id="doctorList">
+
+                        </div>
+                    </section>
+
+                    <h2>第三步</h2>
+                    <section>
+                        <div style="height: 30%">
+                            <h4>选择时间</h4>
+                            <div class="row col-12">
+                                <div class="form-group col-5 row">
+                                    <label class="col-sm-3 col-form-label">开始时间</label>
+                                    <input type="datetime" class="form-control col-6" name="startDate" id="startDate" value="" />
+                                </div>
+                                <div class="form-group col-5 row">
+                                    <label class="col-sm-3 col-form-label">结束时间</label>
+                                    <input type="datetime" class="form-control col-6" name="endDate" id="endDate" value="" />
+                                </div>
+                                <input type="button" onclick="GetScheduling()" class="btn btn-primary" value="查询" />
+                            </div>
+                        </div>
+                        <div class="row col-12" id="date" style="overflow: auto;height: 70%">
+
+                        </div>
+                    </section>
+
+                    <h2>第四步</h2>
+                    <section>
+                        <h4>填写相关信息</h4>
+                        <div class="row col-12" id="otherInfo">
+                            <label>描述</label>
+                            <textarea class="form-control" rows="5" id="describe"></textarea>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="departmentHtml">
+    {{each result value index}}
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="department" value="{{value.id}}" />
+            {{value.name}}
+            <i class="input-frame"></i>
+        </label>
+    </div>
+
+    {{/each}}
+</script>
+<script type="text/html" id="doctorHtml">
+    {{each list value index}}
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="doctor" value="{{value.id}}" />
+            {{value.name}}
+            <i class="input-frame"></i>
+        </label>
+    </div>
+
+    {{/each}}
+</script>
+<script type="text/html" id="dateHtml">
+    {{each result value index}}
+    <div class="card col-6">
+        <div class="card-header">
+            {{value.schedulingDate}}
+        </div>
+        <div class="card-body row">
+            {{each value.appointmentNum item index}}
+            <div class="form-group col-3">
+                <input type="radio" name="appointmentTime" value="{{value.schedulingDate}} {{item}}" />{{item}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{/each}}
+
+</script>
+
+@section Scripts
+{
+    <script src="../assets/vendors/jquery-steps/jquery.steps.min.js"></script>
+
+    <script src="~/static/PA/EditAppointment.js"></script>
+}

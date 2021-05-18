@@ -8,6 +8,8 @@
     <Content Remove="Views\Department\SchedulingList.cshtml" />
     <Content Remove="Views\Doctor\AppointmentList.cshtml" />
     <Content Remove="Views\PA\AddAppointment.cshtml" />
+    <Content Remove="wwwroot\static\c4abffc16072400da5315aebc414e4d9.png" />
+    <Content Remove="wwwroot\static\医生.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +43,8 @@
     <None Include="Views\Department\SchedulingList.cshtml" />
     <None Include="Views\Doctor\AppointmentList.cshtml" />
     <None Include="Views\PA\AddAppointment.cshtml" />
+    <None Include="wwwroot\static\c4abffc16072400da5315aebc414e4d9.png" />
+    <None Include="wwwroot\static\医生.png" />
   </ItemGroup>
 
   <ItemGroup>

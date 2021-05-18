@@ -38,6 +38,7 @@ namespace Web.Controllers
             _patientApplication = patientApplication;
             _patientUserApplication = patientUserApplication;
         }
+        [Authorize]
         public IActionResult DoctorList()
         {
             return View();
@@ -48,6 +49,7 @@ namespace Web.Controllers
             return Json(await _doctorApplication.GetDoctorListAsync(param));
         }
 
+        [Authorize]
 
         public IActionResult AddAppointment(int doctorId)
         {
@@ -109,8 +111,13 @@ namespace Web.Controllers
             return Json(await _patientApplication.Edit(inputDto));
         }
 
-        public IActionResult Online()
+        public async Task<IActionResult> Online()
         {
+            var patientInfo =
+                await _patientApplication.GetPatientByUserIdAsync(User.Claims.FirstOrDefault(c => c.Type == "UserId")
+                    .Value.ToInt());
+            if (patientInfo != null)
+                ViewBag.Name = patientInfo.FullName;
             return View();
         }
 

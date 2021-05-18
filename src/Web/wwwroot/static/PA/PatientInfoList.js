@@ -42,6 +42,9 @@ function Search(index) {
 
 function GetData(index) {
     var data = {
+        Gender: $("#gender").val(),
+        PhoneNumber: $("#phone").val(),
+        IdentityId: $("#identityNo").val(),
         Name: $("#name").val(),
         PageIndex: index || 1,
         PageSize: pageSize || 10
@@ -72,21 +75,38 @@ function PageTool(count) {
 }
 
 function ShowAdd() {
+    $("#FullName").val(null);
+    $("#PhoneNumber").val(null);
+    $("#IdentityId").val(null);
+    $("#Gender").val(null);
+    $("#Height").val(null);
+    $("#Weight").val(null);
+    $("#Address").val(null);
+    $("#DateOfBirth").val(null);
+    $("#BloodType").val(null)
     $("#addModal").modal("show");
 }
 
 function Add() {
     var model = GetAddInfo();
+    if (model.DateOfBirth == "") {
+        ShowTip("warning", "请选择出生年月");
+        return;
+    }
+    if (model.Gender == ""||model.Gender==null) {
+        ShowTip("warning", "请选择性别");
+        return;
+    }
     $.post(
         "/PA/AddPatient",
         model,
         function (result) {
             if (result.isSuccess) {
-                ShowTip("success", result.Message);
+                ShowTip("success", result.message);
                 Search(pageIndex);
                 $("#addModal").modal("hide");
             } else {
-                ShowTip("warning", result.Message);
+                ShowTip("warning", result.message);
             }
         });
 }
@@ -143,20 +163,20 @@ function OpenEdit(id) {
 function InitEditUserInfo(data) {
     $("#patientId").val(data.id)
     $("#EditFullName").val(data.fullName);
-        $("#EditPhoneNumber").val(data.phoneNumber);
-        $("#EditIdentityId").val(data.identityId);
-        $("#EditGender").val(data.gender);
-        $("#EditHeight").val(data.height);
-        $("#EditWeight").val(data.weight);
-        $("#EditAddress").val(data.address);
-        $("#EditDateOfBirth").val(data.dateOfBirth);
-        $("#EditBloodType").val(data.bloodType)
+    $("#EditPhoneNumber").val(data.phoneNumber);
+    $("#EditIdentityId").val(data.identityId);
+    $("#EditGender").val(data.gender);
+    $("#EditHeight").val(data.height);
+    $("#EditWeight").val(data.weight);
+    $("#EditAddress").val(data.address);
+    $("#EditDateOfBirth").val(data.dateOfBirth);
+    $("#EditBloodType").val(data.bloodType)
 }
 
 function Edit() {
     if (confirm("确认保存？")) {
         var model = {
-            Id:$("#patientId").val(),
+            Id: $("#patientId").val(),
             FullName: $("#EditFullName").val(),
             PhoneNumber: $("#EditPhoneNumber").val(),
             IdentityId: $("#EditIdentityId").val(),
@@ -167,20 +187,33 @@ function Edit() {
             DateOfBirth: $("#EditDateOfBirth").val(),
             BloodType: $("#EditBloodType").val()
         }
+
+        if (model.DateOfBirth == "") {
+            ShowTip("warning", "请选择出生年月");
+            return;
+        }
+        if (model.Gender == "" || model.Gender == null) {
+            ShowTip("warning", "请选择性别");
+            return;
+        }
         $.post(
             "/PA/EditPatientInfo",
             model,
-            function(result) {
+            function (result) {
                 if (result.isSuccess) {
-                    ShowTip("success", result.Message);
+                    ShowTip("success", result.message);
                     $("#editModal").modal("hide");
                     Search(pageIndex);
                 } else {
-                    ShowTip("warning", result.Message);
+                    ShowTip("warning", result.message);
 
                 }
             }
-            )
+        )
     }
+}
+
+function LoadDepartment() {
+
 }
 

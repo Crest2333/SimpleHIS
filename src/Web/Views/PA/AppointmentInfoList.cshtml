@@ -51,6 +51,14 @@
                         <label class="col-sm-3 col-form-label" style="text-align: right">状态</label>
                         <div class="col-sm-9">
                             <select type="text" class="form-control" id="Status" name="Status" value="">
+                                <option selected="selected" value="-1">请选择</option>
+                                <option value="0">已预约</option>
+                                <option value="1">已报道</option>
+                                <option value="2">就诊中</option>
+                                <option value="3">已就诊</option>
+                                <option value="4">已取消</option>
+                                <option value="5">未报道</option>
+
                             </select>
                         </div>
                     </div>
@@ -114,6 +122,8 @@
 
         <td>
             {{if value.status==0}}
+            <a href="/PA/EditAppointment?appointmentId={{value.id}}" class="btn btn-primary">编辑</a>
+
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','2')">报道</button>
             {{/if}}
             {{if value.status==1}}
@@ -122,18 +132,22 @@
             {{if value.status==2}}
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')">已就诊</button>
             {{/if}}
-            {{if value.status==3}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')"></button>
-            {{/if}}
-            <button class="btn btn-primary">编辑</button>
             <a href="/PA/AppointmentDetail?appointmentId={{value.id}}" class="btn btn-primary">详情</a>
             {{if value.status==0||value.status==1}}
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">取消</button>
             {{/if}}
-            
+
         </td>
     </tr>
 
+    {{/each}}
+</script>
+
+<script id="departmentHtml" type="text/html">
+    <option value="-1" selected="selected">请选择</option>
+
+    {{each result value index}}
+    <option value="{{value.id}}">{{value.name}}</option>
     {{/each}}
 </script>
 @section Scripts

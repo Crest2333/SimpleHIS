@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Public;
 
 namespace ABPExample.Query.Interface
 {
@@ -15,5 +16,7 @@ namespace ABPExample.Query.Interface
         /// <param name="inputDto"></param>
         /// <returns></returns>
         Task<bool> Authentication(LoginInputDto inputDto);
+
+        Task<ModelResult> EditPassWordAsync(EditPassWordDto inputDto);
     }
 }

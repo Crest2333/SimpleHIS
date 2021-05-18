@@ -223,6 +223,36 @@ namespace ABPExample.Query.Query
                     UserId = c.Key.Id,
                     Name = c.Key.UserName
                 }).ToListAsync();
+
+            var userIdList = list.Select(c => c.UserId).ToList();
+
+            var patientInfoList = await (
+                from a in _context.PatientsMapping
+                from b in _context.Patients.Where(c => c.Id == a.PatientId && !c.IsDeleted).DefaultIfEmpty()
+                where !a.IsDeleted && userIdList.Contains(a.UserId)
+                select new
+                {
+                    a.UserId,
+                    b.FullName
+                }).ToDictionaryAsync(c => c.UserId, c => c.FullName);
+
+
+            var newMessage = await _context.ChatLog.Where(c =>
+                    userIdList.Contains(c.PatientUserId) && c.DoctorId == doctorId && c.SendFrom == 1 &&
+                    c.IsNew.HasValue && c.IsNew.Value && !c.IsDeleted)
+                .GroupBy(c => c.PatientUserId)
+                .Select(c => new {c.Key, TotalCount = c.Count()})
+                .ToListAsync();
+
+            foreach (var item in list)
+            {
+                if (patientInfoList.ContainsKey(item.UserId))
+                    item.Name = patientInfoList[item.UserId];
+                if (newMessage.Any(c => c.Key == item.UserId))
+                {
+                    item.NewMessage = newMessage.FirstOrDefault(c => c.Key == item.UserId)?.TotalCount;
+                }
+            }
             return ModelResult<List<ChatUserInfoDto>>.Instance.Ok("", list);
         }
 

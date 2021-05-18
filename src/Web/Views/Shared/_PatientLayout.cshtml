@@ -40,10 +40,14 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
-                                    <i data-feather="search"></i>
+                                    <div class="sidebar-header">
+                                        <a href="/PatientAccount/DashBoard" class="sidebar-brand" style="font-size: 16px;color: #031a61;">
+                                            康仁医院信息管理系统
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
-                            <input type="text" class="form-control" id="navbarForm" placeholder="Search here...">
                         </div>
                     </form>
                     <ul class="navbar-nav ml-auto">
@@ -211,42 +215,30 @@
                         </li>
                         <li class="nav-item dropdown nav-profile">
                             <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="../../../assets/images/faces/face1.jpg" alt="profile">
+                                <img src="~/static/用户.png" alt="profile">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="profileDropdown">
                                 <div class="dropdown-header d-flex flex-column align-items-center">
                                     <div class="figure mb-3">
-                                        <img src="../../../assets/images/faces/face1.jpg" alt="">
+                                        <img src="~/static/用户.png" alt="">
                                     </div>
                                     <div class="info text-center">
-                                        <p class="name font-weight-bold mb-0">Amiah Burton</p>
-                                        <p class="email text-muted mb-3">amiahburton@gmail.com</p>
+                                        <p class="name font-weight-bold mb-0">@ViewBag.UserName</p>
                                     </div>
                                 </div>
                                 <div class="dropdown-body">
                                     <ul class="profile-nav p-0 pt-3">
-                                        <li class="nav-item">
-                                            <a href="../../pages/general/profile.html" class="nav-link">
-                                                <i data-feather="user"></i>
-                                                <span>Profile</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="javascript:;" class="nav-link">
-                                                <i data-feather="edit"></i>
-                                                <span>Edit Profile</span>
-                                            </a>
-                                        </li>
+
                                         <li class="nav-item">
                                             <a href="javascript:;" class="nav-link">
                                                 <i data-feather="repeat"></i>
-                                                <span>Switch User</span>
+                                                <span>修改信息</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="javascript:;" class="nav-link">
+                                            <a href="/PatientAccount/LogOut" class="nav-link">
                                                 <i data-feather="log-out"></i>
-                                                <span>Log Out</span>
+                                                <span>退出</span>
                                             </a>
                                         </li>
                                     </ul>

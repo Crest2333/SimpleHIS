@@ -6,6 +6,7 @@ using ABPExample.Domain.Dtos.Patient;
 using ABPExample.Domain.Dtos.UserDtos;
 using ABPExample.Domain.Public;
 using HIS.Domain.Dtos.Chat;
+using HIS.Domain.Dtos.PatientUser;
 using RegisterInputDto = HIS.Domain.Dtos.PatientUser.RegisterInputDto;
 
 namespace HIS.Application.Interface
@@ -27,5 +28,7 @@ namespace HIS.Application.Interface
         Task<ModelResult<List<ChatLogDto>>> GetChatLogByDoctorIdAsync(int doctorId, int patientUserId, DateTime? startDateTime);
 
         Task<ModelResult<bool>> AddAsync(string message, int patientUserId, int doctorId,int from);
+
+        Task<ModelResult> ResetPassWordAsync(ResetPassWordDto inputDto);
     }
 }

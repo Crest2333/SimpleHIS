@@ -39,6 +39,8 @@ namespace ABPExample.Application.Application
 
         public async Task<ModelResult> AddOrEditMedicalAdviceAsync(MedicalAdviceInputDto inputDto)
         {
+            if (inputDto.Content.IsNullOrWhiteSpace())
+                return new ModelResult {IsSuccess = false, Message = "内容不能为空"};
             var entity = await GetMedicalAdviceAsync(inputDto.AppointmentId);
 
             if (entity.Result != null)

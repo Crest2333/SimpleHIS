@@ -18,16 +18,16 @@ function GetOnlineUser() {
 }
 
 let toId;
-function SelectUser(userId) {
+function SelectUser(userId,userName) {
     toId = "P" + userId;
-
+  
     $.get(
         `/Doctor/GetChatLogByUserId?userId=${userId}`,
         function (result) {
             console.log(result);
             if (result.isSuccess) {
                 var html = template("historyList", result);
-                
+                $("#sendName").text(userName)
                 $("#messageList").html(html);
             }
         }

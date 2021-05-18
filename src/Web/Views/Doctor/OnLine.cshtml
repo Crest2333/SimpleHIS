@@ -3,6 +3,7 @@
     ViewData["Title"] = "OnLine";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="page-content" style="margin-top:10px">
 
     <div class="row chat-wrapper">
@@ -16,11 +17,11 @@
                                     <div class="d-flex justify-content-between align-items-center pb-2 mb-2">
                                         <div class="d-flex align-items-center">
                                             <figure class="mr-2 mb-0">
-                                                <img src="../../../assets/images/faces/face1.jpg" class="img-sm rounded-circle" alt="profile">
+                                                <img src="\Images\医生.png" class="img-sm rounded-circle" />
                                                 <div class="status online"></div>
                                             </figure>
                                             <div>
-                                                <h6>田旺强</h6>
+                                                <h6>@ViewBag.Name</h6>
                                             </div>
                                         </div>
                                         <div class="dropdown">
@@ -68,11 +69,9 @@
                                     <div class="d-flex align-items-center">
                                         <i data-feather="corner-up-left" id="backToChatList" class="icon-lg mr-2 ml-n2 text-muted d-lg-none"></i>
                                         <figure class="mb-0 mr-2">
-                                            <div class="status online"></div>
-                                            <div class="status online"></div>
                                         </figure>
                                         <div>
-                                            <p>侯思阳</p>
+                                            <p id="sendName"></p>
                                         </div>
                                     </div>
 
@@ -154,13 +153,8 @@
 }
 
 <script type="text/html" id="userHtmlList">
-
-
-
     {{each result value index}}
-
-
-    <li class="chat-item pr-1" onclick="SelectUser('{{value.userId}}')">
+    <li class="chat-item pr-1" onclick="SelectUser('{{value.userId}}','{{value.name}}')">
         <a href="javascript:;" class="d-flex align-items-center">
             <figure class="mb-0 mr-2">
                 <svg t="1620899145118" class="icon img-xs rounded-circle" alt="user" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2021" width="200" height="200"><path d="M682.225853 470.765979c8.511293-8.511293 21.278232-17.022585 29.789524-29.789524 51.067756-59.579048 72.345987-136.180682 59.579048-217.037962-17.022585-114.902451-106.391158-204.271023-221.293608-221.293609-93.624219-12.766939-182.992792 21.278232-242.57184 89.368573-46.812109 63.834695-72.345987 140.436328-59.579049 217.037962 12.766939 63.834695 42.556463 119.158097 93.624219 161.71456-148.947621 51.067756-255.338779 191.504084-255.338779 353.218644v93.624219C86.435368 977.187891 133.247478 1024 192.826526 1024h638.346948c59.579048 0 106.391158-46.812109 106.391158-106.391158v-93.624219c0-161.71456-106.391158-302.150888-255.338779-353.218644zM375.819318 151.592505c34.045171-42.556463 85.112926-63.834695 136.180682-63.834694 8.511293 0 17.022585 0 29.789524 4.255646 76.601634 12.766939 136.180682 76.601634 148.947621 148.947621 8.511293 55.323402-8.511293 106.391158-42.556463 144.691975-42.556463 46.812109-102.135512 72.345987-165.970206 59.579048-76.601634-12.766939-136.180682-76.601634-148.947621-148.947621-8.511293-51.067756 8.511293-106.391158 42.556463-144.691975z m476.632387 766.016337c0 12.766939-8.511293 21.278232-21.278231 21.278232h-638.346948c-12.766939 0-21.278232-8.511293-21.278231-21.278232v-93.624219c0-161.71456 131.925036-289.383949 289.383949-289.383949h97.879865c161.71456 0 289.383949 131.925036 289.38395 289.383949v93.624219z" p-id="2022"></path></svg>
@@ -170,7 +164,9 @@
                 <div>
                     <p class="text-body font-weight-bold">{{value.name}}</p>
                 </div>
-
+                <div class="d-flex flex-column align-items-end">
+                    <div class="badge badge-pill badge-primary ml-auto">{{value.newMessage}}</div>
+                </div>
             </div>
         </a>
     </li>
@@ -186,7 +182,7 @@
 
         {{if value.isMe}}
         <li class="message-item me">
-            <img src="../../../assets/images/faces/face2.jpg" class="img-xs rounded-circle" alt="avatar">
+            <img src="~/static/医生.png" class="img-xs rounded-circle" alt="avatar"/>
             <div class="content">
                 <div class="message">
                     <div class="bubble">
@@ -200,7 +196,8 @@
         {{else}}
 
         <li class="message-item friend">
-            <img src="../../../assets/images/faces/face1.jpg" class="img-xs rounded-circle" alt="avatar">
+            <svg t="1620899145118" class="img-xs rounded-circle" alt="user" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2021" width="200" height="200"><path d="M682.225853 470.765979c8.511293-8.511293 21.278232-17.022585 29.789524-29.789524 51.067756-59.579048 72.345987-136.180682 59.579048-217.037962-17.022585-114.902451-106.391158-204.271023-221.293608-221.293609-93.624219-12.766939-182.992792 21.278232-242.57184 89.368573-46.812109 63.834695-72.345987 140.436328-59.579049 217.037962 12.766939 63.834695 42.556463 119.158097 93.624219 161.71456-148.947621 51.067756-255.338779 191.504084-255.338779 353.218644v93.624219C86.435368 977.187891 133.247478 1024 192.826526 1024h638.346948c59.579048 0 106.391158-46.812109 106.391158-106.391158v-93.624219c0-161.71456-106.391158-302.150888-255.338779-353.218644zM375.819318 151.592505c34.045171-42.556463 85.112926-63.834695 136.180682-63.834694 8.511293 0 17.022585 0 29.789524 4.255646 76.601634 12.766939 136.180682 76.601634 148.947621 148.947621 8.511293 55.323402-8.511293 106.391158-42.556463 144.691975-42.556463 46.812109-102.135512 72.345987-165.970206 59.579048-76.601634-12.766939-136.180682-76.601634-148.947621-148.947621-8.511293-51.067756 8.511293-106.391158 42.556463-144.691975z m476.632387 766.016337c0 12.766939-8.511293 21.278232-21.278231 21.278232h-638.346948c-12.766939 0-21.278232-8.511293-21.278231-21.278232v-93.624219c0-161.71456 131.925036-289.383949 289.383949-289.383949h97.879865c161.71456 0 289.383949 131.925036 289.38395 289.383949v93.624219z" p-id="2022"></path></svg>
+        
             <div class="content">
                 <div class="message">
                     <div class="bubble">

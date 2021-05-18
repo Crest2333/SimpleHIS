@@ -11,6 +11,7 @@ using ABPExample.Domain.Public;
 using ABPExample.EntityFramework.EntityFrameworkCore;
 using ABPExample.Query.Interface;
 using AutoMapper;
+using HIS.Domain.Dtos.Appointment;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.DependencyInjection;
 
@@ -27,11 +28,18 @@ namespace ABPExample.Query.Query
         }
         public async Task<ModelResult> AddAppointment(AddAppointmentInfoDto inputDto)
         {
+            
             var patientInfo = await _context.Patients.FirstOrDefaultAsync(c => c.Id == inputDto.PatientId && !c.IsDeleted);
             if (patientInfo == null)
                 return new ModelResult { IsSuccess = false, Message = "没有找到患者信息" };
-
-            var query = new Appointment
+            var time = $"{Convert.ToDateTime(inputDto.AppointmentTime):HH:mm}";
+            var haveEntity = await _context.Appointment
+                .AnyAsync(c =>
+                    c.PatientId == inputDto.PatientId && c.AppointmentDate.Date == inputDto.AppointmentDate.Date &&
+                    c.AppointmentTime == time && !c.IsDeleted && c.Status == AppointmentStatusEnum.Reserved );
+            if (haveEntity)
+                return new ModelResult { IsSuccess = false, Message = "所预约时间段已有别的预约正在进行" };
+            var entityAppointment = new Appointment
             {
                 Status = AppointmentStatusEnum.Reserved,
                 AppointmentDate = Convert.ToDateTime($"{inputDto.AppointmentDate:yyyy-MM-dd} { Convert.ToDateTime(inputDto.AppointmentTime):HH:mm}"),
@@ -45,7 +53,11 @@ namespace ABPExample.Query.Query
                 PatientId = inputDto.PatientId
             };
 
-            await _context.AddAsync(query);
+            if(entityAppointment.AppointmentDate<DateTime.Now)
+                return new ModelResult { IsSuccess = false, Message = "预约时间不能小于当前时间" };
+
+
+            await _context.AddAsync(entityAppointment);
             await _context.SaveChangesAsync();
             return new ModelResult { IsSuccess = true, Message = "添加成功" };
         }
@@ -115,9 +127,10 @@ namespace ABPExample.Query.Query
                         where string.IsNullOrWhiteSpace(param.PatientName) || b.FullName == param.PatientName
                         where string.IsNullOrWhiteSpace(param.PhoneNumber) || b.PhoneNumber == param.PhoneNumber
                         where !param.DoctorId.HasValue||param.DoctorId.Value<=0||a.DoctorId==param.DoctorId
-                        where !param.Status.HasValue ||(int) a.Status == param.Status
+                        where !param.Status.HasValue ||param.Status.Value<0||(int) a.Status == param.Status
                         where !param.StartDate.HasValue || a.AppointmentDate >= param.StartDate.Value
                         where !param.EndDate.HasValue || a.AppointmentDate <= param.EndDate
+                        where !param.DepartmentId.HasValue||param.DepartmentId.Value<0||d.Id==param.DepartmentId.Value
                         where !a.IsDeleted
                         select new AppointmentInfoListDto
                         {
@@ -142,7 +155,7 @@ namespace ABPExample.Query.Query
             return new ModelResult<PageDto<AppointmentInfoListDto>> { IsSuccess = true, Result = new PageDto<AppointmentInfoListDto>(count, list) };
         }
 
-        public async Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentInputDto inputDto)
+        public async Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentStatusInputDto inputDto)
         {
             var appointment =
                 await _context.Appointment

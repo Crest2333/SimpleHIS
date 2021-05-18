@@ -10,6 +10,6 @@ namespace HIS.Query.Interface
     {
         Task<List<ChatLogDto>> GetChatLogByDoctorIdAsync(int doctorId, int patientUserId, DateTime? startDateTime);
 
-        Task<bool> AddAsync(string message,int patientUserId,int doctorId,int from);
+        Task<bool> AddAsync(string message,int patientUserId,int doctorId,int from,bool isNew);
     }
 }

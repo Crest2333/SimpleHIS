@@ -80,7 +80,7 @@ function PageTool(count) {
                 console.log(obj.curr)
                 console.log(first);
                 if (!first) {
-                    GetList(obj.curr)
+                    Search(obj.curr)
                     //do something
                 }
             }

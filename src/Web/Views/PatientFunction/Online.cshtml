@@ -18,11 +18,12 @@
                                     <div class="d-flex justify-content-between align-items-center pb-2 mb-2">
                                         <div class="d-flex align-items-center">
                                             <figure class="mr-2 mb-0">
-                                                <img src="../../../assets/images/faces/face1.jpg" class="img-sm rounded-circle" alt="profile">
+                                                <img src="~/static/用户.png" class="img-sm rounded-circle" alt="profile">
+
                                                 <div class="status online"></div>
                                             </figure>
                                             <div>
-                                                <h6>张子承</h6>
+                                                <h6>@ViewBag.Name</h6>
                                             </div>
                                         </div>
                                         <div class="dropdown">
@@ -78,7 +79,7 @@
                                             <div class="status online"></div>
                                         </figure>
                                         <div>
-                                            <p>田旺强</p>
+                                            <p id="sendName"></p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mr-n1">
@@ -157,7 +158,8 @@
 
         {{if value.isMe}}
         <li class="message-item me">
-            <img src="../../../assets/images/faces/face2.jpg" class="img-xs rounded-circle" alt="avatar">
+            <img src="~/static/用户.png" class="img-xs rounded-circle" alt="user" />
+
             <div class="content">
                 <div class="message">
                     <div class="bubble">
@@ -170,17 +172,17 @@
 
         {{else}}
 
-        <li class="message-item friend">
-            <img src="../../../assets/images/faces/face1.jpg" class="img-xs rounded-circle" alt="avatar">
-            <div class="content">
-                <div class="message">
-                    <div class="bubble">
-                        <p>{{value.message}}</p>
-                    </div>
-                    <span>{{value.sendDateTime}}</span>
+    <li class="message-item friend">
+        <img src="~/static/医生.png" class="img-xs rounded-circle" alt="avatar" />
+        <div class="content">
+            <div class="message">
+                <div class="bubble">
+                    <p>{{value.message}}</p>
                 </div>
+                <span>{{value.sendDateTime}}</span>
             </div>
-        </li>
+        </div>
+    </li>
         {{/if}}
         {{/each}}
     </ul>
@@ -191,11 +193,11 @@
 
 
     {{each result value index}}
-    <li class="chat-item pr-1" onclick="SelectDoctor('{{value.doctorInfo.doctorId}}')">
+    <li class="chat-item pr-1" onclick="SelectDoctor('{{value.doctorInfo.doctorId}}','{{value.doctorInfo.doctorName}}')">
         <a href="javascript:;" class="d-flex align-items-center">
             <figure class="mb-0 mr-2">
-                <img src="{{value.doctorInfo.imgUrl}}" class="img-xs rounded-circle" alt="user">
-                <div class="status online"></div>
+                <img src="~/static/医生.png" class="img-xs rounded-circle" alt="user">
+
             </figure>
             <div class="d-flex justify-content-between flex-grow border-bottom">
             <div>
@@ -205,7 +207,6 @@
                 {{each value.departmentNameList item i}}
 
                 <p class="text-body font-weight-bold">{{item}};</p>
-
                 {{/each}}
             </div>
             </div>

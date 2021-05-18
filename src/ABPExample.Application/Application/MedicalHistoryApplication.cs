@@ -37,6 +37,15 @@ namespace ABPExample.Application.Application
 
         public async Task<ModelResult> Edit(EditMedicalInputDto input)
         {
+            if (input.Name.IsNullOrWhiteSpace())
+            {
+                return new ModelResult { IsSuccess = false, Message = "请填写名称" };
+            }
+
+            if (input.Describe.IsNullOrWhiteSpace())
+            {
+                return new ModelResult { IsSuccess = false, Message = "请填写描述" };
+            }
             return await _medicalHistoryQuery.Edit(input);
         }
 

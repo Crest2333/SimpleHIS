@@ -29,14 +29,45 @@ namespace HIS.Query.Query
 
         public async Task<List<ChatLogDto>> GetChatLogByDoctorIdAsync(int doctorId, int patientUserId, DateTime? startDateTime)
         {
-            var list = await _context.ChatLog
+            var list = await _context.ChatLog.AsNoTracking()
                 .Where(c => c.DoctorId == doctorId && c.PatientUserId == patientUserId && !c.IsDeleted)
                 .WhereIf(startDateTime.HasValue, c => c.CreationTime >= startDateTime.Value)
+                //.Select(c => new ChatLog
+                //{
+                //    Id = c.Id,
+                //    IsNew = false,
+                //    Message = c.Message,
+                //    SendFrom = c.SendFrom,
+                //    DoctorId = c.DoctorId,
+                //    PatientUserId = c.PatientUserId
+                //})
                 .ToListAsync();
+
+            var updateList = list.Where(c => c.IsNew.HasValue && c.IsNew.Value)
+                .Select(c=>new ChatLog
+                {
+                    Id = c.Id,
+                    IsNew = false
+                }).ToList();
+            if ( updateList.Any())
+            {
+                try
+                {
+                    _context.ModifiedRange(updateList, c => c.IsNew);
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    //
+                }
+
+            }
+
             return _mapper.Map<List<ChatLog>, List<ChatLogDto>>(list);
         }
 
-        public async Task<bool> AddAsync(string message, int patientUserId, int doctorId, int from)
+        public async Task<bool> AddAsync(string message, int patientUserId, int doctorId, int from, bool isNew)
         {
             var model = new ChatLog
             {
@@ -44,9 +75,10 @@ namespace HIS.Query.Query
                 DoctorId = doctorId,
                 Message = message,
                 SendFrom = from,
+                IsNew = isNew
             };
             await _context.AddAsync(model);
-            return await _context.SaveChangesAsync()>0;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

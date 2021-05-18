@@ -50,7 +50,7 @@ namespace HIS.Application.Common
 
             if (toSocket != null)
                 await SendMessage(toSocket, JsonConvert.SerializeObject(sendData));
-             await SendMessage(socket, JsonConvert.SerializeObject(sendData));
+            await SendMessage(socket, JsonConvert.SerializeObject(sendData));
 
             var sendUserId = 0;
             var sendDoctorId = 0;
@@ -58,7 +58,7 @@ namespace HIS.Application.Common
             if (userId.Contains("P"))
             {
                 sendUserId = userId.Contains("P")
-                    ? userId.Replace("P",string.Empty).ToInt()
+                    ? userId.Replace("P", string.Empty).ToInt()
                     : userId.Replace("D", string.Empty).ToInt();
                 sendDoctorId = data.SendToId.Contains("P")
                     ? data.SendToId.Replace("P", string.Empty).ToInt()
@@ -76,9 +76,14 @@ namespace HIS.Application.Common
                     : userId.Replace("D", string.Empty).ToInt();
                 sendFrom = 2;
             }
-                
 
-            await _chatQuery.AddAsync(data.Message, sendUserId , sendDoctorId,sendFrom);
+            if (toSocket == null)
+
+                await _chatQuery.AddAsync(data.Message, sendUserId, sendDoctorId, sendFrom, true);
+            else
+
+                await _chatQuery.AddAsync(data.Message, sendUserId, sendDoctorId, sendFrom, false);
+
         }
     }
 }

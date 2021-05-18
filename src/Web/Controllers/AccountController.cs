@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABPExample.Application.Interface;
 using ABPExample.Domain.Dtos.UserDtos;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -12,10 +14,12 @@ namespace Web.Controllers
     public class AccountController : AbpController
     {
         private readonly IAccountApplication _application;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IAccountApplication application)
+        public AccountController(IAccountApplication application, IHttpContextAccessor httpContextAccessor)
         {
             _application = application;
+            _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Index()
         {
@@ -44,8 +48,15 @@ namespace Web.Controllers
 
         public IActionResult LogOut()
         {
-            return View();
+           _httpContextAccessor.HttpContext.SignOutAsync();
+            return Redirect("Login");
         }
+
+        public async Task<JsonResult> EditPassWord(EditPassWordDto inputDto)
+        {
+            return Json(await _application.EditPassWordAsync(inputDto));
+        }
+
 
         public IActionResult DashBoard()
         {

@@ -116,29 +116,30 @@ function ShowBatchAddUserPage() {
 }
 
 function BatchAddUser() {
-    var file = $('#batchFile').prop("files");
-    var data = new FormData()
-    data.append("file", file[0]);
-    $.ajax(
-        {
-            method: 'post',
-            url: "BatchAddUser",
-            data: data,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (res) {
-                if (res.isSuccess) {
-                    ShowTip('success', '添加成功')
-                }
-                else {
-                    ShowTip('warning', res.Message);
-                }
-                $("#batchAddUser").modal("hide")
-            }
+    $("#import").submit();
+    //var file = $('#batchFile').prop("files");
+    //var data = new FormData()
+    //data.append("file", file[0]);
+    //$.ajax(
+    //    {
+    //        method: 'post',
+    //        url: "/User/BatchAddUser",
+    //        data: data,
+    //        cache: false,
+    //        processData: false,
+    //        contentType: false,
+    //        success: function (res) {
+    //            if (res.isSuccess) {
+    //                ShowTip('success', '添加成功')
+    //            }
+    //            else {
+    //                ShowTip('warning', res.Message);
+    //            }
+    //            $("#batchAddUser").modal("hide")
+    //        }
 
-        }
-    )
+    //    }
+    //)
 }
 
 function test() {

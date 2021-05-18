@@ -53,7 +53,7 @@ function LoadDoctor() {
 }
 
 let toId;
-function SelectDoctor(doctorId) {
+function SelectDoctor(doctorId,userName) {
     toId = "D" + doctorId;
 
     $.get(
@@ -61,6 +61,7 @@ function SelectDoctor(doctorId) {
         function (result) {
             console.log(result);
             if (result.isSuccess) {
+                $("#sendName").text(userName);
                 var html = template("historyList", result);
                 $("#messageList").html(html);
             }

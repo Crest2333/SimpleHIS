@@ -20,7 +20,7 @@ namespace HIS.Domain.Models
 
         public void Init()
         {
-            UserImg = "Default.png";
+            UserImg =@"\Images\20210512\334eeb9d1c024b10a8e2329f98622f7e.png";
             UserName = PhoneNumber;
 
         }

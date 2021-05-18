@@ -67,9 +67,7 @@ function AddOrEditMedicalAdvice() {
         GetData(),
         function (result) {
             if (result.isSuccess) {
-                console.log(result);
-
-                windows.open("/Doctor/AppointmentList");
+                ShowTip("success","保存成功")
             } else {
                 ShowTip("warning", result.message);
             }

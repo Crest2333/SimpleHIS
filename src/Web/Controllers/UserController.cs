@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ABPExample.Application.Common;
 using ABPExample.Application.Interface;
 using ABPExample.Domain.Dtos.UserDtos;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,8 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
+    [Authorize]
+
     public class UserController : AbpController
     {
         private readonly IUserApplication _userApplication;
@@ -43,9 +46,13 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> BatchAddUser(IFormFile file)
+        public async Task<FileResult> BatchAddUser(IFormFile file)
         {
-            return Json(await _userApplication.BatchAddUser(file));
+            if (!file.Name.Contains("xlsx") && !file.Name.Contains("xls"))
+                return null;
+            var dt = await _userApplication.BatchAddUser(file);
+            var steam = ExcelHelper.Export(dt.Result);
+            return File(steam, contentType: "application/x-xls", "error.xls");
         }
 
         public async Task<JsonResult> EditUser(EditUserInfoDto inputDto)

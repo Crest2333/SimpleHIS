@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Security.Claims;
 using System.Text;
 
 namespace ABPExample.Application.Common
 {
     public static class Extend
     {
+        
 
         /// <summary>
         ///     List To DataTable
@@ -61,5 +63,7 @@ namespace ABPExample.Application.Common
         {
             return !t.IsValueType || (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
+
+      
     }
 }

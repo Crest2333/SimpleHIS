@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ABPExample.Domain.Models.Enum;
+using HIS.Domain.Dtos.Appointment;
 using Volo.Abp.DependencyInjection;
 
 namespace ABPExample.Application.Application
@@ -48,7 +49,7 @@ namespace ABPExample.Application.Application
             return await _pAQuery.GetAppointmentInfoList(param);
         }
 
-        public async Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentInputDto inputDto)
+        public async Task<ModelResult<bool>> ChangeAppointmentStatus(EditAppointmentStatusInputDto inputDto)
         {
 
             return await _pAQuery.ChangeAppointmentStatus(inputDto);
@@ -64,6 +65,11 @@ namespace ABPExample.Application.Application
             });
 
             await _appointmentQuery.BatchUpdate(list);
+        }
+
+        public async Task<ModelResult> EditAppointmentAsync(EditAppointmentInputDto inputDto)
+        {
+            return await _appointmentQuery.EditAppointmentAsync(inputDto);
         }
     }
 }

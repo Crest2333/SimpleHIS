@@ -173,15 +173,22 @@ function ResetInput() {
 function AddOrEditHistory() {
     if (isAddOrEdit == 1) {
         var model = GetAddHistoryData();
+        if (model.StartDate == "") {
+            ShowTip("warning", "请选择开始时间");
+            return;
+        }
+        console.log(model)
+
+        
         $("#AddHistoryModal").modal("hide");
         $.post(
             "/PA/AddMedicalHistory",
             model,
             function (result) {
                 if (result.isSuccess) {
-                    ShowTip("success", result.Message);
+                    ShowTip("success", result.message);
                 } else {
-                    ShowTip("warning", result.Message);
+                    ShowTip("warning", result.message);
                 }
             })
     }
@@ -231,7 +238,13 @@ function GetEditHistoryData() {
 
 function EditHistory() {
     var model = GetEditHistoryData();
+    console.log(model)
+    if (model.StartDate == "") {
+        ShowTip("warning", "请选择开始时间");
+        return;
+    }
     $("#AddHistoryModal").modal("hide");
+
     $.post(
         "/PA/EditMedicalHistory",
         model,

@@ -36,17 +36,19 @@
                         </div>
                     </div>
                    
-                    <div class="col-xl-3 row ">
-                        <label class="col-sm-3 col-form-label" style="text-align: right">部门</label>
-                        <div class="col-sm-9">
-                            <select type="text" class="form-control" id="DepartmentId" name="DepartmentId" value="">
-                            </select>
-                        </div>
-                    </div>
+                   
                     <div class="col-xl-3 row ">
                         <label class="col-sm-3 col-form-label" style="text-align: right">状态</label>
                         <div class="col-sm-9">
                             <select type="text" class="form-control" id="Status" name="Status" value="">
+                                <option selected="selected" value="-1">请选择</option>
+                                <option value="0">已预约</option>
+                                <option value="1">已报道</option>
+                                <option value="2">就诊中</option>
+                                <option value="3">已就诊</option>
+                                <option value="4">已取消</option>
+                                <option value="5">未报道</option>
+
                             </select>
                         </div>
                     </div>
@@ -110,18 +112,23 @@
         <td>{{value.statusDesc}}</td>
 
         <td>
-            {{if value.status==1}}
+            {{if value.status==0}}
+            <a href="/PA/EditAppointment?appointmentId={{value.id}}" class="btn btn-primary">编辑</a>
+
             <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','2')">报道</button>
             {{/if}}
-            
-            {{if value.status==2}}
-            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">就诊中</button>
+            {{if value.status==1}}
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')">就诊中</button>
             {{/if}}
-            <button class="btn btn-primary">编辑</button>
+            {{if value.status==2}}
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','3')">已就诊</button>
+            {{/if}}
             <a href="/PA/AppointmentDetail?appointmentId={{value.id}}" class="btn btn-primary">详情</a>
+            {{if value.status==0||value.status==1}}
+            <button class="btn btn-primary" onclick="ChangeStatus('{{value.id}}','4')">取消</button>
+            {{/if}}
             <a href="/Doctor/DoctorWork?appointmentId={{value.id}}" class="btn btn-primary">就诊</a>
 
-            <button class="btn btn-primary" onclick="Cancel('{{value.id}}')">取消</button>
         </td>
     </tr>
 

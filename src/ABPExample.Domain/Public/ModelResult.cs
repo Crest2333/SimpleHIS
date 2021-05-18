@@ -19,6 +19,7 @@ namespace ABPExample.Domain.Public
         public ModelResult Error(string msg )
         {
             this.Code = 500;
+            this.IsSuccess = false;
             this.Message = msg;
             return this;
         }

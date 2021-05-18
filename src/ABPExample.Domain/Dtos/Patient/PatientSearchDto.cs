@@ -12,6 +12,8 @@ namespace ABPExample.Domain.Dtos.Patient
 
         public string IdentityId { get; set; }
 
+        public int? Gender { get; set; }
+
         public int PageIndex { get; set; }
 
         public int PageSize { get; set; }

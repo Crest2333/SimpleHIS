@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ABPExample.Domain.Dtos.Appointment;
 using ABPExample.Domain.Models;
 
 namespace ABPExample.Query.Interface
@@ -12,5 +13,7 @@ namespace ABPExample.Query.Interface
         Task BatchUpdate(List<Appointment> entityList);
 
         Task<List<Appointment>> GetExpireAppointmentAsync();
+
+        Task<ModelResult> EditAppointmentAsync(EditAppointmentInputDto inputDto);
     }
 }

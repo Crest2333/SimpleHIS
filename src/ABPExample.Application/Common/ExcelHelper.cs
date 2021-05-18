@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using HIS.Domain.Common;
 
 namespace ABPExample.Application.Common
 {
@@ -72,38 +73,137 @@ namespace ABPExample.Application.Common
             return data;
         }
 
-        public static Stream ToExcel(DataTable dt,string fileName, ExcelType type)
+        public static Stream Export(DataTable dtSource)
         {
-            IWorkbook workbook;
-            if (type==ExcelType.XLSX)
-                workbook = new XSSFWorkbook();
-            else
-                workbook = new HSSFWorkbook();
-            ISheet sheet = string.IsNullOrEmpty(dt.TableName) ? workbook.CreateSheet("Sheet1") : workbook.CreateSheet(dt.TableName);
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
 
-            //表头  
-            IRow row = sheet.CreateRow(0);
-            for (int i = 0; i < dt.Columns.Count; i++)
+            ICellStyle dateStyle = workbook.CreateCellStyle();
+            IDataFormat format = workbook.CreateDataFormat();
+            dateStyle.DataFormat = format.GetFormat("yyyy-MM-dd");
+
+            #region 取得每列的列宽（最大宽度）
+            int[] arrColWidth = new int[dtSource.Columns.Count];
+            foreach (DataColumn item in dtSource.Columns)
             {
-                ICell cell = row.CreateCell(i);
-                cell.SetCellValue(dt.Columns[i].ColumnName);
+                //GBK对应的code page是CP936
+                arrColWidth[item.Ordinal] = Encoding.GetEncoding(936).GetBytes(item.ColumnName.ToString()).Length;
             }
-
-            //数据  
-            for (int i = 0; i < dt.Rows.Count; i++)
+            for (int i = 0; i < dtSource.Rows.Count; i++)
             {
-                IRow row1 = sheet.CreateRow(i + 1);
-                for (int j = 0; j < dt.Columns.Count; j++)
+                for (int j = 0; j < dtSource.Columns.Count; j++)
                 {
-                    ICell cell = row1.CreateCell(j);
-                    cell.SetCellValue(dt.Rows[i][j].ToString());
+                    int intTemp = Encoding.GetEncoding(936).GetBytes(dtSource.Rows[i][j].ToString()).Length;
+                    if (intTemp > arrColWidth[j])
+                    {
+                        arrColWidth[j] = intTemp;
+                    }
                 }
             }
+            #endregion
 
-            //转为字节数组  
-            MemoryStream stream = new MemoryStream();
-            workbook.Write(stream);
-            return stream;
+            int rowIndex = 0;
+            ICellStyle contentStyle = workbook.CreateCellStyle();
+            contentStyle.Alignment = HorizontalAlignment.Left;
+            foreach (DataRow row in dtSource.Rows)
+            {
+                #region 新建表，填充表头，填充列头，样式
+                if (rowIndex == 65535 || rowIndex == 0)
+                {
+                    if (rowIndex != 0)
+                    {
+                        sheet = workbook.CreateSheet();
+                    }
+                    #region 列头及样式
+                    {
+                        IRow headerRow = sheet.CreateRow(0);
+                        ICellStyle headStyle = workbook.CreateCellStyle();
+                        headStyle.Alignment = HorizontalAlignment.Center;
+                        IFont font = workbook.CreateFont();
+                        font.FontHeightInPoints = 10;
+                        font.Boldweight = 700;
+                        headStyle.SetFont(font);
+
+
+                        foreach (DataColumn column in dtSource.Columns)
+                        {
+                            headerRow.CreateCell(column.Ordinal).SetCellValue(column.ColumnName);
+                            headerRow.GetCell(column.Ordinal).CellStyle = headStyle;
+
+                            //设置列宽  
+                            sheet.SetColumnWidth(column.Ordinal, (arrColWidth[column.Ordinal] + 1) * 256);
+
+                        }
+                    }
+                    #endregion
+                    rowIndex = 1;
+                }
+                #endregion
+
+
+                #region 填充内容
+                IRow dataRow = sheet.CreateRow(rowIndex);
+                foreach (DataColumn column in dtSource.Columns)
+                {
+                    ICell newCell = dataRow.CreateCell(column.Ordinal);
+                    newCell.CellStyle = contentStyle;
+
+                    string drValue = row[column].ToString();
+
+                    switch (column.DataType.ToString())
+                    {
+                        case "System.String"://字符串类型  
+                            newCell.SetCellValue(drValue);
+                            break;
+                        case "System.DateTime"://日期类型  
+                            DateTime dateV;
+                            DateTime.TryParse(drValue, out dateV);
+                            newCell.SetCellValue(dateV);
+
+                            newCell.CellStyle = dateStyle;//格式化显示  
+                            break;
+                        case "System.Boolean"://布尔型  
+                            bool boolV = false;
+                            bool.TryParse(drValue, out boolV);
+                            newCell.SetCellValue(boolV);
+                            break;
+                        case "System.Int16"://整型  
+                        case "System.Int32":
+                        case "System.Int64":
+                        case "System.Byte":
+                            int intV = 0;
+                            int.TryParse(drValue, out intV);
+                            newCell.SetCellValue(intV);
+                            break;
+                        case "System.Decimal"://浮点型  
+                        case "System.Double":
+                            string value = string.Format("{0:N2}", drValue);
+                            newCell.SetCellValue(value);
+                            break;
+                        case "System.DBNull"://空值处理  
+                            newCell.SetCellValue("");
+                            break;
+                        default:
+                            newCell.SetCellValue("");
+                            break;
+                    }
+
+                }
+                #endregion
+
+                rowIndex++;
+            }
+
+
+            var ms = new MemoryStream();
+
+            workbook.Write(ms);
+            ms.Flush();
+            ms.Position = 0;
+
+            //sheet.Dispose();
+            //workbook.Dispose();//一般只用写这一个就OK了，他会遍历并释放所有资源，但当前版本有问题所以只释放sheet  
+            return ms;
         }
 
         public enum ExcelType
@@ -111,5 +211,7 @@ namespace ABPExample.Application.Common
             XLSX,
             XLS
         }
+
+
     }
 }
